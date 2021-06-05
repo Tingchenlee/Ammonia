@@ -1,0 +1,2107 @@
+Global RMG Settings:
+   database.directory   = /Users/lee.ting/Code/RMG-database/input (Default, relative to RMG-Py source code)
+   test_data.directory  = /Users/lee.ting/Code/RMG-Py/rmgpy/test_data (Default, relative to RMG-Py source code)
+RMG execution initiated at Sat Jun  5 15:45:51 2021
+
+#########################################################
+# RMG-Py - Reaction Mechanism Generator in Python       #
+# Version: 3.1.0                                        #
+# Authors: RMG Developers (rmg_dev@mit.edu)             #
+# P.I.s:   William H. Green (whgreen@mit.edu)           #
+#          Richard H. West (r.west@neu.edu)             #
+# Website: http://reactionmechanismgenerator.github.io/ #
+#########################################################
+
+The current git HEAD for RMG-Py is:
+	b'd89ec085a1ff1df8180c5acda37a956abebce5e4'
+	b'Tue Jun 1 18:15:26 2021 -0400'
+
+The current git HEAD for RMG-database is:
+	b'c5238fb32de9cdf0acfb3c08d8e9baddc06d14c5'
+	b'Fri Jun 4 17:33:36 2021 -0400'
+
+Reading input file "/Users/lee.ting/Code/Test/testing/models/Rebrov/master/523K/523K_O088N006/input.py"...
+# Microkinetic model for ammonia oxidation
+# E.V. Rebrov, M.H.J.M. de Croon, J.C. Schouten
+# Development of the kinetic model of platinum catalyzed ammonia oxidation in a microreactor
+# Chemical Engineering Journal 90 (2002) 61–76
+
+database(
+    thermoLibraries=['surfaceThermoPt111', 'surfaceThermoNi111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','DFT_QCI_thermo', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON'],
+    reactionLibraries = ['Surface/CPOX_Pt/Deutschmann2006'],
+    seedMechanisms = [],
+    kineticsDepositories = ['training'],
+    kineticsFamilies = ['surface','default'],
+    kineticsEstimator = 'rate rules',
+)
+
+catalystProperties(
+    metal = 'Pt111'
+)
+
+generatedSpeciesConstraints(
+    allowed=['input species','seed mechanisms','reaction libraries'],
+    maximumNitrogenAtoms=2,
+    maximumOxygenAtoms=3,
+)
+
+# List of species
+species(
+    label='X',
+    reactive=True,
+    structure=adjacencyList("1 X u0"),
+)
+
+species(
+    label='O2',
+    reactive=True,
+    structure=adjacencyList(
+"""
+multiplicity 3
+1 O u1 p2 c0 {2,S}
+2 O u1 p2 c0 {1,S}
+"""),
+)
+
+species(
+    label='H2O',
+    reactive=True,
+    structure=SMILES("O"),
+)
+
+species(
+    label='N2',
+    reactive=True,
+    structure=SMILES("N#N"),
+)
+
+species(
+    label='NO',
+    reactive=True,
+    structure=adjacencyList(
+"""
+multiplicity 2
+1 N u1 p1 c0 {2,D}
+2 O u0 p2 c0 {1,D}
+"""),
+)
+
+species(
+    label='NH3',
+    reactive=True,
+    structure=adjacencyList(
+"""
+1 N u0 p1 c0 {2,S} {3,S} {4,S}
+2 H u0 p0 c0 {1,S}
+3 H u0 p0 c0 {1,S}
+4 H u0 p0 c0 {1,S}
+"""),
+)
+
+species(
+    label='N2O',
+    reactive=True,
+    structure=adjacencyList(
+"""
+1 N u0 p2 c-1 {2,D}
+2 N u0 p0 c+1 {1,D} {3,D}
+3 O u0 p2 c0 {2,D}
+"""),
+)
+
+species(
+    label='He',
+    reactive=False,
+    structure=adjacencyList(
+"""
+1 He u0 p1 c0
+"""),
+)
+
+#-------------
+
+#temperature from 523-673K 
+surfaceReactor(  
+    temperature=(523,'K'),
+    initialPressure=(1.0, 'bar'),
+    nSims=12,
+    initialGasMoleFractions={
+        "NH3": 0.06,
+        "O2": 0.88,
+        "He": 0.06,
+        "NO":0.0,
+        "H2O":0.0,
+        "N2O":0.0,
+        "N2":0.0,
+    },
+    initialSurfaceCoverages={
+        "X": 1.0,
+    },
+    surfaceVolumeRatio=(2.8571428e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
+    terminationConversion = {"NH3":0.99,},
+    #terminationTime=(10, 's'),
+)
+
+simulator( #default for surface reaction atol=1e-18,rtol=1e-12
+    atol=1e-18, #absolute tolerance are 1e-15 to 1e-25
+    rtol=1e-12, #relative tolerance is usually 1e-4 to 1e-8
+)
+
+model( 
+    toleranceKeepInEdge=0.01, #recommend setting toleranceKeepInEdge to not be larger than 10% of toleranceMoveToCore
+    toleranceMoveToCore=0.1, 
+    toleranceInterruptSimulation=1e8, #This value should be set to be equal to toleranceMoveToCore unless the advanced pruning feature is desired
+    #to always enable pruning should be set as a high value, e.g. 1e8
+    maximumEdgeSpecies=5000, #set up less than 200000
+    minCoreSizeForPrune=50, #default value
+    #toleranceThermoKeepSpeciesInEdge=0.5, 
+    minSpeciesExistIterationsForPrune=2, #default value = 2 iteration
+)
+
+options(
+    units='si',
+    saveRestartPeriod=None,
+    generateOutputHTML=True,
+    generatePlots=True, 
+    saveEdgeSpecies=True,
+    saveSimulationProfiles=True,
+)
+Using catalyst surface properties from metal 'Pt111'.
+Using binding energies:
+{'H': (-2.75368,'eV/molecule'), 'C': (-7.02516,'eV/molecule'), 'N': (-4.63225,'eV/molecule'), 'O': (-3.81153,'eV/molecule')}
+Using surface site density: (2.483e-09,'mol/cm^2')
+
+Surface reaction system 1
+Gas phase mole fractions:
+  NH3                  0.06
+  O2                   0.88
+  He                   0.06
+  NO                   0
+  H2O                  0
+  N2O                  0
+  N2                   0
+Total gas phase:          1 moles
+Pressure:                 1e+05 Pa
+Temperature:              523.0 K
+Reactor volume:           0.0435 m3
+Surface/volume ratio:     2.86e+04 m2/m3
+Surface site density:     2.48e-05 mol/m2
+Surface sites in reactor: 0.0308 moles
+Initial surface coverages (and amounts):
+  X                  1 = 0.030849 moles
+Warning: Generate Output HTML option was turned on. Note that this will slow down model generation.
+Warning: Edge species saving was turned on. This will slow down model generation for large simulations.
+
+Loading transport library from GRI-Mech.py in /Users/lee.ting/Code/RMG-database/input/transport/libraries...
+Loading transport library from OneDMinN2.py in /Users/lee.ting/Code/RMG-database/input/transport/libraries...
+Loading transport library from NOx2018.py in /Users/lee.ting/Code/RMG-database/input/transport/libraries...
+Loading transport library from NIST_Fluorine.py in /Users/lee.ting/Code/RMG-database/input/transport/libraries...
+Loading transport library from PrimaryTransportLibrary.py in /Users/lee.ting/Code/RMG-database/input/transport/libraries...
+Loading transport group database from /Users/lee.ting/Code/RMG-database/input/transport/groups...
+Loading kinetics library Surface/CPOX_Pt/Deutschmann2006 from /Users/lee.ting/Code/RMG-database/input/kinetics/libraries/Surface/CPOX_Pt/Deutschmann2006/reactions.py...
+Loading frequencies group database from /Users/lee.ting/Code/RMG-database/input/statmech/groups...
+Loading solvation thermodynamics group database from /Users/lee.ting/Code/RMG-database/input/solvation/groups...
+Loading thermodynamics library from surfaceThermoPt111.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from surfaceThermoNi111.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from primaryThermoLibrary.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from thermo_DFT_CCSDTF12_BAC.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from DFT_QCI_thermo.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from GRI-Mech3.0-N.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from NitrogenCurran.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from primaryNS.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from CHON.py in /Users/lee.ting/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics group database from /Users/lee.ting/Code/RMG-database/input/thermo/groups...
+Trimolecular reactions are turned on
+Adding rate rules from training set in kinetics families...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([12.5,14.58,16.07,17.22,18.87,19.96,21.35],'cal/(mol*K)'), H298=(-69.7873,'kcal/mol'), S298=(27.26,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""formyloxyX""", comment="""Gas phase thermo for formyloxy from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([11.54,14.52,16.98,18.92,21.57,23.27,25.39],'cal/(mol*K)'), H298=(-96.43,'kcal/mol'), S298=(26.4,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(103.931,'J/(mol*K)'), label="""formic_acid""", comment="""Gas phase thermo for formic_acid from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CR2NR)*) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([12.5,14.58,16.07,17.22,18.87,19.96,21.35],'cal/(mol*K)'), H298=(-69.7873,'kcal/mol'), S298=(27.26,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""formyloxyX""", comment="""Gas phase thermo for formyloxy from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([11.54,14.52,16.98,18.92,21.57,23.27,25.39],'cal/(mol*K)'), H298=(-96.43,'kcal/mol'), S298=(26.4,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(103.931,'J/(mol*K)'), label="""formic_acid""", comment="""Gas phase thermo for formic_acid from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CR2NR)*) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([12.5,14.58,16.07,17.22,18.87,19.96,21.35],'cal/(mol*K)'), H298=(-69.7873,'kcal/mol'), S298=(27.26,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""formyloxyX""", comment="""Gas phase thermo for formyloxy from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([12.5,14.58,16.07,17.22,18.87,19.96,21.35],'cal/(mol*K)'), H298=(-69.7873,'kcal/mol'), S298=(27.26,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""formyloxyX""", comment="""Gas phase thermo for formyloxy from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([37.7445,43.0395,45.9154,47.5388,49.2943,50.3394,51.8374],'J/(mol*K)'), H298=(36.9676,'kJ/mol'), S298=(13.6489,'J/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(37.4151,'J/(mol*K)'), comment="""Gas phase thermo for N2 from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N-*RN-*R) Binding energy corrected by LSR (1.33N) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([37.7445,43.0395,45.9154,47.5388,49.2943,50.3394,51.8374],'J/(mol*K)'), H298=(36.9676,'kJ/mol'), S298=(13.6489,'J/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(37.4151,'J/(mol*K)'), comment="""Gas phase thermo for N2 from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N-*RN-*R) Binding energy corrected by LSR (1.33N) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([37.7445,43.0395,45.9154,47.5388,49.2943,50.3394,51.8374],'J/(mol*K)'), H298=(-153.118,'kJ/mol'), S298=(13.6489,'J/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(37.4151,'J/(mol*K)'), comment="""Gas phase thermo for N2 from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N-*RN-*R) Binding energy corrected by LSR (1.33N) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([37.7445,43.0395,45.9154,47.5388,49.2943,50.3394,51.8374],'J/(mol*K)'), H298=(-153.118,'kJ/mol'), S298=(13.6489,'J/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(37.4151,'J/(mol*K)'), comment="""Gas phase thermo for N2 from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N-*RN-*R) Binding energy corrected by LSR (1.33N) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Rh'. Using 'Rh111'.
+Warning: Found multiple binding energies for 'Rh'. Using 'Rh111'.
+Warning: Found multiple binding energies for 'Rh'. Using 'Rh111'.
+Warning: Found multiple binding energies for 'Rh'. Using 'Rh111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([37.7445,43.0395,45.9154,47.5388,49.2943,50.3394,51.8374],'J/(mol*K)'), H298=(-153.118,'kJ/mol'), S298=(13.6489,'J/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(37.4151,'J/(mol*K)'), comment="""Gas phase thermo for N2 from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N-*RN-*R) Binding energy corrected by LSR (1.33N) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([37.7445,43.0395,45.9154,47.5388,49.2943,50.3394,51.8374],'J/(mol*K)'), H298=(-153.118,'kJ/mol'), S298=(13.6489,'J/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(37.4151,'J/(mol*K)'), comment="""Gas phase thermo for N2 from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N-*RN-*R) Binding energy corrected by LSR (1.33N) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Pt'. Using 'Pt111'.
+Warning: Found multiple binding energies for 'Pt'. Using 'Pt111'.
+Warning: Found multiple binding energies for 'Pt'. Using 'Pt111'.
+Warning: Found multiple binding energies for 'Pt'. Using 'Pt111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Ni'. Using 'Ni111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([9.95,11.39,12.49,13.34,14.49,15.19,16.05],'cal/(mol*K)'), H298=(-26.53,'kcal/mol'), S298=(23.42,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NO2JX""", comment="""Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([9.95,11.39,12.49,13.34,14.49,15.19,16.05],'cal/(mol*K)'), H298=(-26.53,'kcal/mol'), S298=(23.42,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NO2JX""", comment="""Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([9.95,11.39,12.49,13.34,14.49,15.19,16.05],'cal/(mol*K)'), H298=(-36.9379,'kcal/mol'), S298=(23.42,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NO2JX""", comment="""Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([9.95,11.39,12.49,13.34,14.49,15.19,16.05],'cal/(mol*K)'), H298=(-36.9379,'kcal/mol'), S298=(23.42,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NO2JX""", comment="""Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([7.7,10.11,11.8,12.94,14.32,15.13,16.01],'cal/(mol*K)'), H298=(13.41,'kcal/mol'), S298=(19.25,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NNOJJX""", comment="""Gas phase thermo for NNOJJ from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N=*R)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([7.7,10.11,11.8,12.94,14.32,15.13,16.01],'cal/(mol*K)'), H298=(13.41,'kcal/mol'), S298=(19.25,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NNOJJX""", comment="""Gas phase thermo for NNOJJ from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(N=*R)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([9.95,11.39,12.49,13.34,14.49,15.19,16.05],'cal/(mol*K)'), H298=(-26.53,'kcal/mol'), S298=(23.42,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NO2JX""", comment="""Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([9.95,11.39,12.49,13.34,14.49,15.19,16.05],'cal/(mol*K)'), H298=(-26.53,'kcal/mol'), S298=(23.42,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(58.2013,'J/(mol*K)'), label="""NO2JX""", comment="""Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([11.54,14.52,16.98,18.92,21.57,23.27,25.39],'cal/(mol*K)'), H298=(-96.43,'kcal/mol'), S298=(26.4,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(103.931,'J/(mol*K)'), label="""formic_acid""", comment="""Gas phase thermo for formic_acid from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CR2NR)*) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([11.54,14.52,16.98,18.92,21.57,23.27,25.39],'cal/(mol*K)'), H298=(-96.43,'kcal/mol'), S298=(26.4,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(103.931,'J/(mol*K)'), label="""formic_acid""", comment="""Gas phase thermo for formic_acid from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CR2NR)*) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([12.5,14.58,16.07,17.22,18.87,19.96,21.35],'cal/(mol*K)'), H298=(-69.7873,'kcal/mol'), S298=(27.26,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""formyloxyX""", comment="""Gas phase thermo for formyloxy from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([11.54,14.52,16.98,18.92,21.57,23.27,25.39],'cal/(mol*K)'), H298=(-96.43,'kcal/mol'), S298=(26.4,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(103.931,'J/(mol*K)'), label="""formic_acid""", comment="""Gas phase thermo for formic_acid from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CR2NR)*) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([12.5,14.58,16.07,17.22,18.87,19.96,21.35],'cal/(mol*K)'), H298=(-69.7873,'kcal/mol'), S298=(27.26,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""formyloxyX""", comment="""Gas phase thermo for formyloxy from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(O-*R) Binding energy corrected by LSR (0.50O) from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([11.54,14.52,16.98,18.92,21.57,23.27,25.39],'cal/(mol*K)'), H298=(-96.43,'kcal/mol'), S298=(26.4,'cal/(mol*K)'), Cp0=(33.2579,'J/(mol*K)'), CpInf=(103.931,'J/(mol*K)'), label="""formic_acid""", comment="""Gas phase thermo for formic_acid from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CR2NR)*) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([13.19,15.17,16.51,17.56,19.08,20.07,21.36],'cal/(mol*K)'), H298=(72.8,'kcal/mol'), S298=(34.3,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""NCCN""", comment="""Gas phase thermo for NCCN from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CRN)*)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([13.19,15.17,16.51,17.56,19.08,20.07,21.36],'cal/(mol*K)'), H298=(72.8,'kcal/mol'), S298=(34.3,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(83.1447,'J/(mol*K)'), label="""NCCN""", comment="""Gas phase thermo for NCCN from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111((CRN)*)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Found multiple binding energies for 'Cu'. Using 'Cu111'.
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW) Binding energy corrected by LSR () from Pt111""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 2000.0 K...
+Warning: Cphigh is above the theoretical CpInf value for ThermoData object
+ThermoData(Tdata=([300,400,500,600,800,1000,1500],'K'), Cpdata=([10.09,11.57,12.64,13.46,14.64,15.43,16.43],'cal/(mol*K)'), H298=(-87.45,'kcal/mol'), S298=(28.54,'cal/(mol*K)'), Cp0=(29.1007,'J/(mol*K)'), CpInf=(62.3585,'J/(mol*K)'), label="""CO2""", comment="""Gas phase thermo for CO2 from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation: adsorptionPt111(R*vdW)""").
+The thermo for this species is probably wrong! Setting CpInf = Cphigh for Entropy calculationat T = 1666.6666666666665 K...
+Filling in rate rules in kinetics families by averaging...
+Adding reaction library Surface/CPOX_Pt/Deutschmann2006 to model edge...
+
+Summary of Model Enlargement
+---------------------------------
+Added 0 new core species
+Created 14 new edge species
+    H2(8)
+    HX(9)
+    OX(10)
+    CH4(11)
+    CH3X(12)
+    HOX(13)
+    H2OX(14)
+    CO2(15)
+    CO2X(16)
+    CO(17)
+    OCX(18)
+    CX(19)
+    CH2X(20)
+    CHX(21)
+Added 0 new core reactions
+Created 18 new edge reactions
+    X(1) + X(1) + H2(8) <=> HX(9) + HX(9)
+    X(1) + X(1) + O2(2) <=> OX(10) + OX(10)
+    X(1) + X(1) + CH4(11) <=> HX(9) + CH3X(12)
+    X(1) + OX(10) + CH4(11) <=> HOX(13) + CH3X(12)
+    X(1) + HOX(13) + CH4(11) <=> H2OX(14) + CH3X(12)
+    X(1) + H2O(3) <=> H2OX(14)
+    X(1) + CO2(15) <=> CO2X(16)
+    X(1) + CO(17) <=> OCX(18)
+    OX(10) + CX(19) <=> X(1) + OCX(18)
+    OX(10) + OCX(18) <=> X(1) + CO2X(16)
+    HX(9) + CO2X(16) <=> HOX(13) + OCX(18)
+    HX(9) + CH2X(20) <=> X(1) + CH3X(12)
+    HX(9) + CHX(21) <=> X(1) + CH2X(20)
+    X(1) + CHX(21) <=> HX(9) + CX(19)
+    OX(10) + HX(9) <=> X(1) + HOX(13)
+    OX(10) + H2OX(14) <=> HOX(13) + HOX(13)
+    H2(8) + CX(19) <=> CH2X(20)
+    HX(9) + HOX(13) <=> X(1) + H2OX(14)
+
+After model enlargement:
+    The model core has 0 species and 0 reactions
+    The model edge has 22 species and 18 reactions
+
+NOT generating reactions for unreactive species He
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    He
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 1 species and 0 reactions
+    The model edge has 21 species and 18 reactions
+
+
+NOT generating reactions for unreactive species Ar
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    Ar
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 2 species and 0 reactions
+    The model edge has 21 species and 18 reactions
+
+
+NOT generating reactions for unreactive species Ne
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    Ne
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 3 species and 0 reactions
+    The model edge has 21 species and 18 reactions
+
+
+Adding species X(1) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    X(1)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 4 species and 0 reactions
+    The model edge has 20 species and 18 reactions
+
+
+Adding species O2(2) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    O2(2)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 5 species and 0 reactions
+    The model edge has 19 species and 18 reactions
+
+
+Adding species H2O(3) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    H2O(3)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 6 species and 0 reactions
+    The model edge has 18 species and 18 reactions
+
+
+Adding species N2(4) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    N2(4)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 7 species and 0 reactions
+    The model edge has 17 species and 18 reactions
+
+
+Adding species NO(5) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NO(5)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 8 species and 0 reactions
+    The model edge has 16 species and 18 reactions
+
+
+Adding species NH3(6) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NH3(6)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 9 species and 0 reactions
+    The model edge has 15 species and 18 reactions
+
+
+Adding species N2O(7) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    N2O(7)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 10 species and 0 reactions
+    The model edge has 14 species and 18 reactions
+
+
+Initialization complete. Starting model generation.
+
+Generating initial reactions...
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [OH] renamed OH(D) based on thermo library name
+Species [H] renamed H based on thermo library name
+Species [NH2] renamed NH2(D) based on thermo library name
+Species N#N.[Pt] renamed NN_ads based on thermo library name
+Species [Pt]N=O renamed NO_ads based on thermo library name
+Species N[Pt] renamed NH2_ads based on thermo library name
+Species [Pt].N renamed NH3_ads based on thermo library name
+Species [Pt]O[N+](=[N-])[Pt] renamed N2OXX based on thermo library name
+Species [Pt][N-][N+](=O)[Pt] renamed N2OXX based on thermo library name
+Species [N-]=[N+]=O.[Pt] renamed N2O based on thermo library name
+Species [O]O renamed HO2 based on thermo library name
+Species [O]ON=O renamed ONOOJ based on thermo library name
+Species [N]=N renamed NNHJ based on thermo library name
+Species [N]O renamed NOHJJ based on thermo library name
+Species N=O renamed HNO based on thermo library name
+Species [N-]=[N+]O renamed NNOH based on thermo library name
+Species [N-]=[NH+][O] renamed ONHN based on thermo library name
+Species [NH-][N+]=O renamed HNNO based on thermo library name
+Species O=NN=O renamed ONNO_cis based on thermo library name
+Generating kinetics for new reactions...
+For reaction X(1) + X(1) + H2O(3) <=> HX(9) + HOX(13), Ea raised from 59.0 to 61.9 kJ/mol to match endothermicity of reaction.
+For reaction O2(2) + N2(4) <=> [O]ON=[N](35), Ea raised from 397.7 to 400.3 kJ/mol to match endothermicity of reaction.
+For reaction O2(2) + NO(5) <=> ONOOJ(36), Ea raised from 13.4 to 51.7 kJ/mol to match endothermicity of reaction.
+For reaction O2(2) + N2O(7) <=> [N-]=[N+]OO[O](37), Ea raised from 352.1 to 354.9 kJ/mol to match endothermicity of reaction.
+For reaction O2(2) + N2O(7) <=> [O]O[N+](=[N-])[O](38), Ea raised from 267.4 to 275.2 kJ/mol to match endothermicity of reaction.
+For reaction O2(2) + N2O(7) <=> [N-]([N+]=O)O[O](39), Ea raised from 247.2 to 250.1 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 26 new edge species
+    H(23)
+    OH(D)(22)
+    NH2(D)(24)
+    [Pt]N=N[Pt](25)
+    NN_ads(26)
+    NO_ads(27)
+    NH2_ads(28)
+    NH3_ads(29)
+    N2OXX(30)
+    N2OXX(31)
+    [N-]=[N+]=[Pt](32)
+    N2O(33)
+    HO2(34)
+    [O]ON=[N](35)
+    ONOOJ(36)
+    [N-]=[N+]OO[O](37)
+    [O]O[N+](=[N-])[O](38)
+    [N-]([N+]=O)O[O](39)
+    NNHJ(40)
+    NOHJJ(41)
+    HNO(42)
+    [NH-][N+](=O)O(43)
+    NNOH(44)
+    ONHN(45)
+    HNNO(46)
+    ONNO_cis(47)
+Added 0 new core reactions
+Created 33 new edge reactions
+    H(23) + OH(D)(22) <=> H2O(3)
+    H(23) + NH2(D)(24) <=> NH3(6)
+    X(1) + X(1) + H2O(3) <=> HX(9) + HOX(13)
+    X(1) + X(1) + N2(4) <=> [Pt]N=N[Pt](25)
+    X(1) + N2(4) <=> NN_ads(26)
+    X(1) + NO(5) <=> NO_ads(27)
+    X(1) + X(1) + NH3(6) <=> HX(9) + NH2_ads(28)
+    X(1) + NH3(6) <=> NH3_ads(29)
+    X(1) + X(1) + N2O(7) <=> N2OXX(30)
+    X(1) + X(1) + N2O(7) <=> N2OXX(31)
+    X(1) + X(1) + N2O(7) <=> OX(10) + [N-]=[N+]=[Pt](32)
+    X(1) + N2O(7) <=> N2O(33)
+    O2(2) + H2O(3) <=> OH(D)(22) + HO2(34)
+    O2(2) + N2(4) <=> [O]ON=[N](35)
+    O2(2) + NO(5) <=> ONOOJ(36)
+    HO2(34) + NH2(D)(24) <=> O2(2) + NH3(6)
+    O2(2) + N2O(7) <=> [N-]=[N+]OO[O](37)
+    O2(2) + N2O(7) <=> [O]O[N+](=[N-])[O](38)
+    O2(2) + N2O(7) <=> [N-]([N+]=O)O[O](39)
+    OH(D)(22) + NNHJ(40) <=> N2(4) + H2O(3)
+    OH(D)(22) + NOHJJ(41) <=> NO(5) + H2O(3)
+    OH(D)(22) + HNO(42) <=> NO(5) + H2O(3)
+    N2O(7) + H2O(3) <=> [NH-][N+](=O)O(43)
+    OH(D)(22) + NNOH(44) <=> N2O(7) + H2O(3)
+    OH(D)(22) + ONHN(45) <=> N2O(7) + H2O(3)
+    OH(D)(22) + HNNO(46) <=> N2O(7) + H2O(3)
+    NNHJ(40) + NH2(D)(24) <=> N2(4) + NH3(6)
+    NO(5) + NO(5) <=> ONNO_cis(47)
+    NOHJJ(41) + NH2(D)(24) <=> NO(5) + NH3(6)
+    HNO(42) + NH2(D)(24) <=> NO(5) + NH3(6)
+    NNOH(44) + NH2(D)(24) <=> N2O(7) + NH3(6)
+    ONHN(45) + NH2(D)(24) <=> N2O(7) + NH3(6)
+    HNNO(46) + NH2(D)(24) <=> N2O(7) + NH3(6)
+
+After model enlargement:
+    The model core has 10 species and 0 reactions
+    The model edge has 40 species and 51 reactions
+
+
+Completed initial enlarge edge step.
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 0 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 0 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 28 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 28 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:00:55
+    Memory used: 744.83 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Beginning model generation stage 1...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+At time 0.0000e+00 s, species NH3_ads(29) was added to model core to avoid singularity
+
+
+Adding species NH3_ads(29) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NH3_ads(29)
+Created 0 new edge species
+Moved 1 reactions from edge to core
+    X(1) + NH3(6) <=> NH3_ads(29)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 11 species and 1 reactions
+    The model edge has 39 species and 50 reactions
+
+
+For reaction generation 1 process is used.
+Generating kinetics for new reactions...
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 0 new edge species
+Added 0 new core reactions
+Created 1 new edge reactions
+    X(1) + NH3_ads(29) <=> HX(9) + NH2_ads(28)
+
+After model enlargement:
+    The model core has 11 species and 1 reactions
+    The model edge has 39 species and 51 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 1 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 1 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 29 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 29 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:00:57
+    Memory used: 755.32 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 0.0000e+00 s, species OX(10) at rate ratio 0.4280594648389844 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species OX(10) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    OX(10)
+Created 0 new edge species
+Moved 1 reactions from edge to core
+    X(1) + X(1) + O2(2) <=> OX(10) + OX(10)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 12 species and 2 reactions
+    The model edge has 38 species and 50 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species NO[Pt] renamed O-NH2_ads based on thermo library name
+Species [Pt]OO[Pt] renamed O2_ads based on thermo library name
+Species O=O.[Pt] renamed O2(S) based on thermo library name
+Generating kinetics for new reactions...
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 3 new edge species
+    O-NH2_ads(48)
+    O2_ads(49)
+    O2(S)(50)
+Added 0 new core reactions
+Created 4 new edge reactions
+    OX(10) + NH3_ads(29) <=> HOX(13) + NH2_ads(28)
+    OX(10) + NH3_ads(29) <=> HX(9) + O-NH2_ads(48)
+    O2_ads(49) <=> OX(10) + OX(10)
+    X(1) + O2(S)(50) <=> OX(10) + OX(10)
+
+After model enlargement:
+    The model core has 12 species and 2 reactions
+    The model edge has 41 species and 54 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 2 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 2 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 33 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 33 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:00:59
+    Memory used: 767.98 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 9.0166e-06 s, species NH2_ads(28) at rate ratio 0.10004555488704876 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species NH2_ads(28) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NH2_ads(28)
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 13 species and 2 reactions
+    The model edge has 40 species and 54 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species N=[Pt] renamed NH_ads based on thermo library name
+Species NN.[Pt] renamed H2N-NH2_ads based on thermo library name
+Species NN renamed NH2NH2 based on thermo library name
+Generating kinetics for new reactions...
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 3 new edge species
+    NH_ads(51)
+    H2N-NH2_ads(52)
+    NH2NH2(53)
+Added 0 new core reactions
+Created 8 new edge reactions
+    X(1) + NH2(D)(24) <=> NH2_ads(28)
+    X(1) + NH2_ads(28) <=> HX(9) + NH_ads(51)
+    HX(9) + H2N-NH2_ads(52) <=> NH2_ads(28) + NH3_ads(29)
+    OX(10) + NH2_ads(28) <=> HOX(13) + NH_ads(51)
+    X(1) + O-NH2_ads(48) <=> OX(10) + NH2_ads(28)
+    NH2_ads(28) + NH2_ads(28) <=> NH_ads(51) + NH3_ads(29)
+    X(1) + X(1) + NH2NH2(53) <=> NH2_ads(28) + NH2_ads(28)
+    X(1) + H2N-NH2_ads(52) <=> NH2_ads(28) + NH2_ads(28)
+
+After model enlargement:
+    The model core has 13 species and 2 reactions
+    The model edge has 43 species and 62 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 2 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 2 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 41 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 41 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:02
+    Memory used: 743.67 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 9.1908e-06 s, species HOX(13) at rate ratio 0.10013076160515401 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species HOX(13) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    HOX(13)
+Created 0 new edge species
+Moved 1 reactions from edge to core
+    OX(10) + NH3_ads(29) <=> HOX(13) + NH2_ads(28)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 14 species and 3 reactions
+    The model edge has 42 species and 61 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species ON=N[Pt] renamed NNOHX based on thermo library name
+Species NO.[Pt] renamed H2N-OH_ads based on thermo library name
+Species OO[Pt] renamed OOH_ads based on thermo library name
+Species NO renamed NH2OH based on thermo library name
+Species OO renamed HOOH based on thermo library name
+Species OO.[Pt] renamed HO-OH_ads based on thermo library name
+Generating kinetics for new reactions...
+For reaction N2(4) + HOX(13) <=> NNOHX(54), Ea raised from 196.7 to 201.3 kJ/mol to match endothermicity of reaction.
+For reaction N2O(7) + HOX(13) <=> [N-]=[N+](OO)[Pt](56), Ea raised from 117.7 to 119.0 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 10 new edge species
+    NNOHX(54)
+    [N-]=[N+](O[Pt])O(55)
+    [N-]=[N+](OO)[Pt](56)
+    [O-][N+](=NO)[Pt](57)
+    [O-][N+](=N[Pt])O(58)
+    H2N-OH_ads(59)
+    OOH_ads(60)
+    NH2OH(61)
+    HOOH(62)
+    HO-OH_ads(63)
+Added 0 new core reactions
+Created 14 new edge reactions
+    X(1) + OH(D)(22) <=> HOX(13)
+    N2(4) + HOX(13) <=> NNOHX(54)
+    N2O(7) + HOX(13) <=> [N-]=[N+](O[Pt])O(55)
+    N2O(7) + HOX(13) <=> [N-]=[N+](OO)[Pt](56)
+    N2O(7) + HOX(13) <=> [O-][N+](=NO)[Pt](57)
+    N2O(7) + HOX(13) <=> [O-][N+](=N[Pt])O(58)
+    HOX(13) + NH3_ads(29) <=> H2OX(14) + NH2_ads(28)
+    HX(9) + H2N-OH_ads(59) <=> HOX(13) + NH3_ads(29)
+    X(1) + OOH_ads(60) <=> OX(10) + HOX(13)
+    HOX(13) + NH2_ads(28) <=> NH_ads(51) + H2OX(14)
+    X(1) + X(1) + NH2OH(61) <=> HOX(13) + NH2_ads(28)
+    X(1) + H2N-OH_ads(59) <=> HOX(13) + NH2_ads(28)
+    X(1) + X(1) + HOOH(62) <=> HOX(13) + HOX(13)
+    X(1) + HO-OH_ads(63) <=> HOX(13) + HOX(13)
+
+After model enlargement:
+    The model core has 14 species and 3 reactions
+    The model edge has 52 species and 75 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 3 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 3 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 55 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 55 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:04
+    Memory used: 750.06 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 5.2023e-09 s, species H2OX(14) at rate ratio 0.10011379806909666 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species H2OX(14) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    H2OX(14)
+Created 0 new edge species
+Moved 3 reactions from edge to core
+    X(1) + H2O(3) <=> H2OX(14)
+    OX(10) + H2OX(14) <=> HOX(13) + HOX(13)
+    HOX(13) + NH3_ads(29) <=> H2OX(14) + NH2_ads(28)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 15 species and 6 reactions
+    The model edge has 51 species and 72 reactions
+
+
+For reaction generation 1 process is used.
+Generating kinetics for new reactions...
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 0 new edge species
+Added 0 new core reactions
+Created 3 new edge reactions
+    OX(10) + H2OX(14) <=> HX(9) + OOH_ads(60)
+    HX(9) + H2N-OH_ads(59) <=> H2OX(14) + NH2_ads(28)
+    HX(9) + HO-OH_ads(63) <=> HOX(13) + H2OX(14)
+
+After model enlargement:
+    The model core has 15 species and 6 reactions
+    The model edge has 51 species and 75 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 6 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 6 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 58 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 58 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:06
+    Memory used: 756.02 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 1.3518e-06 s, species NH_ads(51) at rate ratio 0.10112010732694247 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species NH_ads(51) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NH_ads(51)
+Created 0 new edge species
+Moved 3 reactions from edge to core
+    OX(10) + NH2_ads(28) <=> HOX(13) + NH_ads(51)
+    NH2_ads(28) + NH2_ads(28) <=> NH_ads(51) + NH3_ads(29)
+    HOX(13) + NH2_ads(28) <=> NH_ads(51) + H2OX(14)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 16 species and 9 reactions
+    The model edge has 50 species and 72 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species N#[Pt] renamed N_ads based on thermo library name
+Species NN[Pt] renamed HN-NH2_ads based on thermo library name
+Error: Could not update atomtypes for this molecule:
+multiplicity 1
+1 O u1 p1 c0 {2,T}
+2 N u1 p0 c0 {1,T} {3,S}
+3 H u0 p0 c0 {2,S}
+
+Error: Could not update atomtypes for this molecule:
+1 O u0 p1 c+1 {2,T}
+2 N u0 p1 c-1 {1,T} {3,S}
+3 H u0 p0 c0 {2,S}
+
+Species [Pt]ON[Pt] renamed HNOXX based on thermo library name
+Species N=O.[Pt] renamed HN-O_ads based on thermo library name
+Species ON[Pt] renamed HN-OH_ads based on thermo library name
+Species N=N renamed HNNH based on thermo library name
+Species [Pt]NN[Pt] renamed HN-NH-h_ads based on thermo library name
+Species N=N.[Pt] renamed HN-NH_ads based on thermo library name
+Generating kinetics for new reactions...
+For reaction NH_ads(51) + NH3_ads(29) <=> HX(9) + HN-NH2_ads(65), Ea raised from 150.8 to 151.1 kJ/mol to match endothermicity of reaction.
+For reaction OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67), Ea raised from 73.0 to 90.8 kJ/mol to match endothermicity of reaction.
+For reaction NH_ads(51) + H2OX(14) <=> HX(9) + HN-OH_ads(68), Ea raised from 156.4 to 157.4 kJ/mol to match endothermicity of reaction.
+Warning: Marked reaction NH2_ads(28) + NH2_ads(28) <=> NH_ads(51) + NH3_ads(29) as duplicate of NH2_ads(28) + NH2_ads(28) <=> NH_ads(51) + NH3_ads(29) for saving to Chemkin file.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 8 new edge species
+    N_ads(64)
+    HN-NH2_ads(65)
+    HNOXX(66)
+    HN-O_ads(67)
+    HN-OH_ads(68)
+    HNNH(69)
+    HN-NH-h_ads(70)
+    HN-NH_ads(71)
+Added 1 new core reactions
+    NH2_ads(28) + NH2_ads(28) <=> NH_ads(51) + NH3_ads(29)
+Created 15 new edge reactions
+    X(1) + NH_ads(51) <=> N_ads(64) + HX(9)
+    NH_ads(51) + NH3_ads(29) <=> HX(9) + HN-NH2_ads(65)
+    OX(10) + NH_ads(51) <=> N_ads(64) + HOX(13)
+    X(1) + X(1) + HNO(42) <=> OX(10) + NH_ads(51)
+    HNOXX(66) <=> OX(10) + NH_ads(51)
+    OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67)
+    NH_ads(51) + NH2_ads(28) <=> N_ads(64) + NH3_ads(29)
+    X(1) + HN-NH2_ads(65) <=> NH_ads(51) + NH2_ads(28)
+    HOX(13) + NH_ads(51) <=> N_ads(64) + H2OX(14)
+    X(1) + HN-OH_ads(68) <=> HOX(13) + NH_ads(51)
+    NH_ads(51) + H2OX(14) <=> HX(9) + HN-OH_ads(68)
+    N_ads(64) + NH2_ads(28) <=> NH_ads(51) + NH_ads(51)
+    X(1) + X(1) + HNNH(69) <=> NH_ads(51) + NH_ads(51)
+    HN-NH-h_ads(70) <=> NH_ads(51) + NH_ads(51)
+    X(1) + HN-NH_ads(71) <=> NH_ads(51) + NH_ads(51)
+
+After model enlargement:
+    The model core has 16 species and 10 reactions
+    The model edge has 58 species and 87 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 10 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 10 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 74 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 74 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:09
+    Memory used: 764.47 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 2.1127e-05 s, species HN-O_ads(67) at rate ratio 0.10049466846202784 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species HN-O_ads(67) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    HN-O_ads(67)
+Created 0 new edge species
+Moved 1 reactions from edge to core
+    OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 17 species and 11 reactions
+    The model edge has 57 species and 86 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species NNO[Pt] renamed NH2NHOJX based on thermo library name
+Species [Pt]ON=O renamed NO2JX based on thermo library name
+Species NN=O.[Pt] renamed NH2NO based on thermo library name
+Species ON=O.[Pt] renamed HONO based on thermo library name
+Generating kinetics for new reactions...
+For reaction OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67), Ea raised from 73.0 to 90.8 kJ/mol to match endothermicity of reaction.
+For reaction X(1) + HN-O_ads(67) <=> HNOXX(66), Ea raised from 0.0 to 73.8 kJ/mol to match endothermicity of reaction.
+For reaction HN-O_ads(67) + NH3_ads(29) <=> NH2_ads(28) + HN-OH_ads(68), Ea raised from 46.1 to 46.3 kJ/mol to match endothermicity of reaction.
+Warning: Marked reaction OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67) as duplicate of OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67) for saving to Chemkin file.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 10 new edge species
+    NH2NHOJX(72)
+    NON[Pt](73)
+    NO2JX(74)
+    NH2NO(75)
+    HONO(76)
+    ONO[Pt](77)
+    OON[Pt](78)
+    [Pt]NN=O(79)
+    [Pt]ONN=O(80)
+    [Pt]NON=O(81)
+Added 1 new core reactions
+    OX(10) + NH_ads(51) <=> X(1) + HN-O_ads(67)
+Created 33 new edge reactions
+    X(1) + HNO(42) <=> HN-O_ads(67)
+    X(1) + HN-O_ads(67) <=> NO_ads(27) + HX(9)
+    X(1) + HN-O_ads(67) <=> HNOXX(66)
+    HN-O_ads(67) + NH3_ads(29) <=> NH2_ads(28) + O-NH2_ads(48)
+    HN-O_ads(67) + NH3_ads(29) <=> NH2_ads(28) + HN-OH_ads(68)
+    HN-O_ads(67) + NH3_ads(29) <=> HX(9) + NH2NHOJX(72)
+    HN-O_ads(67) + NH3_ads(29) <=> HX(9) + NON[Pt](73)
+    OX(10) + HN-O_ads(67) <=> NO_ads(27) + HOX(13)
+    OX(10) + HN-O_ads(67) <=> NO2JX(74) + HX(9)
+    HN-O_ads(67) + NH2_ads(28) <=> NO_ads(27) + NH3_ads(29)
+    HX(9) + NH2NO(75) <=> HN-O_ads(67) + NH2_ads(28)
+    HN-O_ads(67) + NH2_ads(28) <=> X(1) + NH2NHOJX(72)
+    HN-O_ads(67) + NH2_ads(28) <=> X(1) + NON[Pt](73)
+    HN-O_ads(67) + NH2_ads(28) <=> NH_ads(51) + O-NH2_ads(48)
+    HN-O_ads(67) + NH2_ads(28) <=> NH_ads(51) + HN-OH_ads(68)
+    HOX(13) + HN-O_ads(67) <=> NO_ads(27) + H2OX(14)
+    HX(9) + HONO(76) <=> HOX(13) + HN-O_ads(67)
+    HOX(13) + HN-O_ads(67) <=> X(1) + ONO[Pt](77)
+    HOX(13) + HN-O_ads(67) <=> X(1) + OON[Pt](78)
+    HOX(13) + HN-O_ads(67) <=> OX(10) + O-NH2_ads(48)
+    HOX(13) + HN-O_ads(67) <=> OX(10) + HN-OH_ads(68)
+    HN-O_ads(67) + H2OX(14) <=> HOX(13) + O-NH2_ads(48)
+    HN-O_ads(67) + H2OX(14) <=> HOX(13) + HN-OH_ads(68)
+    HN-O_ads(67) + H2OX(14) <=> HX(9) + ONO[Pt](77)
+    HN-O_ads(67) + H2OX(14) <=> HX(9) + OON[Pt](78)
+    NH_ads(51) + HN-O_ads(67) <=> NO_ads(27) + NH2_ads(28)
+    NH_ads(51) + HN-O_ads(67) <=> HX(9) + [Pt]NN=O(79)
+    NH_ads(51) + HN-O_ads(67) <=> N_ads(64) + O-NH2_ads(48)
+    NH_ads(51) + HN-O_ads(67) <=> N_ads(64) + HN-OH_ads(68)
+    HN-O_ads(67) + HN-O_ads(67) <=> NO_ads(27) + O-NH2_ads(48)
+    HN-O_ads(67) + HN-O_ads(67) <=> HX(9) + [Pt]ONN=O(80)
+    HN-O_ads(67) + HN-O_ads(67) <=> NO_ads(27) + HN-OH_ads(68)
+    HN-O_ads(67) + HN-O_ads(67) <=> HX(9) + [Pt]NON=O(81)
+
+After model enlargement:
+    The model core has 17 species and 12 reactions
+    The model edge has 67 species and 119 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 12 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 12 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 108 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 108 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:11
+    Memory used: 774.93 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 3.6346e-07 s, species NO_ads(27) at rate ratio 0.10105483759126628 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species NO_ads(27) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NO_ads(27)
+Created 0 new edge species
+Moved 5 reactions from edge to core
+    X(1) + NO(5) <=> NO_ads(27)
+    OX(10) + HN-O_ads(67) <=> NO_ads(27) + HOX(13)
+    HN-O_ads(67) + NH2_ads(28) <=> NO_ads(27) + NH3_ads(29)
+    HOX(13) + HN-O_ads(67) <=> NO_ads(27) + H2OX(14)
+    NH_ads(51) + HN-O_ads(67) <=> NO_ads(27) + NH2_ads(28)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 18 species and 17 reactions
+    The model edge has 66 species and 114 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [Pt]ON=[Pt] renamed NO-h_ads based on thermo library name
+Species NN=O renamed NH2NO based on thermo library name
+Species ON=O renamed HONO based on thermo library name
+Species O=NN=O.[Pt] renamed ONNO_cis based on thermo library name
+Generating kinetics for new reactions...
+For reaction OX(10) + NO_ads(27) <=> X(1) + NO2JX(74), Ea raised from 115.8 to 135.9 kJ/mol to match endothermicity of reaction.
+For reaction NO_ads(27) + HOX(13) <=> X(1) + OON=[Pt](86), Ea raised from 196.9 to 198.3 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 7 new edge species
+    NO-h_ads(82)
+    NH2NO(83)
+    NON=[Pt](84)
+    HONO(85)
+    OON=[Pt](86)
+    ONNO_cis(87)
+    O=NON=[Pt](88)
+Added 0 new core reactions
+Created 18 new edge reactions
+    X(1) + NO_ads(27) <=> NO-h_ads(82)
+    HX(9) + NH2NO(75) <=> NO_ads(27) + NH3_ads(29)
+    OX(10) + NO_ads(27) <=> X(1) + NO2JX(74)
+    X(1) + X(1) + NH2NO(83) <=> NO_ads(27) + NH2_ads(28)
+    NO_ads(27) + NH2_ads(28) <=> X(1) + NON=[Pt](84)
+    X(1) + NH2NO(75) <=> NO_ads(27) + NH2_ads(28)
+    X(1) + X(1) + HONO(85) <=> NO_ads(27) + HOX(13)
+    NO_ads(27) + HOX(13) <=> X(1) + OON=[Pt](86)
+    X(1) + HONO(76) <=> NO_ads(27) + HOX(13)
+    HX(9) + HONO(76) <=> NO_ads(27) + H2OX(14)
+    N_ads(64) + HN-O_ads(67) <=> NO_ads(27) + NH_ads(51)
+    X(1) + [Pt]NN=O(79) <=> NO_ads(27) + NH_ads(51)
+    ONNO_cis(87) + HX(9) <=> NO_ads(27) + HN-O_ads(67)
+    NO_ads(27) + HN-O_ads(67) <=> X(1) + [Pt]ONN=O(80)
+    NO_ads(27) + HN-O_ads(67) <=> X(1) + [Pt]NON=O(81)
+    X(1) + X(1) + ONNO_cis(47) <=> NO_ads(27) + NO_ads(27)
+    NO_ads(27) + NO_ads(27) <=> X(1) + O=NON=[Pt](88)
+    X(1) + ONNO_cis(87) <=> NO_ads(27) + NO_ads(27)
+
+After model enlargement:
+    The model core has 18 species and 17 reactions
+    The model edge has 73 species and 132 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 17 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 17 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 126 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 126 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:14
+    Memory used: 784.37 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 8.9455e-07 s, species NO-h_ads(82) at rate ratio 0.10081573534644905 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species NO-h_ads(82) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NO-h_ads(82)
+Created 0 new edge species
+Moved 1 reactions from edge to core
+    X(1) + NO_ads(27) <=> NO-h_ads(82)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 19 species and 18 reactions
+    The model edge has 72 species and 131 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [Pt]N=[Pt] renamed NXX based on thermo library name
+Species [Pt]O[Pt] renamed O(T)XX based on thermo library name
+Error: Could not update atomtypes for this molecule:
+multiplicity 1
+1 O u1 p1 c0 {2,T}
+2 N u1 p0 c0 {1,T} {3,S}
+3 N u0 p1 c0 {2,S} {4,S} {5,S}
+4 H u0 p0 c0 {3,S}
+5 H u0 p0 c0 {3,S}
+
+Error: Could not update atomtypes for this molecule:
+1 O u0 p1 c+1 {2,T}
+2 N u0 p1 c-1 {1,T} {3,S}
+3 N u0 p1 c0 {2,S} {4,S} {5,S}
+4 H u0 p0 c0 {3,S}
+5 H u0 p0 c0 {3,S}
+
+Species [Pt]ON([Pt])N renamed NH2NOXX based on thermo library name
+Error: Could not update atomtypes for this molecule:
+multiplicity 1
+1 O u1 p1 c0 {3,T}
+2 O u0 p2 c0 {3,S} {4,S}
+3 N u1 p0 c0 {1,T} {2,S}
+4 H u0 p0 c0 {2,S}
+
+Error: Could not update atomtypes for this molecule:
+1 O u0 p1 c+1 {3,T}
+2 O u0 p2 c0 {3,S} {4,S}
+3 N u0 p1 c-1 {1,T} {2,S}
+4 H u0 p0 c0 {2,S}
+
+Species [Pt]ON([Pt])O renamed HONOXX based on thermo library name
+Species [Pt]NN=[Pt] renamed HN-N-h_ads based on thermo library name
+Error: Could not update atomtypes for this molecule:
+multiplicity 1
+1 O u1 p1 c0 {3,T}
+2 O u0 p2 c0 {4,D}
+3 N u1 p0 c0 {1,T} {4,S}
+4 N u0 p1 c0 {2,D} {3,S}
+
+Error: Could not update atomtypes for this molecule:
+1 O u0 p1 c+1 {3,T}
+2 O u0 p2 c0 {4,D}
+3 N u0 p1 c-1 {1,T} {4,S}
+4 N u0 p1 c0 {2,D} {3,S}
+
+Species [Pt]N(N=O)O[Pt] renamed ONNO_cisXX based on thermo library name
+Species [Pt]ONO[Pt] renamed HNO2JJXX based on thermo library name
+Species [Pt]NOO[Pt] renamed HNOOXX based on thermo library name
+Generating kinetics for new reactions...
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 19 new edge species
+    NXX(89)
+    O(T)XX(90)
+    NH2NOXX(91)
+    [Pt]ON(O[Pt])[Pt](92)
+    [Pt]OON=[Pt](93)
+    HONOXX(94)
+    HN-N-h_ads(95)
+    [Pt]NN(O[Pt])[Pt](96)
+    [Pt]NON=[Pt](97)
+    ONNO_cisXX(98)
+    [Pt]ONON=[Pt](99)
+    [Pt]NOON=[Pt](100)
+    [Pt]ONN=[Pt](101)
+    HNO2JJXX(102)
+    HNOOXX(103)
+    [Pt]=NOON=[Pt](104)
+    [Pt]N(N=[Pt])O[Pt](105)
+    [Pt]ON(N(O[Pt])[Pt])[Pt](106)
+    [Pt]N(O[Pt])ON=[Pt](107)
+Added 0 new core reactions
+Created 33 new edge reactions
+    NO-h_ads(82) <=> OX(10) + N_ads(64)
+    X(1) + NO-h_ads(82) <=> OX(10) + NXX(89)
+    X(1) + NO-h_ads(82) <=> O(T)XX(90) + N_ads(64)
+    NO-h_ads(82) + NH3_ads(29) <=> HNOXX(66) + NH2_ads(28)
+    NO-h_ads(82) + NH3_ads(29) <=> HX(9) + NH2NOXX(91)
+    O2_ads(49) + N_ads(64) <=> OX(10) + NO-h_ads(82)
+    [Pt]ON(O[Pt])[Pt](92) <=> OX(10) + NO-h_ads(82)
+    X(1) + [Pt]OON=[Pt](93) <=> OX(10) + NO-h_ads(82)
+    NH_ads(51) + HNOXX(66) <=> NO-h_ads(82) + NH2_ads(28)
+    X(1) + NH2NOXX(91) <=> NO-h_ads(82) + NH2_ads(28)
+    OX(10) + HNOXX(66) <=> NO-h_ads(82) + HOX(13)
+    X(1) + HONOXX(94) <=> NO-h_ads(82) + HOX(13)
+    NO-h_ads(82) + H2OX(14) <=> HOX(13) + HNOXX(66)
+    NO-h_ads(82) + H2OX(14) <=> HX(9) + HONOXX(94)
+    OX(10) + HN-N-h_ads(95) <=> NO-h_ads(82) + NH_ads(51)
+    N_ads(64) + HNOXX(66) <=> NO-h_ads(82) + NH_ads(51)
+    N_ads(64) + HNOXX(66) <=> NO-h_ads(82) + NH_ads(51)
+    [Pt]NN(O[Pt])[Pt](96) <=> NO-h_ads(82) + NH_ads(51)
+    X(1) + [Pt]NON=[Pt](97) <=> NO-h_ads(82) + NH_ads(51)
+    NO-h_ads(82) + HN-O_ads(67) <=> NO_ads(27) + HNOXX(66)
+    NO-h_ads(82) + HN-O_ads(67) <=> ONNO_cisXX(98) + HX(9)
+    NO-h_ads(82) + HN-O_ads(67) <=> X(1) + [Pt]ONON=[Pt](99)
+    NO-h_ads(82) + HN-O_ads(67) <=> X(1) + [Pt]NOON=[Pt](100)
+    NO-h_ads(82) + HN-O_ads(67) <=> OX(10) + [Pt]ONN=[Pt](101)
+    NO-h_ads(82) + HN-O_ads(67) <=> N_ads(64) + HNO2JJXX(102)
+    NO-h_ads(82) + HN-O_ads(67) <=> OX(10) + [Pt]NON=[Pt](97)
+    NO-h_ads(82) + HN-O_ads(67) <=> N_ads(64) + HNOOXX(103)
+    X(1) + ONNO_cisXX(98) <=> NO_ads(27) + NO-h_ads(82)
+    NO_ads(27) + NO-h_ads(82) <=> X(1) + [Pt]=NOON=[Pt](104)
+    OX(10) + [Pt]N(N=[Pt])O[Pt](105) <=> NO-h_ads(82) + NO-h_ads(82)
+    N_ads(64) + [Pt]ON(O[Pt])[Pt](92) <=> NO-h_ads(82) + NO-h_ads(82)
+    [Pt]ON(N(O[Pt])[Pt])[Pt](106) <=> NO-h_ads(82) + NO-h_ads(82)
+    X(1) + [Pt]N(O[Pt])ON=[Pt](107) <=> NO-h_ads(82) + NO-h_ads(82)
+
+After model enlargement:
+    The model core has 19 species and 18 reactions
+    The model edge has 91 species and 164 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 18 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 18 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 159 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 159 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:17
+    Memory used: 793.25 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 1.4130e-02 s, species N_ads(64) at rate ratio 0.10024704880547053 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species N_ads(64) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    N_ads(64)
+Created 0 new edge species
+Moved 6 reactions from edge to core
+    OX(10) + NH_ads(51) <=> N_ads(64) + HOX(13)
+    NH_ads(51) + NH2_ads(28) <=> N_ads(64) + NH3_ads(29)
+    HOX(13) + NH_ads(51) <=> N_ads(64) + H2OX(14)
+    N_ads(64) + NH2_ads(28) <=> NH_ads(51) + NH_ads(51)
+    N_ads(64) + HN-O_ads(67) <=> NO_ads(27) + NH_ads(51)
+    NO-h_ads(82) <=> OX(10) + N_ads(64)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 20 species and 24 reactions
+    The model edge has 90 species and 158 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species NN=[Pt] renamed N-NH2_ads based on thermo library name
+Species ON=[Pt] renamed NOH_ads based on thermo library name
+Species O=NN=[Pt] renamed NNOJJX based on thermo library name
+Generating kinetics for new reactions...
+For reaction N_ads(64) + H2OX(14) <=> HX(9) + NOH_ads(109), Ea raised from 114.7 to 115.2 kJ/mol to match endothermicity of reaction.
+For reaction N_ads(64) + NO_ads(27) <=> X(1) + NNOJJX(110), Ea raised from 82.8 to 123.9 kJ/mol to match endothermicity of reaction.
+For reaction [Pt]N=N[Pt](25) <=> N_ads(64) + N_ads(64), Ea raised from 178.1 to 182.5 kJ/mol to match endothermicity of reaction.
+Warning: Marked reaction NH_ads(51) + NH2_ads(28) <=> N_ads(64) + NH3_ads(29) as duplicate of NH_ads(51) + NH2_ads(28) <=> N_ads(64) + NH3_ads(29) for saving to Chemkin file.
+Warning: Marked reaction HOX(13) + NH_ads(51) <=> N_ads(64) + H2OX(14) as duplicate of HOX(13) + NH_ads(51) <=> N_ads(64) + H2OX(14) for saving to Chemkin file.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 4 new edge species
+    N-NH2_ads(108)
+    NOH_ads(109)
+    NNOJJX(110)
+    [Pt]=NON=[Pt](111)
+Added 2 new core reactions
+    NH_ads(51) + NH2_ads(28) <=> N_ads(64) + NH3_ads(29)
+    HOX(13) + NH_ads(51) <=> N_ads(64) + H2OX(14)
+Created 11 new edge reactions
+    N_ads(64) + NH3_ads(29) <=> HX(9) + N-NH2_ads(108)
+    X(1) + N-NH2_ads(108) <=> N_ads(64) + NH2_ads(28)
+    X(1) + NOH_ads(109) <=> N_ads(64) + HOX(13)
+    N_ads(64) + H2OX(14) <=> HX(9) + NOH_ads(109)
+    HN-N-h_ads(95) <=> N_ads(64) + NH_ads(51)
+    N_ads(64) + HN-O_ads(67) <=> NNOJJX(110) + HX(9)
+    N_ads(64) + NO_ads(27) <=> X(1) + NNOJJX(110)
+    N_ads(64) + NO-h_ads(82) <=> OX(10) + [Pt]N=N[Pt](25)
+    [Pt]N(N=[Pt])O[Pt](105) <=> N_ads(64) + NO-h_ads(82)
+    X(1) + [Pt]=NON=[Pt](111) <=> N_ads(64) + NO-h_ads(82)
+    [Pt]N=N[Pt](25) <=> N_ads(64) + N_ads(64)
+
+After model enlargement:
+    The model core has 20 species and 26 reactions
+    The model edge has 94 species and 169 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 26 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 26 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 172 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 172 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:20
+    Memory used: 809.14 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 1.2543e-03 s, species [Pt]N=N[Pt](25) at rate ratio 0.10026548838114162 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species [Pt]N=N[Pt](25) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    [Pt]N=N[Pt](25)
+Created 0 new edge species
+Moved 3 reactions from edge to core
+    X(1) + X(1) + N2(4) <=> [Pt]N=N[Pt](25)
+    N_ads(64) + NO-h_ads(82) <=> OX(10) + [Pt]N=N[Pt](25)
+    [Pt]N=N[Pt](25) <=> N_ads(64) + N_ads(64)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 21 species and 29 reactions
+    The model edge has 93 species and 166 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [Pt]ON=N[Pt] renamed NNOJJXX based on thermo library name
+Error: Could not update atomtypes for this molecule:
+multiplicity 1
+1 O u0 p2 c0 {2,S} {4,S}
+2 N u1 p0 c0 {1,S} {3,T}
+3 N u2 p0 c0 {2,T}
+4 H u0 p0 c0 {1,S}
+
+Species ON(N=[Pt])[Pt] renamed NNOHXX based on thermo library name
+Generating kinetics for new reactions...
+For reaction X(1) + [Pt]N=N[Pt](25) <=> [Pt]=NN([Pt])[Pt](112), Ea raised from 772.2 to 772.3 kJ/mol to match endothermicity of reaction.
+For reaction [Pt]N=N[Pt](25) + HOX(13) <=> X(1) + NNOHXX(114), Ea raised from 398.9 to 402.1 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 3 new edge species
+    [Pt]=NN([Pt])[Pt](112)
+    NNOJJXX(113)
+    NNOHXX(114)
+Added 0 new core reactions
+Created 4 new edge reactions
+    X(1) + NN_ads(26) <=> [Pt]N=N[Pt](25)
+    X(1) + [Pt]N=N[Pt](25) <=> [Pt]=NN([Pt])[Pt](112)
+    X(1) + NNOJJXX(113) <=> OX(10) + [Pt]N=N[Pt](25)
+    [Pt]N=N[Pt](25) + HOX(13) <=> X(1) + NNOHXX(114)
+
+After model enlargement:
+    The model core has 21 species and 29 reactions
+    The model edge has 96 species and 170 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 29 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 29 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 176 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 176 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:23
+    Memory used: 827.42 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 1.1405e-04 s, species NN_ads(26) at rate ratio 0.1003170369323988 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species NN_ads(26) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NN_ads(26)
+Created 0 new edge species
+Moved 2 reactions from edge to core
+    X(1) + N2(4) <=> NN_ads(26)
+    X(1) + NN_ads(26) <=> [Pt]N=N[Pt](25)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 22 species and 31 reactions
+    The model edge has 95 species and 168 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [Pt]N=N renamed N-NH_ads based on thermo library name
+Generating kinetics for new reactions...
+For reaction NN_ads(26) + NH3_ads(29) <=> N-NH_ads(115) + NH2_ads(28), Ea raised from 193.8 to 195.8 kJ/mol to match endothermicity of reaction.
+For reaction NN_ads(26) + NH2_ads(28) <=> NH_ads(51) + N-NH_ads(115), Ea raised from 145.0 to 146.3 kJ/mol to match endothermicity of reaction.
+For reaction NN_ads(26) + HOX(13) <=> OX(10) + N-NH_ads(115), Ea raised from 133.6 to 136.1 kJ/mol to match endothermicity of reaction.
+For reaction NN_ads(26) + H2OX(14) <=> HOX(13) + N-NH_ads(115), Ea raised from 225.8 to 226.6 kJ/mol to match endothermicity of reaction.
+For reaction NN_ads(26) + H2OX(14) <=> HX(9) + NNOHX(54), Ea raised from 303.8 to 305.7 kJ/mol to match endothermicity of reaction.
+For reaction NN_ads(26) + NH_ads(51) <=> N_ads(64) + N-NH_ads(115), Ea raised from 168.8 to 169.3 kJ/mol to match endothermicity of reaction.
+For reaction NO-h_ads(82) + NN_ads(26) <=> N_ads(64) + NNOJJXX(113), Ea raised from 346.0 to 347.9 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 1 new edge species
+    N-NH_ads(115)
+Added 0 new core reactions
+Created 9 new edge reactions
+    NN_ads(26) + NH3_ads(29) <=> N-NH_ads(115) + NH2_ads(28)
+    NN_ads(26) + NH2_ads(28) <=> NH_ads(51) + N-NH_ads(115)
+    NN_ads(26) + HOX(13) <=> X(1) + NNOHX(54)
+    NN_ads(26) + HOX(13) <=> OX(10) + N-NH_ads(115)
+    NN_ads(26) + H2OX(14) <=> HOX(13) + N-NH_ads(115)
+    NN_ads(26) + H2OX(14) <=> HX(9) + NNOHX(54)
+    NN_ads(26) + NH_ads(51) <=> N_ads(64) + N-NH_ads(115)
+    NN_ads(26) + HN-O_ads(67) <=> NO_ads(27) + N-NH_ads(115)
+    NO-h_ads(82) + NN_ads(26) <=> N_ads(64) + NNOJJXX(113)
+
+After model enlargement:
+    The model core has 22 species and 31 reactions
+    The model edge has 96 species and 177 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 31 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 31 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 185 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 185 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:26
+    Memory used: 842.07 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 3.6943e-01 s, species NO2JX(74) at rate ratio 0.1001042570039053 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species NO2JX(74) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    NO2JX(74)
+Created 0 new edge species
+Moved 1 reactions from edge to core
+    OX(10) + NO_ads(27) <=> X(1) + NO2JX(74)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 23 species and 32 reactions
+    The model edge has 95 species and 176 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [O]N=O renamed NO2J based on thermo library name
+Species [Pt]OON=O renamed ONOOJX based on thermo library name
+Species OON=O renamed ONOOH based on thermo library name
+Species OON=O.[Pt] renamed ONOOH based on thermo library name
+Species O=NON=O.[Pt] renamed ONONO based on thermo library name
+Species O=NON=O renamed ONONO based on thermo library name
+Error: Could not update atomtypes for this molecule:
+multiplicity 1
+1 O u0 p2 c0 {4,S} {5,S}
+2 O u1 p1 c0 {4,T}
+3 O u0 p2 c0 {5,D}
+4 N u1 p0 c0 {1,S} {2,T}
+5 N u0 p1 c0 {1,S} {3,D}
+
+Error: Could not update atomtypes for this molecule:
+1 O u0 p2 c0 {4,S} {5,S}
+2 O u0 p1 c+1 {4,T}
+3 O u0 p2 c0 {5,D}
+4 N u0 p1 c-1 {1,S} {2,T}
+5 N u0 p1 c0 {1,S} {3,D}
+
+Species [Pt]N(O[Pt])ON=O renamed ONONOXX based on thermo library name
+Generating kinetics for new reactions...
+For reaction NO_ads(27) + NO2JX(74) <=> X(1) + O=NOON=[Pt](126), Ea raised from 286.0 to 287.6 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 12 new edge species
+    NO2J(116)
+    NON=O.[Pt](117)
+    ONOOJX(118)
+    NON=O(119)
+    ONOOH(120)
+    ONOOH(121)
+    ONONO(122)
+    [Pt]ONON=O(123)
+    [Pt]NOON=O(124)
+    ONONO(125)
+    O=NOON=[Pt](126)
+    ONONOXX(127)
+Added 0 new core reactions
+Created 32 new edge reactions
+    X(1) + NO2J(116) <=> NO2JX(74)
+    HONO(76) + NH2_ads(28) <=> NO2JX(74) + NH3_ads(29)
+    HX(9) + NON=O.[Pt](117) <=> NO2JX(74) + NH3_ads(29)
+    X(1) + ONOOJX(118) <=> OX(10) + NO2JX(74)
+    OX(10) + NH2NO(75) <=> NO2JX(74) + NH2_ads(28)
+    NH_ads(51) + HONO(76) <=> NO2JX(74) + NH2_ads(28)
+    X(1) + X(1) + NON=O(119) <=> NO2JX(74) + NH2_ads(28)
+    X(1) + NON=O.[Pt](117) <=> NO2JX(74) + NH2_ads(28)
+    OX(10) + HONO(76) <=> NO2JX(74) + HOX(13)
+    OX(10) + HONO(76) <=> NO2JX(74) + HOX(13)
+    X(1) + X(1) + ONOOH(120) <=> NO2JX(74) + HOX(13)
+    X(1) + ONOOH(121) <=> NO2JX(74) + HOX(13)
+    HOX(13) + HONO(76) <=> NO2JX(74) + H2OX(14)
+    HX(9) + ONOOH(121) <=> NO2JX(74) + H2OX(14)
+    NO2JX(74) + NH_ads(51) <=> OX(10) + [Pt]NN=O(79)
+    N_ads(64) + HONO(76) <=> NO2JX(74) + NH_ads(51)
+    X(1) + [Pt]NON=O(81) <=> NO2JX(74) + NH_ads(51)
+    NO2JX(74) + HN-O_ads(67) <=> NO_ads(27) + HONO(76)
+    ONONO(122) + HX(9) <=> NO2JX(74) + HN-O_ads(67)
+    NO2JX(74) + HN-O_ads(67) <=> X(1) + [Pt]ONON=O(123)
+    NO2JX(74) + HN-O_ads(67) <=> X(1) + [Pt]NOON=O(124)
+    NO2JX(74) + HN-O_ads(67) <=> OX(10) + [Pt]ONN=O(80)
+    NO2JX(74) + HN-O_ads(67) <=> OX(10) + [Pt]NON=O(81)
+    OX(10) + ONNO_cis(87) <=> NO_ads(27) + NO2JX(74)
+    X(1) + X(1) + ONONO(125) <=> NO_ads(27) + NO2JX(74)
+    NO_ads(27) + NO2JX(74) <=> X(1) + O=NOON=[Pt](126)
+    X(1) + ONONO(122) <=> NO_ads(27) + NO2JX(74)
+    OX(10) + ONNO_cisXX(98) <=> NO-h_ads(82) + NO2JX(74)
+    X(1) + ONONOXX(127) <=> NO-h_ads(82) + NO2JX(74)
+    N_ads(64) + NO2JX(74) <=> OX(10) + NNOJJX(110)
+    X(1) + O=NON=[Pt](88) <=> N_ads(64) + NO2JX(74)
+    OX(10) + ONONO(122) <=> NO2JX(74) + NO2JX(74)
+
+After model enlargement:
+    The model core has 23 species and 32 reactions
+    The model edge has 107 species and 208 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 32 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 32 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 217 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 217 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:31
+    Memory used: 866.78 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+Reached max number of objects...preparing to terminate
+At time 6.7137e-01 s, species HX(9) at rate ratio 0.10001338676654367 exceeded the minimum rate for moving to model core of 0.1
+terminating simulation due to interrupt...
+
+
+Adding species HX(9) to model core
+
+Summary of Model Enlargement
+---------------------------------
+Added 1 new core species
+    HX(9)
+Created 0 new edge species
+Moved 9 reactions from edge to core
+    OX(10) + HX(9) <=> X(1) + HOX(13)
+    HX(9) + HOX(13) <=> X(1) + H2OX(14)
+    X(1) + X(1) + H2O(3) <=> HX(9) + HOX(13)
+    X(1) + X(1) + NH3(6) <=> HX(9) + NH2_ads(28)
+    X(1) + NH3_ads(29) <=> HX(9) + NH2_ads(28)
+    X(1) + NH2_ads(28) <=> HX(9) + NH_ads(51)
+    X(1) + NH_ads(51) <=> N_ads(64) + HX(9)
+    X(1) + HN-O_ads(67) <=> NO_ads(27) + HX(9)
+    OX(10) + HN-O_ads(67) <=> NO2JX(74) + HX(9)
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 24 species and 41 reactions
+    The model edge has 106 species and 199 reactions
+
+
+For reaction generation 1 process is used.
+Generating thermo for new species...
+Species [N-]=[N+]([Pt])O renamed NNOHX based on thermo library name
+Species [H][H].[Pt] renamed H2_ads based on thermo library name
+Generating kinetics for new reactions...
+For reaction N2(4) + HX(9) <=> N-NH_ads(115), Ea raised from 118.7 to 122.2 kJ/mol to match endothermicity of reaction.
+For reaction N2O(7) + HX(9) <=> [N-]=[NH+]O[Pt](128), Ea raised from 108.8 to 109.0 kJ/mol to match endothermicity of reaction.
+For reaction [Pt]N=N[Pt](25) + HX(9) <=> X(1) + HN-N-h_ads(95), Ea raised from 194.0 to 199.1 kJ/mol to match endothermicity of reaction.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 5 new edge species
+    [N-]=[NH+]O[Pt](128)
+    NNOHX(129)
+    [O-][N+](=N)[Pt](130)
+    [O-][NH+]=N[Pt](131)
+    H2_ads(132)
+Added 0 new core reactions
+Created 21 new edge reactions
+    X(1) + H(23) <=> HX(9)
+    N2(4) + HX(9) <=> N-NH_ads(115)
+    N2O(7) + HX(9) <=> [N-]=[NH+]O[Pt](128)
+    N2O(7) + HX(9) <=> NNOHX(129)
+    N2O(7) + HX(9) <=> [O-][N+](=N)[Pt](130)
+    N2O(7) + HX(9) <=> [O-][NH+]=N[Pt](131)
+    H2_ads(132) + NH2_ads(28) <=> HX(9) + NH3_ads(29)
+    NH_ads(51) + H2_ads(132) <=> HX(9) + NH2_ads(28)
+    OX(10) + H2_ads(132) <=> HX(9) + HOX(13)
+    HX(9) + H2OX(14) <=> HOX(13) + H2_ads(132)
+    N_ads(64) + H2_ads(132) <=> HX(9) + NH_ads(51)
+    HX(9) + HN-O_ads(67) <=> NO_ads(27) + H2_ads(132)
+    HX(9) + HN-O_ads(67) <=> X(1) + O-NH2_ads(48)
+    HX(9) + HN-O_ads(67) <=> X(1) + HN-OH_ads(68)
+    X(1) + X(1) + HNO(42) <=> NO_ads(27) + HX(9)
+    NO_ads(27) + HX(9) <=> X(1) + NOH_ads(109)
+    X(1) + HNOXX(66) <=> NO-h_ads(82) + HX(9)
+    [Pt]N=N[Pt](25) + HX(9) <=> X(1) + HN-N-h_ads(95)
+    X(1) + N-NH_ads(115) <=> NN_ads(26) + HX(9)
+    X(1) + X(1) + HONO(85) <=> NO2JX(74) + HX(9)
+    X(1) + HONO(76) <=> NO2JX(74) + HX(9)
+
+After model enlargement:
+    The model core has 24 species and 41 reactions
+    The model edge has 111 species and 220 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 41 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 41 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 238 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 238 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:35
+    Memory used: 888.79 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Conducting simulation of reaction system 1...
+At time 5.8162e+00 s, reached target termination conversion: 0.990000 of NH3(6)
+    NH3(6) conversion: 0.99      
+
+
+For reaction generation 1 process is used.
+
+Summary of Secondary Model Edge Enlargement
+---------------------------------
+Added 0 new core species
+Created 0 new edge species
+Added 0 new core reactions
+Created 0 new edge reactions
+
+After model enlargement:
+    The model core has 24 species and 41 reactions
+    The model edge has 111 species and 220 reactions
+
+
+Saving current model core to Chemkin file...
+Chemkin file contains 0 reactions.
+Chemkin file contains 41 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 0 reactions.
+Chemkin file contains 41 reactions.
+Saving current model core and edge to Chemkin file...
+Chemkin file contains 23 reactions.
+Chemkin file contains 238 reactions.
+Saving annotated version of Chemkin files...
+Chemkin file contains 23 reactions.
+Chemkin file contains 238 reactions.
+Saving current model core to HTML file...
+Saving current model edge to HTML file...
+Updating RMG execution statistics...
+    Execution time (DD:HH:MM:SS): 00:00:01:40
+    Memory used: 908.54 MB
+Generating plots of execution statistics...
+
+Making seed mechanism...
+Performing final model checks...
+No collision rate violators found in the model's core.
+
+MODEL GENERATION COMPLETED
+
+The final model core has 24 species and 41 reactions
+The final model edge has 111 species and 220 reactions
+
+RMG execution terminated at Sat Jun  5 15:47:33 2021
