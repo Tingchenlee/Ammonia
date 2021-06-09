@@ -1,3 +1,5 @@
+Interfaces:
+- {}
 Phases:
 - Species:
   - name: He
@@ -84,35 +86,6 @@ Phases:
         - 0.0
         - -745.375
         - 3.35532
-        type: NASApolynomial
-      type: NASA
-    type: Species
-  - name: X
-    radicalelectrons: 0
-    smiles: '[Pt]'
-    thermo:
-      polys:
-      - Tmax: 1000.0
-        Tmin: 298.0
-        coefs:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        type: NASApolynomial
-      - Tmax: 3000.0
-        Tmin: 1000.0
-        coefs:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
         type: NASApolynomial
       type: NASA
     type: Species
@@ -290,36 +263,46 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
-  - name: NH3_ads
+  name: gas
+- Species:
+  - adjlist: '1 X u0 p0 c0
+
+      '
+    name: X
     radicalelectrons: 0
-    smiles: '[Pt].N'
+    smiles: '[Pt]'
     thermo:
       polys:
       - Tmax: 1000.0
         Tmin: 298.0
         coefs:
-        - 1.31496774
-        - 0.0146998289
-        - -1.30679071e-05
-        - 6.9936087e-09
-        - -1.52920905e-12
-        - -14530.5774
-        - -4.29992592
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
         type: NASApolynomial
-      - Tmax: 2000.0
+      - Tmax: 3000.0
         Tmin: 1000.0
         coefs:
-        - 8.39460262
-        - -0.00722640455
-        - 1.26169819e-05
-        - -6.50952664e-09
-        - 1.13563586e-12
-        - -16365.9104
-        - -40.2856883
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
         type: NASApolynomial
       type: NASA
     type: Species
-  - name: OX
+  - adjlist: '1 O u0 p2 c0 {2,D}
+
+      2 X u0 p0 c0 {1,D}
+
+      '
+    name: OX
     radicalelectrons: 0
     smiles: O=[Pt]
     thermo:
@@ -348,50 +331,86 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
-  - name: NH2_ads
+  - adjlist: '1 N u0 p1 c0 {2,S} {3,S} {4,S}
+
+      2 H u0 p0 c0 {1,S}
+
+      3 H u0 p0 c0 {1,S}
+
+      4 H u0 p0 c0 {1,S}
+
+      5 X u0 p0 c0
+
+      '
+    name: NH3_X
     radicalelectrons: 0
-    smiles: N[Pt]
+    smiles: '[Pt].N'
     thermo:
       polys:
       - Tmax: 1000.0
         Tmin: 298.0
         coefs:
-        - -1.89010759
-        - 0.0286217997
-        - -4.34545237e-05
-        - 3.34143285e-08
-        - -9.99500135e-12
-        - -4878.93528
-        - 6.34997611
+        - 1.31496774
+        - 0.0146998289
+        - -1.30679071e-05
+        - 6.9936087e-09
+        - -1.52920905e-12
+        - -14530.5774
+        - -4.29992592
         type: NASApolynomial
       - Tmax: 2000.0
         Tmin: 1000.0
         coefs:
-        - 6.67968147
-        - -0.00464266766
-        - 8.12871035e-06
-        - -4.20436074e-09
-        - 7.35132153e-13
-        - -6752.25639
-        - -35.5181494
+        - 8.39460262
+        - -0.00722640455
+        - 1.26169819e-05
+        - -6.50952664e-09
+        - 1.13563586e-12
+        - -16365.9104
+        - -40.2856883
         type: NASApolynomial
       type: NASA
     type: Species
-  name: phase
+  - adjlist: '1 O u0 p2 c0 {2,S} {3,S}
+
+      2 O u0 p2 c0 {1,S} {4,S}
+
+      3 X u0 p0 c0 {1,S}
+
+      4 X u0 p0 c0 {2,S}
+
+      '
+    name: O2_ads
+    radicalelectrons: 0
+    smiles: '[Pt]OO[Pt]'
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 298.0
+        coefs:
+        - 0.744370346
+        - 0.0211027468
+        - -3.61266754e-05
+        - 2.91032111e-08
+        - -9.01689834e-12
+        - -14532.3684
+        - -4.83356832
+        type: NASApolynomial
+      - Tmax: 2000.0
+        Tmin: 1000.0
+        coefs:
+        - 5.79639127
+        - -0.000749042336
+        - 1.40680168e-06
+        - -7.97092567e-10
+        - 1.49696529e-13
+        - -15527.8968
+        - -28.9715227
+        type: NASApolynomial
+      type: NASA
+    type: Species
+  name: surface
 Reactions:
-- kinetics:
-    A: 1.0
-    Ea: 0.0
-    T0: 1.0
-    n: 0.0
-    type: StickingCoefficient
-  products:
-  - NH3_ads
-  radicalchange: 0
-  reactants:
-  - X
-  - NH3
-  type: ElementaryReaction
 - kinetics:
     A: 189000000000.00003
     Ea: 0.0
@@ -405,5 +424,41 @@ Reactions:
   - X
   - X
   - O2
+  type: ElementaryReaction
+- kinetics:
+    A: 0.011
+    Ea: 0.0
+    n: 0.0
+    type: StickingCoefficient
+  products:
+  - NH3_X
+  radicalchange: 0
+  reactants:
+  - X
+  - NH3
+  type: ElementaryReaction
+- kinetics:
+    A: 89600000000.0
+    Ea: 0.0
+    n: 0.422
+    type: Arrhenius
+  products:
+  - OX
+  - OX
+  radicalchange: 0
+  reactants:
+  - O2_ads
+  type: ElementaryReaction
+- kinetics:
+    A: 89600000000.0
+    Ea: 0.0
+    n: 0.422
+    type: Arrhenius
+  products:
+  - OX
+  - OX
+  radicalchange: 0
+  reactants:
+  - O2_ads
   type: ElementaryReaction
 Units: {}

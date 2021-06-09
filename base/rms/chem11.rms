@@ -1,3 +1,5 @@
+Interfaces:
+- {}
 Phases:
 - Species:
   - name: He
@@ -84,35 +86,6 @@ Phases:
         - 0.0
         - -745.375
         - 3.35532
-        type: NASApolynomial
-      type: NASA
-    type: Species
-  - name: X
-    radicalelectrons: 0
-    smiles: '[Pt]'
-    thermo:
-      polys:
-      - Tmax: 1000.0
-        Tmin: 298.0
-        coefs:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        type: NASApolynomial
-      - Tmax: 3000.0
-        Tmin: 1000.0
-        coefs:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
         type: NASApolynomial
       type: NASA
     type: Species
@@ -290,48 +263,88 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
-  - name: NH3_ads
+  name: gas
+- Species:
+  - adjlist: '1 X u0 p0 c0
+
+      '
+    name: X
     radicalelectrons: 0
-    smiles: '[Pt].N'
+    smiles: '[Pt]'
     thermo:
       polys:
       - Tmax: 1000.0
         Tmin: 298.0
         coefs:
-        - 1.31496774
-        - 0.0146998289
-        - -1.30679071e-05
-        - 6.9936087e-09
-        - -1.52920905e-12
-        - -14530.5774
-        - -4.29992592
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        type: NASApolynomial
+      - Tmax: 3000.0
+        Tmin: 1000.0
+        coefs:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        type: NASApolynomial
+      type: NASA
+    type: Species
+  - adjlist: '1 O u0 p2 c0 {2,D}
+
+      2 X u0 p0 c0 {1,D}
+
+      '
+    name: OX
+    radicalelectrons: 0
+    smiles: O=[Pt]
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 298.0
+        coefs:
+        - 0.179722382
+        - 0.0125453156
+        - -2.29924588e-05
+        - 1.94187177e-08
+        - -6.22414099e-12
+        - -17340.2246
+        - -2.22409728
         type: NASApolynomial
       - Tmax: 2000.0
         Tmin: 1000.0
         coefs:
-        - 8.39460262
-        - -0.00722640455
-        - 1.26169819e-05
-        - -6.50952664e-09
-        - 1.13563586e-12
-        - -16365.9104
-        - -40.2856883
+        - 2.92050897
+        - -0.000270455589
+        - 5.15610634e-07
+        - -2.93911213e-10
+        - 5.54030466e-14
+        - -17836.9003
+        - -15.0940536
         type: NASApolynomial
       type: NASA
     type: Species
-  name: phase
+  name: surface
 Reactions:
 - kinetics:
-    A: 1.0
+    A: 189000000000.00003
     Ea: 0.0
-    T0: 1.0
-    n: 0.0
-    type: StickingCoefficient
+    n: -0.5
+    type: Arrhenius
   products:
-  - NH3_ads
+  - OX
+  - OX
   radicalchange: 0
   reactants:
   - X
-  - NH3
+  - X
+  - O2
   type: ElementaryReaction
 Units: {}

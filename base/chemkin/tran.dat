@@ -10,17 +10,18 @@ N2(4)               1      97.530     3.621     0.000     1.760     4.000    ! G
 NO(5)               1      97.530     3.621     0.000     1.760     4.000    ! GRI-Mech
 NH3(6)              2     481.001     2.920     1.470     0.000    10.000    ! GRI-Mech
 N2O(7)              1     232.401     3.828     0.000     0.000     1.000    ! GRI-Mech
-! H3NX(29)            None
 ! OX(10)              None
-! H2NX(28)            None
+! NH3_X(22)           None
+! O2_ads(49)          None
+! H2NX(30)            None
 ! HOX(13)             None
-! H2OX(14)            None
-! NH_ads(51)          None
-! HNOX(67)            None
-! NO_ads(27)          None
-! NOX2(82)            None
-! N_ads(64)           None
-! N2X2(25)            None
-! NN_ads(26)          None
-! NO2JX(74)           None
 ! HX(9)               None
+! H2OX(14)            None
+! NH_ads(60)          None
+! N_X(23)             None
+! NOX2(87)            None
+! NO_X(24)            None
+! NN_ads(29)          None
+! N2X2(28)            None
+N2O2(48)            2     531.400     4.687     0.000     0.000     0.000    ! Epsilon & sigma estimated with fixed Lennard Jones Parameters. This is the fallback method! Try improving transport databases!
+ONOOJ(37)           2     531.400     4.687     0.000     0.000     0.000    ! Epsilon & sigma estimated with fixed Lennard Jones Parameters. This is the fallback method! Try improving transport databases!

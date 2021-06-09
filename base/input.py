@@ -4,8 +4,8 @@
 # Chemical Engineering Journal 90 (2002) 61–76
 
 database(
-    thermoLibraries=['surfaceThermoPt111', 'surfaceThermoNi111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','DFT_QCI_thermo', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON'],
-    reactionLibraries = ['Surface/CPOX_Pt/Deutschmann2006'],
+    thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','DFT_QCI_thermo', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON'],
+    reactionLibraries = ['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],
     seedMechanisms = [],
     kineticsDepositories = ['training'],
     kineticsFamilies = ['surface','default'],
@@ -99,13 +99,13 @@ species(
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=(523,'K'),
+    temperature=(673,'K'),
     initialPressure=(1.0, 'bar'),
     nSims=12,
     initialGasMoleFractions={
-        "NH3": 0.06,
+        "NH3": 0.066,
         "O2": 0.88,
-        "He": 0.06,
+        "He": 0.054,
         "NO":0.0,
         "H2O":0.0,
         "N2O":0.0,

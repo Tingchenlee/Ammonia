@@ -1,3 +1,5 @@
+Interfaces:
+- {}
 Phases:
 - Species:
   - name: He
@@ -84,35 +86,6 @@ Phases:
         - 0.0
         - -745.375
         - 3.35532
-        type: NASApolynomial
-      type: NASA
-    type: Species
-  - name: X
-    radicalelectrons: 0
-    smiles: '[Pt]'
-    thermo:
-      polys:
-      - Tmax: 1000.0
-        Tmin: 298.0
-        coefs:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        type: NASApolynomial
-      - Tmax: 3000.0
-        Tmin: 1000.0
-        coefs:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
         type: NASApolynomial
       type: NASA
     type: Species
@@ -290,6 +263,40 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
-  name: phase
+  name: gas
+- Species:
+  - adjlist: '1 X u0 p0 c0
+
+      '
+    name: X
+    radicalelectrons: 0
+    smiles: '[Pt]'
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 298.0
+        coefs:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        type: NASApolynomial
+      - Tmax: 3000.0
+        Tmin: 1000.0
+        coefs:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        type: NASApolynomial
+      type: NASA
+    type: Species
+  name: surface
 Reactions: []
 Units: {}
