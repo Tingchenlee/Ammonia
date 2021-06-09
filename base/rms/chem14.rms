@@ -418,7 +418,7 @@ Phases:
       4 X u0 p0 c0 {1,S}
 
       '
-    name: NH2_ads
+    name: NH2_X
     radicalelectrons: 0
     smiles: N[Pt]
     thermo:
@@ -476,9 +476,9 @@ Reactions:
   - NH3
   type: ElementaryReaction
 - kinetics:
-    A: 89600000000.0
-    Ea: 0.0
-    n: 0.422
+    A: 439000000000.0
+    Ea: 76227.0
+    n: 0.299
     type: Arrhenius
   products:
   - OX
@@ -488,9 +488,9 @@ Reactions:
   - O2_ads
   type: ElementaryReaction
 - kinetics:
-    A: 89600000000.0
-    Ea: 0.0
-    n: 0.422
+    A: 439000000000.0
+    Ea: 76227.0
+    n: 0.299
     type: Arrhenius
   products:
   - OX

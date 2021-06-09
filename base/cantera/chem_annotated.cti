@@ -2,9 +2,14 @@ units(length='cm', time='s', quantity='mol', act_energy='kcal/mol')
 
 ideal_gas(name='gas',
           elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
-          species="""He         Ar         Ne         O2(2)      H2O(3)
-                     N2(4)      NO(5)      NH3(6)     N2O(7)     ONOOJ(37)
-                     N2O2(48)""",
+          species="""He          Ar          Ne          O2(2)
+                     H2O(3)      N2(4)       NO(5)       NH3(6)
+                     N2O(7)      NO2(26)     H(29)       OH(30)
+                     NH2(34)     HO2(57)     ONOOJ(59)   NNHJ(63)
+                     HNO(65)     N2O2(70)    NH2NO(121)  HONO(124)
+                     S(147)      ONOOH(148)  ONONO(153)  HNO2(191)
+                     NO2NO(222)  NO2OH(227)  H2NO2(270)  NH2OJ(283)
+                     HNNOH(290)""",
           reactions='gas-*',
           transport='Mix',
           initial_state=state(temperature=300.0, pressure=OneAtm))
@@ -13,8 +18,10 @@ ideal_interface(name='surface1',
                 elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
                 species="""X(1)        HX(9)       OX(10)      HOX(13)
                           H2OX(14)    NH3_X(22)   N_X(23)     NO_X(24)
-                          N2X2(28)    NN_ads(29)  H2NX(30)    O2_ads(49)
-                          NH_ads(60)  NOX2(87)""",
+                          NO2_X(25)   NH2_X(35)   NH_X(37)    N2_X(50)
+                          NHO_X(51)   N2X2(54)    O2_ads(71)  HO2X(95)
+                          HONO(113)   NOX2(119)   NO2JX(235)  NO2OH(256)
+                          NO2X2(416)""",
                 site_density=2.483e-09,
                 phases="gas",
           reactions='surface1-*',
@@ -170,7 +177,81 @@ species(name='N2O(7)',
                                 well_depth=232.401,
                                 rot_relax=1.0))
 
-species(name='ONOOJ(37)',
+species(name='NO2(26)',
+        atoms='N:1 O:2',
+        thermo=(NASA([100.00, 1003.62],
+                     [ 3.95017800E+00, -1.10890723E-03,  1.34101326E-05,
+                      -1.53108002E-08,  5.31018790E-12,  2.97329517E+03,
+                       6.19455359E+00]),
+                NASA([1003.62, 5000.00],
+                     [ 4.42984125E+00,  2.84582332E-03, -1.26849815E-06,
+                       2.63845835E-10, -2.02209363E-14,  2.58156381E+03,
+                       2.40679556E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.5,
+                                well_depth=200.001,
+                                rot_relax=1.0))
+
+species(name='H(29)',
+        atoms='H:1',
+        thermo=(NASA([100.00, 3459.60],
+                     [ 2.50000000E+00,  9.24384602E-15, -1.36779837E-17,
+                       6.66184769E-21, -1.00106912E-24,  2.54742178E+04,
+                      -4.44972896E-01]),
+                NASA([3459.60, 5000.00],
+                     [ 2.49999999E+00,  9.20455546E-12, -3.58608293E-15,
+                       6.15198922E-19, -3.92041801E-23,  2.54742178E+04,
+                      -4.44972842E-01])),
+        transport=gas_transport(geom='atom',
+                                diam=2.05,
+                                well_depth=145.0))
+
+species(name='OH(30)',
+        atoms='H:1 O:1',
+        thermo=(NASA([100.00, 1145.76],
+                     [ 3.51456839E+00,  2.92734177E-05, -5.32150560E-07,
+                       1.01947516E-09, -3.85939388E-13,  3.41425418E+03,
+                       2.10434756E+00]),
+                NASA([1145.76, 5000.00],
+                     [ 3.07193723E+00,  6.04019852E-04, -1.39805999E-08,
+                      -2.13440797E-11,  2.48061354E-15,  3.57938792E+03,
+                       4.57801473E+00])),
+        transport=gas_transport(geom='linear',
+                                diam=2.75,
+                                well_depth=80.0))
+
+species(name='NH2(34)',
+        atoms='H:2 N:1',
+        thermo=(NASA([100.00, 1522.03],
+                     [ 4.08973577E+00, -1.15511403E-03,  4.13796328E-06,
+                      -2.48323585E-09,  4.84276042E-13,  2.11773522E+04,
+                       2.89566843E-01]),
+                NASA([1522.03, 5000.00],
+                     [ 2.68014191E+00,  3.36843288E-03, -1.12728830E-06,
+                       1.76557247E-10, -1.06787207E-14,  2.15115727E+04,
+                       7.37048498E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=2.65,
+                                well_depth=80.0,
+                                polar=2.26,
+                                rot_relax=4.0))
+
+species(name='HO2(57)',
+        atoms='H:1 O:2',
+        thermo=(NASA([100.00, 1000.23],
+                     [ 4.02426387E+00, -1.64555802E-03,  1.05113009E-05,
+                      -1.06996279E-08,  3.49400133E-12,  2.34739714E+02,
+                       4.70055404E+00]),
+                NASA([1000.23, 5000.00],
+                     [ 3.62864814E+00,  3.05393245E-03, -1.21134051E-06,
+                       2.29646940E-10, -1.65068081E-14,  1.57940273E+02,
+                       5.82973638E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.458,
+                                well_depth=107.4,
+                                rot_relax=1.0))
+
+species(name='ONOOJ(59)',
         atoms='N:1 O:3',
         thermo=(NASA([100.00, 867.17],
                      [ 3.00798903E+00,  2.56959706E-02, -5.03707878E-05,
@@ -184,7 +265,37 @@ species(name='ONOOJ(37)',
                                 diam=4.687,
                                 well_depth=531.4))
 
-species(name='N2O2(48)',
+species(name='NNHJ(63)',
+        atoms='H:1 N:2',
+        thermo=(NASA([100.00, 1085.69],
+                     [ 4.05639457E+00, -1.73134497E-03,  9.19514103E-06,
+                      -8.17674566E-09,  2.35157297E-12,  2.87988555E+04,
+                       4.03299590E+00]),
+                NASA([1085.69, 5000.00],
+                     [ 3.08739385E+00,  3.98312407E-03, -1.66275704E-06,
+                       3.09811390E-10, -2.15377742E-14,  2.88828816E+04,
+                       8.20549912E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.798,
+                                well_depth=71.4,
+                                rot_relax=1.0))
+
+species(name='HNO(65)',
+        atoms='H:1 N:1 O:1',
+        thermo=(NASA([100.00, 1248.03],
+                     [ 4.11012862E+00, -2.22093029E-03,  8.85050766E-06,
+                      -6.83133665E-09,  1.69819601E-12,  1.15599620E+04,
+                       3.43465419E+00]),
+                NASA([1248.03, 5000.00],
+                     [ 2.64834323E+00,  4.64380426E-03, -2.01985125E-06,
+                       3.74694134E-10, -2.55957115E-14,  1.17550833E+04,
+                       1.01307403E+01])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.492,
+                                well_depth=116.7,
+                                rot_relax=1.0))
+
+species(name='N2O2(70)',
         atoms='N:2 O:2',
         thermo=(NASA([100.00, 977.06],
                      [ 3.16765179E+00,  1.27184383E-02,  7.75840726E-07,
@@ -197,6 +308,167 @@ species(name='N2O2(48)',
         transport=gas_transport(geom='nonlinear',
                                 diam=4.687,
                                 well_depth=531.4))
+
+species(name='NH2NO(121)',
+        atoms='H:2 N:2 O:1',
+        thermo=(NASA([100.00, 990.03],
+                     [ 3.57581225E+00,  5.12304363E-03,  1.56591373E-05,
+                      -2.25494676E-08,  8.49953957E-12,  8.07984538E+03,
+                       7.65075648E+00]),
+                NASA([990.03, 5000.00],
+                     [ 5.80625827E+00,  6.64872427E-03, -2.61753249E-06,
+                       5.08242009E-10, -3.76376448E-14,  7.12179031E+03,
+                      -5.69557351E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=5.118,
+                                well_depth=237.1))
+
+species(name='HONO(124)',
+        atoms='H:1 N:1 O:2',
+        thermo=(NASA([100.00, 1030.67],
+                     [ 3.58324194E+00,  6.77956286E-03,  2.80768372E-06,
+                      -7.92847153E-09,  3.26002109E-12, -1.05229890E+04,
+                       7.64225438E+00]),
+                NASA([1030.67, 5000.00],
+                     [ 5.61861478E+00,  4.45477302E-03, -1.92172142E-06,
+                       3.78240351E-10, -2.77201678E-14, -1.12386294E+04,
+                      -3.67508048E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.95,
+                                well_depth=350.0,
+                                dipole=1.639,
+                                rot_relax=1.0))
+
+species(name='S(147)',
+        atoms='H:2 N:2 O:2',
+        thermo=(NASA([100.00, 1156.58],
+                     [ 2.70906843E+00,  2.75402926E-02, -2.95298401E-05,
+                       1.57516364E-08, -3.31204043E-12,  9.88699221E+03,
+                       1.17249177E+01]),
+                NASA([1156.58, 5000.00],
+                     [ 8.55445180E+00,  7.32419510E-03, -3.31103390E-06,
+                       6.38799823E-10, -4.53323594E-14,  8.53486154E+03,
+                      -1.73259906E+01])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=4.687,
+                                well_depth=531.4))
+
+species(name='ONOOH(148)',
+        atoms='H:1 N:1 O:3',
+        thermo=(NASA([100.00, 768.14],
+                     [ 2.96303231E+00,  2.47517810E-02, -3.57816826E-05,
+                       2.80288133E-08, -8.89434537E-12, -3.02582362E+03,
+                       1.22924656E+01]),
+                NASA([768.14, 5000.00],
+                     [ 6.03640108E+00,  8.74634120E-03, -4.52435700E-06,
+                       8.98581758E-10, -6.38218817E-14, -3.49794289E+03,
+                      -1.72382302E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=4.687,
+                                well_depth=531.4))
+
+species(name='ONONO(153)',
+        atoms='N:2 O:3',
+        thermo=(NASA([100.00, 1001.15],
+                     [ 2.24879839E+00,  3.26009460E-02, -3.22935172E-05,
+                       9.64974224E-09,  5.97919020E-13,  9.10294939E+03,
+                       1.36637803E+01]),
+                NASA([1001.15, 5000.00],
+                     [ 1.37258250E+01, -1.18339321E-03,  2.39194755E-07,
+                       2.92776088E-11, -7.01573079E-15,  6.19995814E+03,
+                      -4.47406725E+01])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=5.784,
+                                well_depth=341.1))
+
+species(name='HNO2(191)',
+        atoms='H:1 N:1 O:2',
+        thermo=(NASA([100.00, 1007.86],
+                     [ 3.98439375E+00, -2.90734587E-03,  2.42183346E-05,
+                      -2.60196146E-08,  8.72153466E-12, -6.45816992E+03,
+                       6.63654571E+00]),
+                NASA([1007.86, 5000.00],
+                     [ 3.92431014E+00,  6.24041893E-03, -2.65593641E-06,
+                       5.27594604E-10, -3.90804545E-14, -6.89855764E+03,
+                       4.68204338E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.95,
+                                well_depth=350.0,
+                                dipole=1.639,
+                                rot_relax=1.0))
+
+species(name='NO2NO(222)',
+        atoms='N:2 O:3',
+        thermo=(NASA([100.00, 797.72],
+                     [ 2.68864968E+00,  3.19246309E-02, -5.47810267E-05,
+                       4.87707956E-08, -1.70336371E-11,  8.19040920E+03,
+                       1.34213932E+01]),
+                NASA([797.72, 5000.00],
+                     [ 6.29755155E+00,  9.74441015E-03, -5.39451429E-06,
+                       1.07959561E-09, -7.61146161E-14,  7.74457756E+03,
+                      -2.35937415E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=5.784,
+                                well_depth=341.1))
+
+species(name='NO2OH(227)',
+        atoms='H:1 N:1 O:3',
+        thermo=(NASA([100.00, 964.74],
+                     [ 3.37979394E+00,  7.07795347E-03,  1.89738359E-05,
+                      -3.13216693E-08,  1.27350814E-11, -1.74102618E+04,
+                       1.01297198E+01]),
+                NASA([964.74, 5000.00],
+                     [ 8.17856129E+00,  3.61024777E-03, -1.17843436E-06,
+                       2.55810544E-10, -2.19831728E-14, -1.91007169E+04,
+                      -1.68117174E+01])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=4.2,
+                                well_depth=400.0,
+                                dipole=0.2,
+                                rot_relax=1.0))
+
+species(name='H2NO2(270)',
+        atoms='H:2 N:1 O:2',
+        thermo=(NASA([100.00, 1492.35],
+                     [ 3.52871209E+00,  1.13043887E-02, -6.90043106E-06,
+                       2.18536825E-09, -3.02428725E-13,  1.76154663E+04,
+                       1.00582460E+01]),
+                NASA([1492.35, 5000.00],
+                     [ 4.80898520E+00,  7.87281243E-03, -3.45125032E-06,
+                       6.44534676E-10, -4.43056791E-14,  1.72333447E+04,
+                       3.36911346E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=5.118,
+                                well_depth=237.1))
+
+species(name='NH2OJ(283)',
+        atoms='H:2 N:1 O:1',
+        thermo=(NASA([100.00, 1947.25],
+                     [ 3.94550143E+00,  3.66316757E-03,  9.70080117E-07,
+                      -1.35904825E-09,  2.83751281E-13,  6.92849718E+03,
+                       7.87015520E+00]),
+                NASA([1947.25, 5000.00],
+                     [ 4.51740464E+00,  5.03664910E-03, -2.05092197E-06,
+                       3.47288113E-10, -2.16018382E-14,  6.22264643E+03,
+                       3.48939730E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=3.492,
+                                well_depth=116.7,
+                                rot_relax=1.0))
+
+species(name='HNNOH(290)',
+        atoms='H:2 N:2 O:1',
+        thermo=(NASA([100.00, 1000.84],
+                     [ 3.51101428E+00,  6.73912251E-03,  1.17225375E-05,
+                      -1.89184424E-08,  7.28537368E-12,  8.32224158E+03,
+                       8.43831016E+00]),
+                NASA([1000.84, 5000.00],
+                     [ 6.07655211E+00,  6.39073562E-03, -2.60054960E-06,
+                       5.10762064E-10, -3.78946805E-14,  7.31261211E+03,
+                      -6.41945127E+00])),
+        transport=gas_transport(geom='nonlinear',
+                                diam=5.118,
+                                well_depth=237.1))
 
 species(name='X(1)',
         atoms='X:1',
@@ -286,7 +558,62 @@ species(name='NO_X(24)',
                       -1.48667738E-09,  2.75613483E-13, -1.47707534E+04,
                       -2.76785587E+01])))
 
-species(name='N2X2(28)',
+species(name='NO2_X(25)',
+        atoms='N:1 O:2 X:1',
+        thermo=(NASA([100.00, 944.78],
+                     [ 3.77761273E+00, -2.42435523E-04,  2.27925148E-05,
+                      -3.07622678E-08,  1.20227209E-11, -1.46114223E+04,
+                      -1.04281554E+01]),
+                NASA([944.78, 5000.00],
+                     [ 6.56032390E+00,  1.06476421E-03, -6.32224278E-08,
+                       2.86672424E-11, -4.96825971E-15, -1.57213855E+04,
+                      -2.67865327E+01])))
+
+species(name='NH2_X(35)',
+        atoms='H:2 N:1 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [-1.89010759E+00,  2.86217997E-02, -4.34545237E-05,
+                       3.34143285E-08, -9.99500135E-12, -4.87893528E+03,
+                       6.34997611E+00]),
+                NASA([1000.00, 2000.00],
+                     [ 6.67968147E+00, -4.64266766E-03,  8.12871035E-06,
+                      -4.20436074E-09,  7.35132153E-13, -6.75225639E+03,
+                      -3.55181494E+01])))
+
+species(name='NH_X(37)',
+        atoms='H:1 N:1 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [-2.68663098E+00,  2.89197486E-02, -4.76398566E-05,
+                       3.77368064E-08, -1.14895177E-11, -1.39698939E+03,
+                       9.81076735E+00]),
+                NASA([1000.00, 2000.00],
+                     [ 4.82700699E+00, -2.46380210E-03,  4.35378855E-06,
+                      -2.27895186E-09,  4.02508146E-13, -2.92453268E+03,
+                      -2.63392973E+01])))
+
+species(name='N2_X(50)',
+        atoms='N:2 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [ 4.13993917E+00, -9.92755910E-04,  1.76704033E-06,
+                      -1.57884342E-10, -3.64206712E-13, -4.38199802E+03,
+                      -7.98299353E+00]),
+                NASA([1000.00, 2000.00],
+                     [ 4.38660517E+00, -1.50692391E-03,  2.67640594E-06,
+                      -1.41531803E-09,  2.51363379E-13, -4.48345747E+03,
+                      -9.36216462E+00])))
+
+species(name='NHO_X(51)',
+        atoms='H:1 N:1 O:1 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [ 1.08095806E+00,  1.29219267E-02, -1.33374540E-05,
+                       7.75158679E-09, -1.92612419E-12, -8.13728821E+03,
+                       6.08546053E-01]),
+                NASA([1000.00, 2000.00],
+                     [ 6.47671505E+00, -3.95793547E-03,  7.09299979E-06,
+                      -3.80627447E-09,  6.85388388E-13, -9.53610261E+03,
+                      -2.67996453E+01])))
+
+species(name='N2X2(54)',
         atoms='N:2 X:2',
         thermo=(NASA([100.00, 899.07],
                      [ 3.17988900E+00,  2.16745972E-03,  1.49948526E-05,
@@ -298,29 +625,7 @@ species(name='N2X2(28)',
                       -3.97208822E+01])),
         size=2.0)
 
-species(name='NN_ads(29)',
-        atoms='N:2 X:1',
-        thermo=(NASA([298.00, 1000.00],
-                     [ 4.13993917E+00, -9.92755910E-04,  1.76704033E-06,
-                      -1.57884342E-10, -3.64206712E-13, -4.38199802E+03,
-                      -7.98299353E+00]),
-                NASA([1000.00, 2000.00],
-                     [ 4.38660517E+00, -1.50692391E-03,  2.67640594E-06,
-                      -1.41531803E-09,  2.51363379E-13, -4.48345747E+03,
-                      -9.36216462E+00])))
-
-species(name='H2NX(30)',
-        atoms='H:2 N:1 X:1',
-        thermo=(NASA([298.00, 1000.00],
-                     [-1.89010759E+00,  2.86217997E-02, -4.34545237E-05,
-                       3.34143285E-08, -9.99500135E-12, -4.87893528E+03,
-                       6.34997611E+00]),
-                NASA([1000.00, 2000.00],
-                     [ 6.67968147E+00, -4.64266766E-03,  8.12871035E-06,
-                      -4.20436074E-09,  7.35132153E-13, -6.75225639E+03,
-                      -3.55181494E+01])))
-
-species(name='O2_ads(49)',
+species(name='O2_ads(71)',
         atoms='O:2 X:2',
         thermo=(NASA([298.00, 1000.00],
                      [ 7.44370346E-01,  2.11027468E-02, -3.61266754E-05,
@@ -332,18 +637,29 @@ species(name='O2_ads(49)',
                       -2.89715227E+01])),
         size=2.0)
 
-species(name='NH_ads(60)',
-        atoms='H:1 N:1 X:1',
+species(name='HO2X(95)',
+        atoms='H:1 O:2 X:1',
         thermo=(NASA([298.00, 1000.00],
-                     [-2.68663098E+00,  2.89197486E-02, -4.76398566E-05,
-                       3.77368064E-08, -1.14895177E-11, -1.39698939E+03,
-                       9.81076735E+00]),
+                     [ 3.30951701E+00,  1.58303400E-02, -2.48037342E-05,
+                       1.93368066E-08, -5.83664367E-12, -1.65355567E+04,
+                      -1.33537537E+01]),
                 NASA([1000.00, 2000.00],
-                     [ 4.82700699E+00, -2.46380210E-03,  4.35378855E-06,
-                      -2.27895186E-09,  4.02508146E-13, -2.92453268E+03,
-                      -2.63392973E+01])))
+                     [ 7.82755313E+00, -2.15021793E-03,  3.74021314E-06,
+                      -1.91291320E-09,  3.31650646E-13, -1.74991919E+04,
+                      -3.53134909E+01])))
 
-species(name='NOX2(87)',
+species(name='HONO(113)',
+        atoms='H:1 N:1 O:2 X:1',
+        thermo=(NASA([100.00, 934.01],
+                     [ 3.62715065E+00,  2.75916366E-04,  3.33355336E-05,
+                      -4.66563437E-08,  1.86832180E-11, -1.98878745E+04,
+                      -8.20960747E+00]),
+                NASA([934.01, 5000.00],
+                     [ 8.35979045E+00,  2.94387500E-04,  7.26303648E-07,
+                      -1.26757790E-10,  4.71512033E-15, -2.16568174E+04,
+                      -3.54557339E+01])))
+
+species(name='NOX2(119)',
         atoms='N:1 O:1 X:2',
         thermo=(NASA([298.00, 1000.00],
                      [ 3.23151905E+00,  6.07214925E-03, -7.46345407E-06,
@@ -355,28 +671,678 @@ species(name='NOX2(87)',
                       -2.47556107E+01])),
         size=2.0)
 
+species(name='NO2JX(235)',
+        atoms='N:1 O:2 X:1',
+        thermo=(NASA([100.00, 927.02],
+                     [ 4.12534925E+00, -1.50568600E-02,  7.29924440E-05,
+                      -8.77811171E-08,  3.34788467E-11, -2.11761105E+04,
+                      -1.68028820E+01]),
+                NASA([927.02, 5000.00],
+                     [ 8.69567333E+00, -3.19762074E-03,  2.70455142E-06,
+                      -4.86132899E-10,  2.69603332E-14, -2.33803999E+04,
+                      -4.58244902E+01])))
+
+species(name='NO2OH(256)',
+        atoms='H:1 N:1 O:3 X:1',
+        thermo=(NASA([100.00, 934.69],
+                     [ 3.41972018E+00,  6.11808035E-04,  4.94226931E-05,
+                      -7.00381808E-08,  2.82005969E-11, -2.67749712E+04,
+                      -5.70730513E+00]),
+                NASA([934.69, 5000.00],
+                     [ 1.09891463E+01, -6.64550000E-04,  1.53410064E-06,
+                      -2.64174614E-10,  1.16796181E-14, -2.95492410E+04,
+                      -4.89853380E+01])))
+
+species(name='NO2X2(416)',
+        atoms='N:1 O:2 X:2',
+        thermo=(NASA([100.00, 932.25],
+                     [ 3.70196376E+00, -1.04978920E-03,  3.25289302E-05,
+                      -4.50413618E-08,  1.80456743E-11, -1.45934680E+04,
+                      -1.48553970E+01]),
+                NASA([932.25, 5000.00],
+                     [ 8.24462296E+00, -1.05584433E-03,  1.18682216E-06,
+                      -2.07846318E-10,  1.03100776E-14, -1.62871595E+04,
+                      -4.09936549E+01])),
+        size=2.0)
+
 #-------------------------------------------------------------------------------
 # Reaction data
 #-------------------------------------------------------------------------------
-#  Reaction index: Chemkin #1; RMG #48
+#  Reaction index: Chemkin #1; RMG #88
 #  Template reaction: R_Recombination
-#  Flux pairs: NO(5), N2O2(48); NO(5), N2O2(48);
-#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0
-
-# Reaction 1
-reaction('NO(5) + NO(5) <=> N2O2(48)', [5.156200e+36, -7.489, 1.348],
-         id='gas-1')
-#  Reaction index: Chemkin #2; RMG #35
-#  Template reaction: R_Recombination
-#  Flux pairs: NO(5), ONOOJ(37); O2(2), ONOOJ(37);
+#  Flux pairs: NO(5), ONOOJ(59); O2(2), ONOOJ(59);
 #  Matched reaction 5 NO + O2 <=> NO3 in R_Recombination/training
 #  This reaction matched rate rule [Root_N-1R->H_1CNOS->N_Ext-2R-R_N-3R!H-u0_Ext-1N-R]
 #  family: R_Recombination
 #  Ea raised from 13.4 to 51.7 kJ/mol to match endothermicity of reaction.
 
+# Reaction 1
+reaction('O2(2) + NO(5) <=> ONOOJ(59)', [1.170000e+11, 0.0, 12.359],
+         id='gas-1')
+#  Reaction index: Chemkin #2; RMG #101
+#  Template reaction: R_Recombination
+#  Flux pairs: NO(5), N2O2(70); NO(5), N2O2(70);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0
+
 # Reaction 2
-reaction('O2(2) + NO(5) <=> ONOOJ(37)', [1.170000e+11, 0.0, 12.359],
+reaction('NO(5) + NO(5) <=> N2O2(70)', [5.156200e+36, -7.489, 1.348],
          id='gas-2')
+#  Reaction index: Chemkin #3; RMG #428
+#  Template reaction: R_Recombination
+#  Flux pairs: OH(30), HONO(124); NO(5), HONO(124);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-1N-R
+
+# Reaction 3
+reaction('NO(5) + OH(30) <=> HONO(124)', [6.742360e+12, 0.142, 0.0],
+         id='gas-3')
+#  Reaction index: Chemkin #4; RMG #490
+#  Template reaction: H_Abstraction
+#  Flux pairs: OH(30), H2O(3); HONO(124), NO2(26);
+#  From training reaction 658 used for O/H/OneDeN;O_pri_rad
+#  Exact match found for rate rule [O/H/OneDeN;O_pri_rad]
+#  Euclidian distance = 0
+#  family: H_Abstraction
+
+# Reaction 4
+reaction('OH(30) + HONO(124) <=> NO2(26) + H2O(3)', [1.200000e+06, 2.0, -0.6],
+         id='gas-4')
+#  Reaction index: Chemkin #5; RMG #566
+#  Template reaction: R_Recombination
+#  Flux pairs: NO2(26), ONONO(153); NO(5), ONONO(153);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0_N-2R->C_N-3R!H->C_Ext-1N-R_2NO->O
+#  Multiplied by reaction path degeneracy 2.0
+
+# Reaction 5
+reaction('NO(5) + NO2(26) <=> ONONO(153)', [2.440000e+11, 0.2, 0.0],
+         id='gas-5')
+#  Reaction index: Chemkin #6; RMG #563
+#  Template reaction: R_Recombination
+#  Flux pairs: NO2(26), NO2NO(222); NO(5), NO2NO(222);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0_N-2R->C_N-3R!H->C_Ext-1N-R_N-2NO->O
+
+# Reaction 6
+reaction('NO(5) + NO2(26) <=> NO2NO(222)', [2.630000e+14, -1.1, 0.0],
+         id='gas-6')
+#  Reaction index: Chemkin #7; RMG #321
+#  Template reaction: H_Abstraction
+#  Flux pairs: ONOOH(148), ONOOJ(59); OH(30), H2O(3);
+#  From training reaction 206 used for O/H/NonDeO;O_pri_rad
+#  Exact match found for rate rule [O/H/NonDeO;O_pri_rad]
+#  Euclidian distance = 0
+#  family: H_Abstraction
+#  Ea raised from -1.8 to -1.8 kJ/mol.
+
+# Reaction 7
+reaction('OH(30) + ONOOH(148) <=> ONOOJ(59) + H2O(3)', [1.100000e+12, 0.0, -0.437],
+         id='gas-7')
+#  Reaction index: Chemkin #8; RMG #460
+#  Template reaction: H_Abstraction
+#  Flux pairs: ONOOJ(59), ONOOH(148); HONO(124), NO2(26);
+#  Estimated using average of templates [O_sec;O_rad/NonDeO] + [O/H/OneDeN;O_rad] for rate rule [O/H/OneDeN;O_rad/NonDeO]
+#  Euclidian distance = 2.0
+#  family: H_Abstraction
+
+# Reaction 8
+reaction('ONOOJ(59) + HONO(124) <=> NO2(26) + ONOOH(148)', [4.486829e+03, 2.72, 5.736],
+         id='gas-8')
+#  Reaction index: Chemkin #9; RMG #585
+#  Template reaction: R_Recombination
+#  Flux pairs: NO2(26), ONOOH(148); OH(30), ONOOH(148);
+#  Matched reaction 22 OH + NO2-2 <=> HOONO in R_Recombination/training
+#  This reaction matched rate rule [Root_N-1R->H_N-1CNOS->N_1COS->O_Ext-1O-R_N-2R->C_3R!H->N]
+#  family: R_Recombination
+
+# Reaction 9
+reaction('NO2(26) + OH(30) <=> ONOOH(148)', [1.030000e+14, -0.24, -0.2],
+         id='gas-9')
+#  Reaction index: Chemkin #10; RMG #580
+#  Template reaction: R_Recombination
+#  Flux pairs: NO2(26), NO2OH(227); OH(30), NO2OH(227);
+#  Matched reaction 138 NO2 + OH <=> HNO3 in R_Recombination/training
+#  This reaction matched rate rule [Root_N-1R->H_1CNOS->N_Ext-1N-R_Ext-1N-R_N-2R->C]
+#  family: R_Recombination
+
+# Reaction 10
+reaction('NO2(26) + OH(30) <=> NO2OH(227)', [3.500000e+12, 0.24, 0.0],
+         id='gas-10')
+#  Reaction index: Chemkin #11; RMG #327
+#  Template reaction: H_Abstraction
+#  Flux pairs: ONOOH(148), ONOOJ(59); NH2(34), NH3(6);
+#  Estimated using template [O_sec;NH2_rad] for rate rule [O/H/NonDeO;NH2_rad]
+#  Euclidian distance = 1.0
+#  family: H_Abstraction
+
+# Reaction 11
+reaction('ONOOH(148) + NH2(34) <=> ONOOJ(59) + NH3(6)', [9.200000e+05, 1.94, 2.785],
+         id='gas-11')
+#  Reaction index: Chemkin #12; RMG #473
+#  Template reaction: H_Abstraction
+#  Flux pairs: OH(30), H2O(3); NH3(6), NH2(34);
+#  Matched reaction 622 OH_p23 + NH3_r <=> H2O + NH2_p23 in H_Abstraction/training
+#  This reaction matched rate rule [NH3;O_pri_rad]
+#  family: H_Abstraction
+
+# Reaction 12
+reaction('OH(30) + NH3(6) <=> H2O(3) + NH2(34)', [1.500000e+08, 1.6, 26.153],
+         id='gas-12')
+#  Reaction index: Chemkin #13; RMG #572
+#  Template reaction: H_Abstraction
+#  Flux pairs: HONO(124), NO2(26); NH2(34), NH3(6);
+#  From training reaction 660 used for O/H/OneDeN;NH2_rad
+#  Exact match found for rate rule [O/H/OneDeN;NH2_rad]
+#  Euclidian distance = 0
+#  family: H_Abstraction
+
+# Reaction 13
+reaction('HONO(124) + NH2(34) <=> NO2(26) + NH3(6)', [9.200000e+05, 1.94, 1.92],
+         id='gas-13')
+#  Reaction index: Chemkin #14; RMG #799
+#  Template reaction: R_Recombination
+#  Flux pairs: NH2(34), H2NO2(270); O2(2), H2NO2(270);
+#  Matched reaction 27 NH2 + O2 <=> NH2OO in R_Recombination/training
+#  This reaction matched rate rule [Root_N-1R->H_1CNOS->N_Ext-2R-R_N-3R!H-u0]
+#  family: R_Recombination
+
+# Reaction 14
+reaction('O2(2) + NH2(34) <=> H2NO2(270)', [2.600000e+19, -3.683, 1.63],
+         id='gas-14')
+#  Reaction index: Chemkin #15; RMG #803
+#  Template reaction: R_Recombination
+#  Flux pairs: NH2(34), NH2NO(121); NO(5), NH2NO(121);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0
+
+# Reaction 15
+reaction('NO(5) + NH2(34) <=> NH2NO(121)', [1.031240e+37, -7.489, 0.0],
+         id='gas-15')
+#  Reaction index: Chemkin #16; RMG #899
+#  Template reaction: ketoenol
+#  Flux pairs: HNNOH(290), NH2NO(121);
+#  Estimated using an average for rate rule [R_ROR;R1_doublebond;R2_doublebond;R_O_H]
+#  Euclidian distance = 0
+#  family: ketoenol
+
+# Reaction 16
+reaction('HNNOH(290) <=> NH2NO(121)', [1.290484e+03, 2.904, 33.383],
+         id='gas-16',
+         options='duplicate')
+#  Reaction index: Chemkin #17; RMG #991
+#  Template reaction: ketoenol
+#  Flux pairs: HNNOH(290), NH2NO(121);
+#  Estimated using an average for rate rule [R_ROR;R1_doublebond;R2_doublebond;R_O_H]
+#  Euclidian distance = 0
+#  family: ketoenol
+
+# Reaction 17
+reaction('HNNOH(290) <=> NH2NO(121)', [1.290484e+03, 2.904, 33.383],
+         id='gas-17',
+         options='duplicate')
+#  Reaction index: Chemkin #18; RMG #93
+#  Template reaction: Disproportionation
+#  Flux pairs: OH(30), H2O(3); NNHJ(63), N2(4);
+#  Matched reaction 80 HO + HN2 <=> H2O + N2 in Disproportionation/training
+#  This reaction matched rate rule [O_pri_rad;N3d/H_d_Nrad]
+#  family: Disproportionation
+
+# Reaction 18
+reaction('OH(30) + NNHJ(63) <=> N2(4) + H2O(3)', [1.200000e+06, 2.0, -1.19],
+         id='gas-18',
+         options='duplicate')
+#  Reaction index: Chemkin #19; RMG #100
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2(34), NH3(6); NNHJ(63), N2(4);
+#  Matched reaction 82 H2N + HN2 <=> H3N + N2 in Disproportionation/training
+#  This reaction matched rate rule [NH2_rad;N3d/H_d_Nrad]
+#  family: Disproportionation
+
+# Reaction 19
+reaction('NNHJ(63) + NH2(34) <=> N2(4) + NH3(6)', [9.200000e+05, 1.94, -1.15],
+         id='gas-19',
+         options='duplicate')
+#  Reaction index: Chemkin #20; RMG #436
+#  Template reaction: Disproportionation
+#  Flux pairs: NO2(26), HONO(124); NNHJ(63), N2(4);
+#  Estimated using an average for rate rule [O_sec_rad;N3d/H_d_Nrad]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Disproportionation
+
+# Reaction 20
+reaction('NO2(26) + NNHJ(63) <=> N2(4) + HONO(124)', [2.800000e+04, 2.69, -1.6],
+         id='gas-20')
+#  Reaction index: Chemkin #21; RMG #639
+#  Template reaction: Disproportionation
+#  Flux pairs: ONOOJ(59), ONOOH(148); NNHJ(63), N2(4);
+#  From training reaction 83 used for O_rad/NonDeO;N3d/H_d_Nrad
+#  Exact match found for rate rule [O_rad/NonDeO;N3d/H_d_Nrad]
+#  Euclidian distance = 0
+#  family: Disproportionation
+
+# Reaction 21
+reaction('ONOOJ(59) + NNHJ(63) <=> N2(4) + ONOOH(148)', [1.400000e+04, 2.69, -1.6],
+         id='gas-21')
+#  Reaction index: Chemkin #22; RMG #988
+#  Template reaction: R_Recombination
+#  Flux pairs: NNHJ(63), HNNOH(290); OH(30), HNNOH(290);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-1N-R
+
+# Reaction 22
+reaction('OH(30) + NNHJ(63) <=> HNNOH(290)', [6.742360e+12, 0.142, 0.0],
+         id='gas-22')
+#  Reaction index: Chemkin #23; RMG #1139
+#  Template reaction: Disproportionation
+#  Flux pairs: NNHJ(63), N2(4); OH(30), H2O(3);
+#  Matched reaction 80 HO + HN2 <=> H2O + N2 in Disproportionation/training
+#  This reaction matched rate rule [O_pri_rad;N3d/H_d_Nrad]
+#  family: Disproportionation
+
+# Reaction 23
+reaction('OH(30) + NNHJ(63) <=> N2(4) + H2O(3)', [1.200000e+06, 2.0, -1.19],
+         id='gas-23',
+         options='duplicate')
+#  Reaction index: Chemkin #24; RMG #1170
+#  Template reaction: Disproportionation
+#  Flux pairs: NNHJ(63), N2(4); NH2(34), NH3(6);
+#  Matched reaction 82 H2N + HN2 <=> H3N + N2 in Disproportionation/training
+#  This reaction matched rate rule [NH2_rad;N3d/H_d_Nrad]
+#  family: Disproportionation
+
+# Reaction 24
+reaction('NNHJ(63) + NH2(34) <=> N2(4) + NH3(6)', [9.200000e+05, 1.94, -1.15],
+         id='gas-24',
+         options='duplicate')
+#  Reaction index: Chemkin #25; RMG #78
+#  Template reaction: R_Recombination
+#  Flux pairs: OH(30), H2O(3); H(29), H2O(3);
+#  Matched reaction 64 H + OH <=> H2O in R_Recombination/training
+#  This reaction matched rate rule [Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing_2CNO->O]
+#  family: R_Recombination
+
+# Reaction 25
+reaction('H(29) + OH(30) <=> H2O(3)', [1.620000e+14, 0.0, 0.15],
+         id='gas-25')
+#  Reaction index: Chemkin #26; RMG #79
+#  Template reaction: R_Recombination
+#  Flux pairs: NH2(34), NH3(6); H(29), NH3(6);
+#  Estimated from node Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing
+
+# Reaction 26
+reaction('H(29) + NH2(34) <=> NH3(6)', [6.358320e+13, 0.035, 0.0],
+         id='gas-26')
+#  Reaction index: Chemkin #27; RMG #429
+#  Template reaction: R_Recombination
+#  Flux pairs: H(29), HONO(124); NO2(26), HONO(124);
+#  Estimated from node Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing_Ext-2CNO-R_N-Sp-3R!H=2CCNNOO_2CNO->O
+#  Multiplied by reaction path degeneracy 2.0
+
+# Reaction 27
+reaction('NO2(26) + H(29) <=> HONO(124)', [5.224300e+12, 0.326, 0.0],
+         id='gas-27')
+#  Reaction index: Chemkin #28; RMG #631
+#  Template reaction: R_Recombination
+#  Flux pairs: H(29), ONOOH(148); ONOOJ(59), ONOOH(148);
+#  Estimated from node Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing_Ext-2CNO-R_N-Sp-3R!H=2CCNNOO_2CNO->O_3R!H->O
+
+# Reaction 28
+reaction('ONOOJ(59) + H(29) <=> ONOOH(148)', [5.250690e+09, 1.273, 0.0],
+         id='gas-28')
+#  Reaction index: Chemkin #29; RMG #1104
+#  Template reaction: R_Addition_MultipleBond
+#  Flux pairs: N2(4), NNHJ(63); H(29), NNHJ(63);
+#  Matched reaction 185 N2 + H <=> NNH in R_Addition_MultipleBond/training
+#  This reaction matched rate rule [N3t_N3t;HJ]
+#  family: R_Addition_MultipleBond
+
+# Reaction 29
+reaction('N2(4) + H(29) <=> NNHJ(63)', [7.600000e+15, -0.64, 15.333],
+         id='gas-29')
+#  Reaction index: Chemkin #30; RMG #86
+#  Template reaction: H_Abstraction
+#  Flux pairs: O2(2), HO2(57); H2O(3), OH(30);
+#  Matched reaction 378 H2O + O2 <=> HO2_r12 + OH_p23 in H_Abstraction/training
+#  This reaction matched rate rule [O_pri;O2b]
+#  family: H_Abstraction
+
+# Reaction 30
+reaction('O2(2) + H2O(3) <=> OH(30) + HO2(57)', [9.300000e+12, 0.0, 74.12],
+         id='gas-30')
+#  Reaction index: Chemkin #31; RMG #89
+#  Template reaction: H_Abstraction
+#  Flux pairs: HO2(57), O2(2); NH2(34), NH3(6);
+#  Estimated using template [X_H;NH2_rad] for rate rule [Orad_O_H;NH2_rad]
+#  Euclidian distance = 2.0
+#  family: H_Abstraction
+
+# Reaction 31
+reaction('HO2(57) + NH2(34) <=> O2(2) + NH3(6)', [4.504698e+07, 1.503, 6.331],
+         id='gas-31')
+#  Reaction index: Chemkin #32; RMG #433
+#  Template reaction: H_Abstraction
+#  Flux pairs: HO2(57), O2(2); NO2(26), HONO(124);
+#  Estimated using average of templates [X_H;O_rad/OneDeN] + [Orad_O_H;O_sec_rad] for rate rule [Orad_O_H;O_rad/OneDeN]
+#  Euclidian distance = 2.0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: H_Abstraction
+
+# Reaction 32
+reaction('NO2(26) + HO2(57) <=> O2(2) + HONO(124)', [1.832314e+05, 1.877, 3.422],
+         id='gas-32')
+#  Reaction index: Chemkin #33; RMG #630
+#  Template reaction: R_Recombination
+#  Flux pairs: HO2(57), ONOOH(148); NO(5), ONOOH(148);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0_N-2R->C_N-3R!H->C_Ext-1N-R_2NO->O
+
+# Reaction 33
+reaction('NO(5) + HO2(57) <=> ONOOH(148)', [1.220000e+11, 0.2, 0.0],
+         id='gas-33')
+#  Reaction index: Chemkin #34; RMG #636
+#  Template reaction: H_Abstraction
+#  Flux pairs: HO2(57), O2(2); ONOOJ(59), ONOOH(148);
+#  From training reaction 404 used for Orad_O_H;O_rad/NonDeO
+#  Exact match found for rate rule [Orad_O_H;O_rad/NonDeO]
+#  Euclidian distance = 0
+#  family: H_Abstraction
+
+# Reaction 34
+reaction('ONOOJ(59) + HO2(57) <=> O2(2) + ONOOH(148)', [1.750000e+10, 0.0, -3.275],
+         id='gas-34')
+#  Reaction index: Chemkin #35; RMG #1107
+#  Template reaction: Disproportionation
+#  Flux pairs: NNHJ(63), N2(4); O2(2), HO2(57);
+#  Matched reaction 78 HN2 + O2 <=> HO2 + N2 in Disproportionation/training
+#  This reaction matched rate rule [O2b;N3d/H_d_Nrad]
+#  family: Disproportionation
+
+# Reaction 35
+reaction('O2(2) + NNHJ(63) <=> N2(4) + HO2(57)', [2.400000e+12, -0.34, 0.15],
+         id='gas-35')
+#  Reaction index: Chemkin #36; RMG #1205
+#  Template reaction: R_Recombination
+#  Flux pairs: H(29), HO2(57); O2(2), HO2(57);
+#  Matched reaction 104 O2 + H <=> HO2-2 in R_Recombination/training
+#  This reaction matched rate rule [Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing_Ext-2CNO-R_N-Sp-3R!H=2CCNNOO_2CNO->O_3R!H->O]
+#  family: R_Recombination
+
+# Reaction 36
+reaction('O2(2) + H(29) <=> HO2(57)', [8.790000e+10, 1.0, 0.45],
+         id='gas-36')
+#  Reaction index: Chemkin #37; RMG #831
+#  Template reaction: R_Recombination
+#  Flux pairs: NH2(34), S(147); NO2(26), S(147);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0_N-2R->C_N-3R!H->C
+#  Multiplied by reaction path degeneracy 2.0
+
+# Reaction 37
+reaction('NO2(26) + NH2(34) <=> S(147)', [1.858298e+13, -0.3, 0.0],
+         id='gas-37')
+#  Reaction index: Chemkin #38; RMG #1328
+#  Template reaction: R_Recombination
+#  Flux pairs: NH2OJ(283), S(147); NO(5), S(147);
+#  Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0_N-2R->C_N-3R!H->C_Ext-1N-R_2NO->O
+
+# Reaction 38
+reaction('NO(5) + NH2OJ(283) <=> S(147)', [1.220000e+11, 0.2, 0.0],
+         id='gas-38')
+#  Reaction index: Chemkin #39; RMG #95
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO(65), NO(5); OH(30), H2O(3);
+#  Matched reaction 650 OH_p23 + HNO_r <=> H2O + NO in H_Abstraction/training
+#  This reaction matched rate rule [O_pri;N3d_rad]
+#  family: H_Abstraction
+
+# Reaction 39
+reaction('OH(30) + HNO(65) <=> NO(5) + H2O(3)', [1.300000e+07, 1.88, -0.95],
+         id='gas-39')
+#  Reaction index: Chemkin #40; RMG #103
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO(65), NO(5); NH2(34), NH3(6);
+#  Matched reaction 653 HNO_r + NH2_r3 <=> NH3_p23 + NO_p in H_Abstraction/training
+#  This reaction matched rate rule [NH3;N3d_rad]
+#  family: H_Abstraction
+
+# Reaction 40
+reaction('HNO(65) + NH2(34) <=> NO(5) + NH3(6)', [9.200000e+05, 1.94, -1.15],
+         id='gas-40')
+#  Reaction index: Chemkin #41; RMG #438
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO(65), NO(5); NO2(26), HONO(124);
+#  Estimated using template [N3d/H/NonDe;O_rad] for rate rule [N3d/H/NonDeO;O_rad/OneDeN]
+#  Euclidian distance = 3.1622776601683795
+#  Multiplied by reaction path degeneracy 2.0
+#  family: H_Abstraction
+
+# Reaction 41
+reaction('NO2(26) + HNO(65) <=> NO(5) + HONO(124)', [4.800000e+06, 2.0, -1.19],
+         id='gas-41')
+#  Reaction index: Chemkin #42; RMG #641
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO(65), NO(5); ONOOJ(59), ONOOH(148);
+#  Estimated using template [N3d/H/NonDe;O_rad] for rate rule [N3d/H/NonDeO;O_rad/NonDeO]
+#  Euclidian distance = 2.23606797749979
+#  family: H_Abstraction
+
+# Reaction 42
+reaction('ONOOJ(59) + HNO(65) <=> NO(5) + ONOOH(148)', [2.400000e+06, 2.0, -1.19],
+         id='gas-42')
+#  Reaction index: Chemkin #43; RMG #1116
+#  Template reaction: Disproportionation
+#  Flux pairs: NNHJ(63), N2(4); NO(5), HNO(65);
+#  Matched reaction 84 HN2 + NO <=> HNO + N2 in Disproportionation/training
+#  This reaction matched rate rule [N3d_rad/O;N3d/H_d_Nrad]
+#  family: Disproportionation
+
+# Reaction 43
+reaction('NO(5) + NNHJ(63) <=> N2(4) + HNO(65)', [1.200000e+06, 2.0, -1.19],
+         id='gas-43')
+#  Reaction index: Chemkin #44; RMG #1207
+#  Template reaction: R_Recombination
+#  Flux pairs: H(29), HNO(65); NO(5), HNO(65);
+#  Estimated from node Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing_Ext-2CNO-R_Sp-3R!H=2CCNNOO_3R!H->O
+
+# Reaction 44
+reaction('NO(5) + H(29) <=> HNO(65)', [9.102870e+19, -2.744, 0.0],
+         id='gas-44')
+#  Reaction index: Chemkin #45; RMG #1256
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO(65), NO(5); O2(2), HO2(57);
+#  Matched reaction 654 HNO_r + O2 <=> HO2_p23 + NO_p in H_Abstraction/training
+#  This reaction matched rate rule [Orad_O_H;N3d_rad]
+#  family: H_Abstraction
+
+# Reaction 45
+reaction('O2(2) + HNO(65) <=> NO(5) + HO2(57)', [4.000000e+13, 0.0, 15.9],
+         id='gas-45')
+#  Reaction index: Chemkin #46; RMG #1416
+#  Template reaction: R_Addition_MultipleBond
+#  Flux pairs: HNO(65), NH2OJ(283); H(29), NH2OJ(283);
+#  Estimated using template [N3d_R;HJ] for rate rule [N3d-H_Od;HJ]
+#  Euclidian distance = 2.0
+#  family: R_Addition_MultipleBond
+
+# Reaction 46
+reaction('H(29) + HNO(65) <=> NH2OJ(283)', [9.884968e+35, -8.04, 12.5],
+         id='gas-46')
+#  Reaction index: Chemkin #47; RMG #1420
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); O2(2), HO2(57);
+#  Estimated using template [Y_rad_birad_trirad_quadrad;N3s/H2_s_Orad] for rate rule [O2b;N3s/H2_s_Orad]
+#  Euclidian distance = 2.0
+#  Multiplied by reaction path degeneracy 4.0
+#  family: Disproportionation
+
+# Reaction 47
+reaction('O2(2) + NH2OJ(283) <=> HO2(57) + HNO(65)', [9.191300e+07, 1.685, 11.751],
+         id='gas-47')
+#  Reaction index: Chemkin #48; RMG #1427
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); NO(5), HNO(65);
+#  Estimated using template [N3_rad;N3s/H2_s_Orad] for rate rule [N3d_rad/O;N3s/H2_s_Orad]
+#  Euclidian distance = 2.0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Disproportionation
+#  Ea raised from -4.8 to 51.9 kJ/mol to match endothermicity of reaction.
+
+# Reaction 48
+reaction('NO(5) + NH2OJ(283) <=> HNO(65) + HNO(65)', [3.600000e+06, 1.94, 12.41],
+         id='gas-48')
+#  Reaction index: Chemkin #49; RMG #1436
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); ONOOJ(59), ONOOH(148);
+#  From training reaction 103 used for O_rad/NonDeO;N3s/H2_s_Orad
+#  Exact match found for rate rule [O_rad/NonDeO;N3s/H2_s_Orad]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Disproportionation
+
+# Reaction 49
+reaction('ONOOJ(59) + NH2OJ(283) <=> HNO(65) + ONOOH(148)', [5.800000e+04, 2.69, -1.6],
+         id='gas-49')
+#  Reaction index: Chemkin #50; RMG #1452
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); OH(30), H2O(3);
+#  Matched reaction 100 HO + H2NO <=> H2O + HNO-2 in Disproportionation/training
+#  This reaction matched rate rule [O_pri_rad;N3s/H2_s_Orad]
+#  family: Disproportionation
+
+# Reaction 50
+reaction('OH(30) + NH2OJ(283) <=> HNO(65) + H2O(3)', [4.800000e+06, 2.0, -1.19],
+         id='gas-50')
+#  Reaction index: Chemkin #51; RMG #1463
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); NO2(26), HONO(124);
+#  Estimated using an average for rate rule [O_sec_rad;N3s/H2_s_Orad]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 4.0
+#  family: Disproportionation
+
+# Reaction 51
+reaction('NO2(26) + NH2OJ(283) <=> HNO(65) + HONO(124)', [1.160000e+05, 2.69, -1.6],
+         id='gas-51')
+#  Reaction index: Chemkin #52; RMG #1487
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); NH2(34), NH3(6);
+#  Matched reaction 102 H2N + H2NO <=> H3N + HNO-2 in Disproportionation/training
+#  This reaction matched rate rule [NH2_rad;N3s/H2_s_Orad]
+#  family: Disproportionation
+
+# Reaction 52
+reaction('NH2(34) + NH2OJ(283) <=> HNO(65) + NH3(6)', [3.600000e+06, 1.94, -1.15],
+         id='gas-52')
+#  Reaction index: Chemkin #53; RMG #430
+#  Template reaction: intra_NO2_ONO_conversion
+#  Flux pairs: HNO2(191), HONO(124);
+#  From training reaction 1 used for RNO2
+#  Exact match found for rate rule [RNO2]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: intra_NO2_ONO_conversion
+
+# Reaction 53
+reaction('HNO2(191) <=> HONO(124)', [4.200000e+10, 1.0, 60.66],
+         id='gas-53',
+         options='duplicate')
+#  Reaction index: Chemkin #54; RMG #560
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO2(191), NO2(26); OH(30), H2O(3);
+#  Matched reaction 3075 HNO2 + OH <=> H2O_p + NO2_p in H_Abstraction/training
+#  This reaction matched rate rule [O_pri;N5dc_rad]
+#  family: H_Abstraction
+
+# Reaction 54
+reaction('OH(30) + HNO2(191) <=> NO2(26) + H2O(3)', [1.200000e+06, 2.0, -0.79],
+         id='gas-54')
+#  Reaction index: Chemkin #55; RMG #568
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO2(191), NO2(26); NH2(34), NH3(6);
+#  Matched reaction 3077 HNO2 + NH2_r3 <=> NH3_p23 + NO2_p in H_Abstraction/training
+#  This reaction matched rate rule [NH3;N5dc_rad]
+#  family: H_Abstraction
+
+# Reaction 55
+reaction('HNO2(191) + NH2(34) <=> NO2(26) + NH3(6)', [9.200000e+05, 1.94, 0.87],
+         id='gas-55')
+#  Reaction index: Chemkin #56; RMG #575
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO2(191), NO2(26); NO2(26), HONO(124);
+#  Estimated using template [X_H;O_rad/OneDeN] for rate rule [N5dc_H;O_rad/OneDeN]
+#  Euclidian distance = 2.0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: H_Abstraction
+
+# Reaction 56
+reaction('NO2(26) + HNO2(191) <=> NO2(26) + HONO(124)', [3.391460e-01, 3.755, 8.482],
+         id='gas-56')
+#  Reaction index: Chemkin #57; RMG #665
+#  Template reaction: H_Abstraction
+#  Flux pairs: HNO2(191), NO2(26); ONOOJ(59), ONOOH(148);
+#  Estimated using average of templates [X_H;O_rad/NonDeO] + [N5dc_H;O_rad] for rate rule [N5dc_H;O_rad/NonDeO]
+#  Euclidian distance = 2.0
+#  family: H_Abstraction
+
+# Reaction 57
+reaction('ONOOJ(59) + HNO2(191) <=> NO2(26) + ONOOH(148)', [2.153571e+05, 2.16, 4.185],
+         id='gas-57')
+#  Reaction index: Chemkin #58; RMG #1146
+#  Template reaction: Disproportionation
+#  Flux pairs: NNHJ(63), N2(4); NO2(26), HNO2(191);
+#  Estimated using template [Y_rad;N3d/H_d_Nrad] for rate rule [N5dc_rad;N3d/H_d_Nrad]
+#  Euclidian distance = 2.0
+#  family: Disproportionation
+
+# Reaction 58
+reaction('NO2(26) + NNHJ(63) <=> N2(4) + HNO2(191)', [3.197301e+06, 1.938, -1.152],
+         id='gas-58')
+#  Reaction index: Chemkin #59; RMG #1221
+#  Template reaction: R_Recombination
+#  Flux pairs: H(29), HNO2(191); NO2(26), HNO2(191);
+#  Estimated from node Root_1R->H_N-2R->S_N-2CHNO->H_N-2CNO-inRing_Ext-2CNO-R_Sp-3R!H=2CCNNOO_3R!H->O
+
+# Reaction 59
+reaction('NO2(26) + H(29) <=> HNO2(191)', [9.102870e+19, -2.744, 0.0],
+         id='gas-59')
+#  Reaction index: Chemkin #60; RMG #1278
+#  Template reaction: H_Abstraction
+#  Flux pairs: NO2(26), HNO2(191); HO2(57), O2(2);
+#  Estimated using template [Orad_O_H;Y_rad] for rate rule [Orad_O_H;N5dc_rad]
+#  Euclidian distance = 2.0
+#  family: H_Abstraction
+
+# Reaction 60
+reaction('NO2(26) + HO2(57) <=> O2(2) + HNO2(191)', [4.949747e+10, 0.0, -1.637],
+         id='gas-60')
+#  Reaction index: Chemkin #61; RMG #1458
+#  Template reaction: Disproportionation
+#  Flux pairs: NH2OJ(283), HNO(65); NO2(26), HNO2(191);
+#  Estimated using template [Y_rad;N3s/H2_s_Orad] for rate rule [N5dc_rad;N3s/H2_s_Orad]
+#  Euclidian distance = 2.0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Disproportionation
+
+# Reaction 61
+reaction('NO2(26) + NH2OJ(283) <=> HNO(65) + HNO2(191)', [3.200000e+06, 1.87, 2.96],
+         id='gas-61')
+#  Reaction index: Chemkin #62; RMG #1589
+#  Template reaction: H_Abstraction
+#  Flux pairs: NO2(26), HNO2(191); HNO(65), NO(5);
+#  Estimated using template [N3d/H/NonDeO;Y_rad] for rate rule [N3d/H/NonDeO;N5dc_rad]
+#  Euclidian distance = 2.0
+#  family: H_Abstraction
+
+# Reaction 62
+reaction('NO2(26) + HNO(65) <=> NO(5) + HNO2(191)', [1.300000e+07, 1.88, -0.95],
+         id='gas-62')
+#  Reaction index: Chemkin #63; RMG #1662
+#  Template reaction: intra_NO2_ONO_conversion
+#  Flux pairs: HNO2(191), HONO(124);
+#  From training reaction 1 used for RNO2
+#  Exact match found for rate rule [RNO2]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: intra_NO2_ONO_conversion
+
+# Reaction 63
+reaction('HNO2(191) <=> HONO(124)', [4.200000e+10, 1.0, 60.66],
+         id='gas-63',
+         options='duplicate')
 #  Reaction index: Chemkin #1; RMG #2
 #  Library reaction: Surface/CPOX_Pt/Deutschmann2006
 #  Flux pairs: O2(2), OX(10); X(1), OX(10); X(1), OX(10);
@@ -391,78 +1357,73 @@ surface_reaction('X(1) + X(1) + O2(2) <=> OX(10) + OX(10)', [1.890000e+21, -0.5,
 # surface1 Reaction 2
 surface_reaction('X(1) + NH3(6) <=> NH3_X(22)', stick(1.100000e-02, 0.0, 0.0),
                  id='surface1-2')
-#  Reaction index: Chemkin #3; RMG #54
+#  Reaction index: Chemkin #3; RMG #107
 #  Template reaction: Surface_Bidentate_Dissociation
-#  Flux pairs: O2_ads(49), OX(10); O2_ads(49), OX(10);
+#  Flux pairs: O2_ads(71), OX(10); O2_ads(71), OX(10);
+#  From training reaction 1 used for Combined
 #  Exact match found for rate rule [Combined]
 #  Euclidian distance = 0
 #  family: Surface_Bidentate_Dissociation
 
 # surface1 Reaction 3
-surface_reaction('O2_ads(49) <=> OX(10) + OX(10)', [8.960000e+10, 0.422, 0.0],
+surface_reaction('O2_ads(71) <=> OX(10) + OX(10)', [4.390000e+11, 0.299, 18.219],
                  id='surface1-3',
                  options='duplicate')
-#  Reaction index: Chemkin #4; RMG #60
+#  Reaction index: Chemkin #4; RMG #111
 #  Template reaction: Surface_Bidentate_Dissociation
-#  Flux pairs: O2_ads(49), OX(10); O2_ads(49), OX(10);
+#  Flux pairs: O2_ads(71), OX(10); O2_ads(71), OX(10);
+#  From training reaction 1 used for Combined
 #  Exact match found for rate rule [Combined]
 #  Euclidian distance = 0
 #  family: Surface_Bidentate_Dissociation
 
 # surface1 Reaction 4
-surface_reaction('O2_ads(49) <=> OX(10) + OX(10)', [8.960000e+10, 0.422, 0.0],
+surface_reaction('O2_ads(71) <=> OX(10) + OX(10)', [4.390000e+11, 0.299, 18.219],
                  id='surface1-4',
                  options='duplicate')
-#  Reaction index: Chemkin #5; RMG #57
-#  Template reaction: Surface_Abstraction_vdW
-#  Estimated using template [AdsorbateVdW;*=O] for rate rule [N-R;*=O]
-#  Euclidian distance = 1.0
-#  Multiplied by reaction path degeneracy 3.0
-#  family: Surface_Abstraction_vdW
+#  Reaction index: Chemkin #5; RMG #39
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: NH2_X(35), NH3_X(22); HX(9), X(1);
 
 # surface1 Reaction 5
-surface_reaction('OX(10) + NH3_X(22) <=> HOX(13) + H2NX(30)', [7.308616e+19, 0.64, 28.743],
+surface_reaction('HX(9) + NH2_X(35) <=> X(1) + NH3_X(22)', [4.000000e+19, 0.0, 7.3],
                  id='surface1-5')
-#  Reaction index: Chemkin #6; RMG #15
+#  Reaction index: Chemkin #6; RMG #82
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: NH3(6), NH2_X(35); NH3(6), HX(9);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  Multiplied by reaction path degeneracy 3.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 6
+surface_reaction('X(1) + X(1) + NH3(6) <=> HX(9) + NH2_X(35)', stick(9.139000e-02, 0.077, 4.5),
+                 id='surface1-6')
+#  Reaction index: Chemkin #7; RMG #15
 #  Library reaction: Surface/CPOX_Pt/Deutschmann2006
 #  Flux pairs: OX(10), HOX(13); HX(9), X(1);
 
-# surface1 Reaction 6
+# surface1 Reaction 7
 surface_reaction('OX(10) + HX(9) <=> X(1) + HOX(13)', [1.280000e+21, 0.0, 2.677],
-                 id='surface1-6')
-#  Reaction index: Chemkin #7; RMG #24
+                 id='surface1-7')
+#  Reaction index: Chemkin #8; RMG #42
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: HOX(13), OX(10); NH2_X(35), NH3_X(22);
+
+# surface1 Reaction 8
+surface_reaction('HOX(13) + NH2_X(35) <=> OX(10) + NH3_X(22)', [4.000000e+19, 0.0, 16.7],
+                 id='surface1-8')
+#  Reaction index: Chemkin #9; RMG #80
 #  Template reaction: Surface_Adsorption_Dissociative
 #  Flux pairs: H2O(3), HOX(13); H2O(3), HX(9);
 #  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [H2O;VacantSite1;VacantSite2]
 #  Euclidian distance = 3.0
 #  Multiplied by reaction path degeneracy 2.0
 #  family: Surface_Adsorption_Dissociative
-#  Ea raised from 0.0 to 61.9 kJ/mol to match endothermicity of reaction.
-
-# surface1 Reaction 7
-surface_reaction('X(1) + X(1) + H2O(3) <=> HX(9) + HOX(13)', stick(3.200000e-02, 0.0, 14.803),
-                 id='surface1-7')
-#  Reaction index: Chemkin #8; RMG #28
-#  Template reaction: Surface_Adsorption_Dissociative
-#  Flux pairs: NH3(6), H2NX(30); NH3(6), HX(9);
-#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
-#  Euclidian distance = 1.0
-#  Multiplied by reaction path degeneracy 3.0
-#  family: Surface_Adsorption_Dissociative
-
-# surface1 Reaction 8
-surface_reaction('X(1) + X(1) + NH3(6) <=> HX(9) + H2NX(30)', stick(4.800000e-02, 0.0, 0.0),
-                 id='surface1-8')
-#  Reaction index: Chemkin #9; RMG #56
-#  Template reaction: Surface_Dissociation_vdW
-#  Flux pairs: NH3_X(22), H2NX(30); NH3_X(22), HX(9);
-#  Matched reaction 7 NH3_X + X_4 <=> NH2_X + H* in Surface_Dissociation_vdW/training
-#  This reaction matched rate rule [N-H;VacantSite]
-#  family: Surface_Dissociation_vdW
-#  metal: None
+#  Ea raised from 59.0 to 61.9 kJ/mol to match endothermicity of reaction.
 
 # surface1 Reaction 9
-surface_reaction('X(1) + NH3_X(22) <=> HX(9) + H2NX(30)', [5.723000e+22, 0.0, 18.879],
+surface_reaction('X(1) + X(1) + H2O(3) <=> HX(9) + HOX(13)', stick(6.093000e-02, 0.077, 14.803),
                  id='surface1-9')
 #  Reaction index: Chemkin #10; RMG #6
 #  Library reaction: Surface/CPOX_Pt/Deutschmann2006
@@ -485,251 +1446,753 @@ surface_reaction('OX(10) + H2OX(14) <=> HOX(13) + HOX(13)', [1.000000e+20, 0.0, 
 # surface1 Reaction 12
 surface_reaction('HX(9) + HOX(13) <=> X(1) + H2OX(14)', [2.040000e+21, 0.0, 15.827],
                  id='surface1-12')
-#  Reaction index: Chemkin #13; RMG #84
-#  Template reaction: Surface_Abstraction_Single_vdW
-#  Estimated using template [Donating;Abstracting] for rate rule [NH3;*O-H]
-#  Euclidian distance = 3.605551275463989
-#  Multiplied by reaction path degeneracy 3.0
-#  family: Surface_Abstraction_Single_vdW
-#  Ea raised from -16.0 to 0.0 kJ/mol.
+#  Reaction index: Chemkin #13; RMG #45
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: HOX(13), H2OX(14); NH3_X(22), NH2_X(35);
 
 # surface1 Reaction 13
-surface_reaction('HOX(13) + NH3_X(22) <=> H2OX(14) + H2NX(30)', [3.000000e+17, 0.0, 0.0],
+surface_reaction('HOX(13) + NH3_X(22) <=> H2OX(14) + NH2_X(35)', [4.000000e+19, 0.0, 12.0],
                  id='surface1-13')
-#  Reaction index: Chemkin #14; RMG #70
-#  Template reaction: Surface_Dissociation
-#  Flux pairs: H2NX(30), NH_ads(60); H2NX(30), HX(9);
-#  Matched reaction 9 NH2_X + Ni_4 <=> NHX_1 + HX_5 in Surface_Dissociation/training
-#  This reaction matched rate rule [N-H2;VacantSite]
-#  family: Surface_Dissociation
-#  metal: None
+#  Reaction index: Chemkin #14; RMG #40
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: NH_X(37), NH2_X(35); HX(9), X(1);
 
 # surface1 Reaction 14
-surface_reaction('X(1) + H2NX(30) <=> HX(9) + NH_ads(60)', [2.718000e+22, 0.0, 18.102],
+surface_reaction('HX(9) + NH_X(37) <=> X(1) + NH2_X(35)', [4.000000e+19, 0.0, 16.5],
                  id='surface1-14')
-#  Reaction index: Chemkin #15; RMG #71
-#  Template reaction: Surface_Abstraction
-#  Flux pairs: NH_ads(60), H2NX(30); HOX(13), OX(10);
-#  Estimated using template [Abstracting;*OH] for rate rule [R-N=*;*OH]
-#  Euclidian distance = 3.0
-#  family: Surface_Abstraction
+#  Reaction index: Chemkin #15; RMG #43
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: OX(10), HOX(13); NH2_X(35), NH_X(37);
 
 # surface1 Reaction 15
-surface_reaction('HOX(13) + NH_ads(60) <=> OX(10) + H2NX(30)', [5.296934e+21, -0.037, 14.364],
+surface_reaction('OX(10) + NH2_X(35) <=> HOX(13) + NH_X(37)', [4.000000e+19, 0.0, 8.6],
                  id='surface1-15')
-#  Reaction index: Chemkin #16; RMG #74
-#  Template reaction: Surface_Abstraction_vdW
-#  Estimated using template [AdsorbateVdW;Adsorbate1] for rate rule [N-R;*=NH]
-#  Euclidian distance = 3.1622776601683795
-#  Multiplied by reaction path degeneracy 3.0
-#  family: Surface_Abstraction_vdW
+#  Reaction index: Chemkin #16; RMG #46
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: HOX(13), H2OX(14); NH2_X(35), NH_X(37);
 
 # surface1 Reaction 16
-surface_reaction('NH_ads(60) + NH3_X(22) <=> H2NX(30) + H2NX(30)', [4.949007e+19, 0.653, 28.713],
-                 id='surface1-16',
-                 options='duplicate')
-#  Reaction index: Chemkin #17; RMG #86
+surface_reaction('HOX(13) + NH2_X(35) <=> NH_X(37) + H2OX(14)', [4.000000e+19, 0.0, 12.9],
+                 id='surface1-16')
+#  Reaction index: Chemkin #17; RMG #122
 #  Template reaction: Surface_Abstraction_vdW
-#  Estimated using template [O-R;Adsorbate1] for rate rule [O-R;*=NH]
-#  Euclidian distance = 3.0
-#  Multiplied by reaction path degeneracy 2.0
+#  Matched reaction 42 H2NX + H2NX-2 <=> H3NX + HNX in Surface_Abstraction_vdW/training
+#  This reaction matched rate rule [N-R;*=NH]
 #  family: Surface_Abstraction_vdW
+#  metal: None
+#  facet: None
+#  site: None
 
 # surface1 Reaction 17
-surface_reaction('NH_ads(60) + H2OX(14) <=> HOX(13) + H2NX(30)', [4.173127e+16, 1.136, 34.866],
+surface_reaction('NH2_X(35) + NH2_X(35) <=> NH_X(37) + NH3_X(22)', [1.160000e+20, 0.667, 10.378],
                  id='surface1-17')
-#  Reaction index: Chemkin #18; RMG #109
-#  Template reaction: Surface_Abstraction_vdW
-#  Estimated using template [AdsorbateVdW;Adsorbate1] for rate rule [N-R;*=NH]
-#  Euclidian distance = 3.1622776601683795
-#  Multiplied by reaction path degeneracy 3.0
-#  family: Surface_Abstraction_vdW
+#  Reaction index: Chemkin #18; RMG #73
+#  Library reaction: Surface/Rebrov_Pt111
+#  Flux pairs: OX(10), NHO_X(51); NH_X(37), X(1);
 
 # surface1 Reaction 18
-surface_reaction('NH_ads(60) + NH3_X(22) <=> H2NX(30) + H2NX(30)', [4.949007e+19, 0.653, 28.713],
-                 id='surface1-18',
-                 options='duplicate')
-#  Reaction index: Chemkin #19; RMG #20
+surface_reaction('OX(10) + NH_X(37) <=> X(1) + NHO_X(51)', [4.030000e+21, 0.0, 17.447],
+                 id='surface1-18')
+#  Reaction index: Chemkin #19; RMG #22
+#  Library reaction: Surface/Arevalo_Pt111
+#  Flux pairs: X(1), NO_X(24); NO(5), NO_X(24);
+
+# surface1 Reaction 19
+surface_reaction('X(1) + NO(5) <=> NO_X(24)', stick(1.492000e-06, 0.0, 0.0),
+                 id='surface1-19')
+#  Reaction index: Chemkin #20; RMG #49
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: OX(10), NO_X(24); NH_X(37), HX(9);
+
+# surface1 Reaction 20
+surface_reaction('OX(10) + NH_X(37) <=> NO_X(24) + HX(9)', [4.000000e+19, 0.0, 14.9],
+                 id='surface1-20')
+#  Reaction index: Chemkin #21; RMG #74
+#  Library reaction: Surface/Rebrov_Pt111
+#  Flux pairs: NHO_X(51), NO_X(24); OX(10), HOX(13);
+
+# surface1 Reaction 21
+surface_reaction('OX(10) + NHO_X(51) <=> NO_X(24) + HOX(13)', [8.050000e+23, 0.0, 28.203],
+                 id='surface1-21')
+#  Reaction index: Chemkin #22; RMG #163
+#  Template reaction: Surface_Dissociation_vdW
+#  Flux pairs: NHO_X(51), NO_X(24); NHO_X(51), HX(9);
+#  From training reaction 11 used for N-H;VacantSite
+#  Exact match found for rate rule [N-H;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Dissociation_vdW
+
+# surface1 Reaction 22
+surface_reaction('X(1) + NHO_X(51) <=> NO_X(24) + HX(9)', [7.516667e+19, 0.0, 22.228],
+                 id='surface1-22')
+#  Reaction index: Chemkin #23; RMG #174
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  From training reaction 8 used for N-H;*NH2
+#  Exact match found for rate rule [N-H;*NH2]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 23
+surface_reaction('NHO_X(51) + NH2_X(35) <=> NO_X(24) + NH3_X(22)', [8.450000e+19, 0.156, 9.686],
+                 id='surface1-23')
+#  Reaction index: Chemkin #24; RMG #183
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using an average for rate rule [N-H;*O-H]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 24
+surface_reaction('HOX(13) + NHO_X(51) <=> NO_X(24) + H2OX(14)', [6.566667e+21, 0.0, 8.072],
+                 id='surface1-24')
+#  Reaction index: Chemkin #25; RMG #193
+#  Template reaction: Surface_Abstraction_vdW
+#  From training reaction 42 used for N-R;*=NH
+#  Exact match found for rate rule [N-R;*=NH]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 25
+surface_reaction('NH_X(37) + NHO_X(51) <=> NO_X(24) + NH2_X(35)', [4.158951e+17, 0.82, 21.912],
+                 id='surface1-25')
+#  Reaction index: Chemkin #26; RMG #201
+#  Template reaction: Surface_DoubleBond_to_Bidentate
+#  Flux pairs: X(1), NOX2(119); NO_X(24), NOX2(119);
+#  Exact match found for rate rule [Combined;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_DoubleBond_to_Bidentate
+
+# surface1 Reaction 26
+surface_reaction('X(1) + NO_X(24) <=> NOX2(119)', [4.270000e+19, 0.549, 4.933],
+                 id='surface1-26')
+#  Reaction index: Chemkin #27; RMG #23
+#  Library reaction: Surface/Arevalo_Pt111
+#  Flux pairs: NO_X(24), NO2_X(25); OX(10), X(1);
+
+# surface1 Reaction 27
+surface_reaction('OX(10) + NO_X(24) <=> X(1) + NO2_X(25)', [1.776000e+22, 0.0, 27.674],
+                 id='surface1-27')
+#  Reaction index: Chemkin #28; RMG #50
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: NO_X(24), NO2_X(25); HOX(13), HX(9);
+
+# surface1 Reaction 28
+surface_reaction('NO_X(24) + HOX(13) <=> NO2_X(25) + HX(9)', [4.000000e+19, 0.0, 38.2],
+                 id='surface1-28')
+#  Reaction index: Chemkin #29; RMG #165
+#  Template reaction: Surface_Abstraction_vdW
+#  Estimated using an average for rate rule [AdsorbateVdW;*=O]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 29
+surface_reaction('OX(10) + NHO_X(51) <=> NO2_X(25) + HX(9)', [2.572451e+18, 0.428, 15.203],
+                 id='surface1-29')
+#  Reaction index: Chemkin #30; RMG #20
 #  Library reaction: Surface/Nitrogen
 #  Flux pairs: N2(4), N_X(23); X(1), N_X(23); X(1), N_X(23);
 
-# surface1 Reaction 19
+# surface1 Reaction 30
 surface_reaction('X(1) + X(1) + N2(4) <=> N_X(23) + N_X(23)', stick(1.000000e-06, 0.0, 0.0),
-                 id='surface1-19')
-#  Reaction index: Chemkin #20; RMG #104
-#  Template reaction: Surface_Dissociation
-#  Flux pairs: NH_ads(60), N_X(23); NH_ads(60), HX(9);
-#  Matched reaction 11 NHX_2 + Ni_4 <=> NX + HX_5 in Surface_Dissociation/training
-#  This reaction matched rate rule [N-H;VacantSite]
-#  family: Surface_Dissociation
+                 id='surface1-30')
+#  Reaction index: Chemkin #31; RMG #21
+#  Library reaction: Surface/Nitrogen
+#  Flux pairs: NO_X(24), OX(10); X(1), N_X(23);
+
+# surface1 Reaction 31
+surface_reaction('X(1) + NO_X(24) <=> OX(10) + N_X(23)', [5.000000e+20, 0.0, 25.765],
+                 id='surface1-31')
+#  Reaction index: Chemkin #32; RMG #25
+#  Library reaction: Surface/Kraehnert_Pt111
+#  Flux pairs: NO_X(24), N2O(7); N_X(23), X(1); N_X(23), X(1);
+
+# surface1 Reaction 32
+surface_reaction('N_X(23) + NO_X(24) <=> X(1) + X(1) + N2O(7)', [1.090000e+17, 0.0, 37.094],
+                 id='surface1-32')
+#  Reaction index: Chemkin #33; RMG #41
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: N_X(23), NH_X(37); HX(9), X(1);
+
+# surface1 Reaction 33
+surface_reaction('N_X(23) + HX(9) <=> X(1) + NH_X(37)', [4.000000e+19, 0.0, 24.5],
+                 id='surface1-33')
+#  Reaction index: Chemkin #34; RMG #44
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: OX(10), HOX(13); NH_X(37), N_X(23);
+
+# surface1 Reaction 34
+surface_reaction('OX(10) + NH_X(37) <=> N_X(23) + HOX(13)', [4.000000e+19, 0.0, 15.8],
+                 id='surface1-34')
+#  Reaction index: Chemkin #35; RMG #47
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: HOX(13), H2OX(14); NH_X(37), N_X(23);
+
+# surface1 Reaction 35
+surface_reaction('HOX(13) + NH_X(37) <=> N_X(23) + H2OX(14)', [4.000000e+19, 0.0, 22.2],
+                 id='surface1-35')
+#  Reaction index: Chemkin #36; RMG #48
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: HOX(13), NO_X(24); N_X(23), HX(9);
+
+# surface1 Reaction 36
+surface_reaction('N_X(23) + HOX(13) <=> NO_X(24) + HX(9)', [4.000000e+19, 0.0, 35.1],
+                 id='surface1-36')
+#  Reaction index: Chemkin #37; RMG #153
+#  Template reaction: Surface_Abstraction_vdW
+#  Matched reaction 50 HNX-2 + H2NX <=> H3NX + NX in Surface_Abstraction_vdW/training
+#  This reaction matched rate rule [N-R;*#N]
+#  family: Surface_Abstraction_vdW
 #  metal: None
+#  facet: None
+#  site: None
 
-# surface1 Reaction 20
-surface_reaction('X(1) + NH_ads(60) <=> N_X(23) + HX(9)', [6.213000e+19, 0.0, 5.48],
-                 id='surface1-20')
-#  Reaction index: Chemkin #21; RMG #105
+# surface1 Reaction 37
+surface_reaction('NH_X(37) + NH2_X(35) <=> N_X(23) + NH3_X(22)', [3.870000e+21, 0.0, 22.6],
+                 id='surface1-37')
+#  Reaction index: Chemkin #38; RMG #158
 #  Template reaction: Surface_Abstraction
-#  Flux pairs: N_X(23), NH_ads(60); HOX(13), OX(10);
-#  Estimated using template [Abstracting;*OH] for rate rule [:N#*;*OH]
+#  Flux pairs: N_X(23), NH_X(37); NH2_X(35), NH_X(37);
+#  Estimated using template [Abstracting;*-N-H] for rate rule [:N#*;*-N-H]
 #  Euclidian distance = 3.0
-#  family: Surface_Abstraction
-
-# surface1 Reaction 21
-surface_reaction('N_X(23) + HOX(13) <=> OX(10) + NH_ads(60)', [5.296934e+21, -0.037, 14.364],
-                 id='surface1-21')
-#  Reaction index: Chemkin #22; RMG #113
-#  Template reaction: Surface_Abstraction_vdW
-#  Estimated using template [AdsorbateVdW;Adsorbate1] for rate rule [N-R;*#N]
-#  Euclidian distance = 2.23606797749979
-#  Multiplied by reaction path degeneracy 3.0
-#  family: Surface_Abstraction_vdW
-
-# surface1 Reaction 22
-surface_reaction('N_X(23) + NH3_X(22) <=> NH_ads(60) + H2NX(30)', [4.949007e+19, 0.653, 28.713],
-                 id='surface1-22')
-#  Reaction index: Chemkin #23; RMG #115
-#  Template reaction: Surface_Abstraction_vdW
-#  Estimated using template [O-R;Adsorbate1] for rate rule [O-R;*#N]
-#  Euclidian distance = 2.0
-#  Multiplied by reaction path degeneracy 2.0
-#  family: Surface_Abstraction_vdW
-
-# surface1 Reaction 23
-surface_reaction('N_X(23) + H2OX(14) <=> HOX(13) + NH_ads(60)', [4.173127e+16, 1.136, 34.866],
-                 id='surface1-23')
-#  Reaction index: Chemkin #24; RMG #119
-#  Template reaction: Surface_Abstraction
-#  Flux pairs: N_X(23), NH_ads(60); H2NX(30), NH_ads(60);
-#  Estimated using template [Abstracting;*R-H] for rate rule [:N#*;*-N-H]
-#  Euclidian distance = 3.605551275463989
 #  Multiplied by reaction path degeneracy 2.0
 #  family: Surface_Abstraction
 
-# surface1 Reaction 24
-surface_reaction('N_X(23) + H2NX(30) <=> NH_ads(60) + NH_ads(60)', [8.359256e+21, -0.018, 7.182],
-                 id='surface1-24')
-#  Reaction index: Chemkin #25; RMG #123
+# surface1 Reaction 38
+surface_reaction('N_X(23) + NH2_X(35) <=> NH_X(37) + NH_X(37)', [2.220000e+21, 0.0, 18.68],
+                 id='surface1-38')
+#  Reaction index: Chemkin #39; RMG #213
+#  Template reaction: Surface_Abstraction_vdW
+#  From training reaction 50 used for N-R;*#N
+#  Exact match found for rate rule [N-R;*#N]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 39
+surface_reaction('N_X(23) + NHO_X(51) <=> NO_X(24) + NH_X(37)', [3.176748e+18, 0.209, 28.348],
+                 id='surface1-39')
+#  Reaction index: Chemkin #40; RMG #221
 #  Template reaction: Surface_Bidentate_Dissociation
-#  Flux pairs: NOX2(87), N_X(23); NOX2(87), OX(10);
+#  Flux pairs: NOX2(119), OX(10); NOX2(119), N_X(23);
+#  From training reaction 1 used for Combined
 #  Exact match found for rate rule [Combined]
 #  Euclidian distance = 0
 #  family: Surface_Bidentate_Dissociation
 
-# surface1 Reaction 25
-surface_reaction('NOX2(87) <=> OX(10) + N_X(23)', [8.960000e+10, 0.422, 0.0],
-                 id='surface1-25',
-                 options='duplicate')
-#  Reaction index: Chemkin #26; RMG #125
+# surface1 Reaction 40
+surface_reaction('NOX2(119) <=> OX(10) + N_X(23)', [4.390000e+11, 0.299, 18.219],
+                 id='surface1-40')
+#  Reaction index: Chemkin #41; RMG #224
 #  Template reaction: Surface_Abstraction
-#  Flux pairs: O2_ads(49), OX(10); N_X(23), NOX2(87);
+#  Flux pairs: N_X(23), NOX2(119); O2_ads(71), OX(10);
 #  Estimated using template [Abstracting;Donating] for rate rule [:N#*;*R-O]
 #  Euclidian distance = 3.1622776601683795
 #  Multiplied by reaction path degeneracy 2.0
 #  family: Surface_Abstraction
 
-# surface1 Reaction 26
-surface_reaction('O2_ads(49) + N_X(23) <=> OX(10) + NOX2(87)', [8.359256e+21, -0.018, 7.182],
-                 id='surface1-26')
-#  Reaction index: Chemkin #27; RMG #132
-#  Template reaction: Surface_Bidentate_Dissociation
-#  Flux pairs: NOX2(87), OX(10); NOX2(87), N_X(23);
-#  Exact match found for rate rule [Combined]
-#  Euclidian distance = 0
-#  family: Surface_Bidentate_Dissociation
+# surface1 Reaction 41
+surface_reaction('O2_ads(71) + N_X(23) <=> OX(10) + NOX2(119)', [7.069825e+21, -0.017, 14.114],
+                 id='surface1-41')
+#  Reaction index: Chemkin #42; RMG #72
+#  Library reaction: Surface/Offermans_Pt111
+#  Flux pairs: X(1), N2_X(50); N2(4), N2_X(50);
 
-# surface1 Reaction 27
-surface_reaction('NOX2(87) <=> OX(10) + N_X(23)', [8.960000e+10, 0.422, 0.0],
-                 id='surface1-27',
-                 options='duplicate')
-#  Reaction index: Chemkin #28; RMG #21
-#  Library reaction: Surface/Nitrogen
-#  Flux pairs: NO_X(24), OX(10); X(1), N_X(23);
+# surface1 Reaction 42
+surface_reaction('X(1) + N2(4) <=> N2_X(50)', [8.600000e+12, 0.0, 0.956],
+                 id='surface1-42')
+#  Reaction index: Chemkin #43; RMG #218
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: N2O2(70), NO_X(24); N2O2(70), NO_X(24);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  family: Surface_Adsorption_Dissociative
 
-# surface1 Reaction 28
-surface_reaction('X(1) + NO_X(24) <=> OX(10) + N_X(23)', [5.000000e+20, 0.0, 25.765],
-                 id='surface1-28')
-#  Reaction index: Chemkin #29; RMG #27
-#  Template reaction: Surface_Adsorption_Single
-#  Flux pairs: X(1), NO_X(24); NO(5), NO_X(24);
-#  Matched reaction 48 NO + Pt <=> NO_X in Surface_Adsorption_Single/training
-#  This reaction matched rate rule [N=O;VacantSite]
-#  family: Surface_Adsorption_Single
-#  metal: None
-
-# surface1 Reaction 29
-surface_reaction('X(1) + NO(5) <=> NO_X(24)', stick(8.500000e-01, 0.0, 0.0),
-                 id='surface1-29')
-#  Reaction index: Chemkin #30; RMG #133
-#  Template reaction: Surface_DoubleBond_to_Bidentate
-#  Flux pairs: NO_X(24), NOX2(87); X(1), NOX2(87);
-#  Exact match found for rate rule [Combined;VacantSite]
-#  Euclidian distance = 0
-#  family: Surface_DoubleBond_to_Bidentate
-
-# surface1 Reaction 30
-surface_reaction('X(1) + NO_X(24) <=> NOX2(87)', [4.270000e+19, 0.549, 4.933],
-                 id='surface1-30')
-#  Reaction index: Chemkin #31; RMG #26
-#  Template reaction: Surface_Adsorption_vdW
-#  Flux pairs: X(1), NN_ads(29); N2(4), NN_ads(29);
-#  From training reaction 5 used for Adsorbate;VacantSite
-#  Exact match found for rate rule [Adsorbate;VacantSite]
-#  Euclidian distance = 0
-#  family: Surface_Adsorption_vdW
-
-# surface1 Reaction 31
-surface_reaction('X(1) + N2(4) <=> NN_ads(29)', stick(1.000000e-01, 0.0, 0.0),
-                 id='surface1-31')
-#  Reaction index: Chemkin #32; RMG #25
+# surface1 Reaction 43
+surface_reaction('X(1) + X(1) + N2O2(70) <=> NO_X(24) + NO_X(24)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-43')
+#  Reaction index: Chemkin #44; RMG #81
 #  Template reaction: Surface_Adsorption_Bidentate
-#  Flux pairs: X(1), N2X2(28); X(1), N2X2(28); N2(4), N2X2(28);
+#  Flux pairs: X(1), N2X2(54); X(1), N2X2(54); N2(4), N2X2(54);
+#  From training reaction 1 used for Adsorbate;VacantSite1;VacantSite2
 #  Exact match found for rate rule [Adsorbate;VacantSite1;VacantSite2]
 #  Euclidian distance = 0
 #  Multiplied by reaction path degeneracy 2.0
 #  family: Surface_Adsorption_Bidentate
 
-# surface1 Reaction 32
-surface_reaction('X(1) + X(1) + N2(4) <=> N2X2(28)', stick(2.000000e-01, 0.0, 0.0),
-                 id='surface1-32')
-#  Reaction index: Chemkin #33; RMG #131
-#  Template reaction: Surface_Bidentate_Dissociation
-#  Flux pairs: N2X2(28), N_X(23); N2X2(28), N_X(23);
-#  Exact match found for rate rule [Combined]
-#  Euclidian distance = 0
-#  family: Surface_Bidentate_Dissociation
-#  Ea raised from 0.0 to 182.5 kJ/mol to match endothermicity of reaction.
-
-# surface1 Reaction 33
-surface_reaction('N2X2(28) <=> N_X(23) + N_X(23)', [8.960000e+10, 0.422, 43.626],
-                 id='surface1-33')
-#  Reaction index: Chemkin #34; RMG #154
+# surface1 Reaction 44
+surface_reaction('X(1) + X(1) + N2(4) <=> N2X2(54)', stick(1.460000e-01, 0.201, 0.0),
+                 id='surface1-44')
+#  Reaction index: Chemkin #45; RMG #295
 #  Template reaction: Surface_Abstraction
-#  Flux pairs: NOX2(87), OX(10); N_X(23), N2X2(28);
+#  Flux pairs: NOX2(119), OX(10); N_X(23), N2X2(54);
 #  Estimated using template [Abstracting;Donating] for rate rule [:N#*;*-O-N]
 #  Euclidian distance = 3.605551275463989
 #  family: Surface_Abstraction
 
-# surface1 Reaction 34
-surface_reaction('N_X(23) + NOX2(87) <=> OX(10) + N2X2(28)', [4.179628e+21, -0.018, 7.182],
-                 id='surface1-34')
-#  Reaction index: Chemkin #35; RMG #186
+# surface1 Reaction 45
+surface_reaction('N_X(23) + NOX2(119) <=> OX(10) + N2X2(54)', [3.534912e+21, -0.017, 14.114],
+                 id='surface1-45')
+#  Reaction index: Chemkin #46; RMG #300
+#  Template reaction: Surface_Bidentate_Dissociation
+#  Flux pairs: N2X2(54), N_X(23); N2X2(54), N_X(23);
+#  From training reaction 1 used for Combined
+#  Exact match found for rate rule [Combined]
+#  Euclidian distance = 0
+#  family: Surface_Bidentate_Dissociation
+#  Ea raised from 178.1 to 182.5 kJ/mol to match endothermicity of reaction.
+
+# surface1 Reaction 46
+surface_reaction('N2X2(54) <=> N_X(23) + N_X(23)', [4.390000e+11, 0.299, 43.626],
+                 id='surface1-46')
+#  Reaction index: Chemkin #47; RMG #301
 #  Template reaction: Surface_vdW_to_Bidentate
-#  Flux pairs: X(1), N2X2(28); NN_ads(29), N2X2(28);
+#  Flux pairs: X(1), N2X2(54); N2_X(50), N2X2(54);
 #  Exact match found for rate rule [Combined;VacantSite]
 #  Euclidian distance = 0
 #  Multiplied by reaction path degeneracy 2.0
 #  family: Surface_vdW_to_Bidentate
 
-# surface1 Reaction 35
-surface_reaction('X(1) + NN_ads(29) <=> N2X2(28)', [2.000000e+19, 0.0, 0.0],
-                 id='surface1-35')
-#  Reaction index: Chemkin #36; RMG #183
+# surface1 Reaction 47
+surface_reaction('X(1) + N2_X(50) <=> N2X2(54)', [2.000000e+19, 0.0, 0.0],
+                 id='surface1-47')
+#  Reaction index: Chemkin #48; RMG #184
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using template [O-R;Abstracting] for rate rule [O-N=R;Abstracting]
+#  Euclidian distance = 2.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 48
+surface_reaction('HX(9) + HONO(113) <=> HOX(13) + NHO_X(51)', [2.000000e+19, 0.0, 14.575],
+                 id='surface1-48')
+#  Reaction index: Chemkin #49; RMG #211
+#  Template reaction: Surface_Dissociation_vdW
+#  Flux pairs: HONO(113), NO_X(24); HONO(113), HOX(13);
+#  From training reaction 29 used for Combined;VacantSite
+#  Exact match found for rate rule [Combined;VacantSite]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_Dissociation_vdW
+
+# surface1 Reaction 49
+surface_reaction('X(1) + HONO(113) <=> NO_X(24) + HOX(13)', [6.610000e+17, 1.589, 15.913],
+                 id='surface1-49')
+#  Reaction index: Chemkin #50; RMG #212
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using template [N-R;Abstracting] for rate rule [N-O;Abstracting]
+#  Euclidian distance = 1.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 50
+surface_reaction('HX(9) + HONO(113) <=> NO_X(24) + H2OX(14)', [9.486980e+20, 0.069, 8.789],
+                 id='surface1-50')
+#  Reaction index: Chemkin #51; RMG #258
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using template [Donating;*NH2] for rate rule [O-H;*NH2]
+#  Euclidian distance = 2.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 51
+surface_reaction('HONO(113) + NH2_X(35) <=> NO2_X(25) + NH3_X(22)', [8.450000e+19, 0.156, 9.686],
+                 id='surface1-51')
+#  Reaction index: Chemkin #52; RMG #261
+#  Template reaction: Surface_Abstraction_vdW
+#  From training reaction 9 used for O-R;*=NH
+#  Exact match found for rate rule [O-R;*=NH]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 52
+surface_reaction('NH_X(37) + HONO(113) <=> NO2_X(25) + NH2_X(35)', [1.248121e+16, 0.969, 18.903],
+                 id='surface1-52')
+#  Reaction index: Chemkin #53; RMG #265
+#  Template reaction: Surface_Dissociation_vdW
+#  Flux pairs: HONO(113), HX(9); HONO(113), NO2_X(25);
+#  From training reaction 22 used for O-H;VacantSite
+#  Exact match found for rate rule [O-H;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Dissociation_vdW
+
+# surface1 Reaction 53
+surface_reaction('X(1) + HONO(113) <=> NO2_X(25) + HX(9)', [1.885000e+21, -0.118, 17.8],
+                 id='surface1-53')
+#  Reaction index: Chemkin #54; RMG #266
+#  Template reaction: Surface_Abstraction_vdW
+#  Estimated using template [O-R;*=O] for rate rule [O-N=R;*=O]
+#  Euclidian distance = 2.0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 54
+surface_reaction('OX(10) + HONO(113) <=> NO2_X(25) + HOX(13)', [2.015000e+19, 0.0, 12.596],
+                 id='surface1-54',
+                 options='duplicate')
+#  Reaction index: Chemkin #55; RMG #267
+#  Template reaction: Surface_Abstraction_vdW
+#  From training reaction 33 used for O-R;*=O
+#  Exact match found for rate rule [O-R;*=O]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 55
+surface_reaction('OX(10) + HONO(113) <=> NO2_X(25) + HOX(13)', [2.015000e+19, 0.0, 12.596],
+                 id='surface1-55',
+                 options='duplicate')
+#  Reaction index: Chemkin #56; RMG #270
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using average of templates [Donating;*O-H] + [O-H;Abstracting] for rate rule [O-H;*O-H]
+#  Euclidian distance = 2.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 56
+surface_reaction('HOX(13) + HONO(113) <=> NO2_X(25) + H2OX(14)', [3.623994e+20, 0.0, 9.461],
+                 id='surface1-56')
+#  Reaction index: Chemkin #57; RMG #273
+#  Template reaction: Surface_Abstraction_vdW
+#  From training reaction 10 used for O-R;*#N
+#  Exact match found for rate rule [O-R;*#N]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 57
+surface_reaction('N_X(23) + HONO(113) <=> NO2_X(25) + NH_X(37)', [1.097746e+15, 1.029, 22.34],
+                 id='surface1-57')
+#  Reaction index: Chemkin #58; RMG #275
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using template [N-H;*O] for rate rule [N-H;*O-N]
+#  Euclidian distance = 1.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 58
+surface_reaction('NO2_X(25) + NHO_X(51) <=> NO_X(24) + HONO(113)', [6.566667e+21, 0.0, 8.072],
+                 id='surface1-58')
+#  Reaction index: Chemkin #59; RMG #351
+#  Template reaction: Surface_Abstraction_vdW
+#  Estimated using template [O-R;*=O] for rate rule [O-N=R;*=O]
+#  Euclidian distance = 2.0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 59
+surface_reaction('OX(10) + HONO(113) <=> NO2_X(25) + HOX(13)', [2.015000e+19, 0.0, 12.596],
+                 id='surface1-59',
+                 options='duplicate')
+#  Reaction index: Chemkin #60; RMG #352
+#  Template reaction: Surface_Abstraction_vdW
+#  From training reaction 33 used for O-R;*=O
+#  Exact match found for rate rule [O-R;*=O]
+#  Euclidian distance = 0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 60
+surface_reaction('OX(10) + HONO(113) <=> NO2_X(25) + HOX(13)', [2.015000e+19, 0.0, 12.596],
+                 id='surface1-60',
+                 options='duplicate')
+#  Reaction index: Chemkin #61; RMG #209
 #  Template reaction: Surface_Adsorption_Dissociative
-#  Flux pairs: N2O2(48), NO_X(24); N2O2(48), NO_X(24);
+#  Flux pairs: HONO(124), NO_X(24); HONO(124), HOX(13);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-N;VacantSite1;VacantSite2]
+#  Euclidian distance = 2.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 61
+surface_reaction('X(1) + X(1) + HONO(124) <=> NO_X(24) + HOX(13)', stick(1.523000e-02, 0.077, 4.5),
+                 id='surface1-61')
+#  Reaction index: Chemkin #62; RMG #264
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: HONO(124), HX(9); HONO(124), NO2_X(25);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-H;VacantSite1;VacantSite2]
+#  Euclidian distance = 2.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 62
+surface_reaction('X(1) + X(1) + HONO(124) <=> NO2_X(25) + HX(9)', stick(1.523000e-02, 0.077, 4.5),
+                 id='surface1-62')
+#  Reaction index: Chemkin #63; RMG #348
+#  Template reaction: Surface_Adsorption_vdW
+#  Flux pairs: HONO(124), HONO(113); X(1), HONO(113);
+#  From training reaction 15 used for O-H;VacantSite
+#  Exact match found for rate rule [O-H;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Adsorption_vdW
+
+# surface1 Reaction 63
+surface_reaction('X(1) + HONO(124) <=> HONO(113)', stick(3.340000e-01, 0.258, 0.0),
+                 id='surface1-63')
+#  Reaction index: Chemkin #64; RMG #29
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: X(1), HOX(13); OH(30), HOX(13);
+
+# surface1 Reaction 64
+surface_reaction('X(1) + OH(30) <=> HOX(13)', stick(1.000000e+00, 0.0, 0.0),
+                 id='surface1-64')
+#  Reaction index: Chemkin #65; RMG #137
+#  Template reaction: Surface_Dissociation
+#  Flux pairs: HO2X(95), HOX(13); HO2X(95), OX(10);
+#  Estimated using an average for rate rule [O;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Dissociation
+
+# surface1 Reaction 65
+surface_reaction('X(1) + HO2X(95) <=> OX(10) + HOX(13)', [1.235858e+21, 0.624, 31.096],
+                 id='surface1-65',
+                 options='duplicate')
+#  Reaction index: Chemkin #66; RMG #144
+#  Template reaction: Surface_Abstraction_vdW
+#  Estimated using an average for rate rule [AdsorbateVdW;*=O]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 66
+surface_reaction('OX(10) + H2OX(14) <=> HX(9) + HO2X(95)', [5.144901e+18, 0.428, 60.238],
+                 id='surface1-66')
+#  Reaction index: Chemkin #67; RMG #353
+#  Template reaction: Surface_Abstraction_vdW
+#  Estimated using template [N-R;*=O] for rate rule [N-O;*=O]
+#  Euclidian distance = 1.0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 67
+surface_reaction('OX(10) + HONO(113) <=> NO_X(24) + HO2X(95)', [3.366667e+20, 0.0, 16.143],
+                 id='surface1-67')
+#  Reaction index: Chemkin #68; RMG #498
+#  Template reaction: Surface_Dissociation
+#  Flux pairs: HO2X(95), OX(10); HO2X(95), HOX(13);
+#  Estimated using an average for rate rule [O;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Dissociation
+
+# surface1 Reaction 68
+surface_reaction('X(1) + HO2X(95) <=> OX(10) + HOX(13)', [1.235858e+21, 0.624, 31.096],
+                 id='surface1-68',
+                 options='duplicate')
+#  Reaction index: Chemkin #69; RMG #24
+#  Library reaction: Surface/Arevalo_Pt111
+#  Flux pairs: X(1), NO2_X(25); NO2(26), NO2_X(25);
+
+# surface1 Reaction 69
+surface_reaction('X(1) + NO2(26) <=> NO2_X(25)', stick(1.488000e-06, 0.0, 0.0),
+                 id='surface1-69')
+#  Reaction index: Chemkin #70; RMG #282
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: ONONO(153), NO_X(24); ONONO(153), NO2_X(25);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-N;VacantSite1;VacantSite2]
+#  Euclidian distance = 2.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 70
+surface_reaction('X(1) + X(1) + ONONO(153) <=> NO_X(24) + NO2_X(25)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-70')
+#  Reaction index: Chemkin #71; RMG #268
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: ONOOH(148), NO2_X(25); ONOOH(148), HOX(13);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 71
+surface_reaction('X(1) + X(1) + ONOOH(148) <=> NO2_X(25) + HOX(13)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-71')
+#  Reaction index: Chemkin #72; RMG #533
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: ONOOH(148), NO_X(24); ONOOH(148), HO2X(95);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-N;VacantSite1;VacantSite2]
+#  Euclidian distance = 2.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 72
+surface_reaction('X(1) + X(1) + ONOOH(148) <=> NO_X(24) + HO2X(95)', stick(1.523000e-02, 0.077, 4.5),
+                 id='surface1-72')
+#  Reaction index: Chemkin #73; RMG #682
+#  Template reaction: Surface_Adsorption_vdW
+#  Flux pairs: X(1), NO2OH(256); NO2OH(227), NO2OH(256);
+#  From training reaction 15 used for O-H;VacantSite
+#  Exact match found for rate rule [O-H;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Adsorption_vdW
+
+# surface1 Reaction 73
+surface_reaction('X(1) + NO2OH(227) <=> NO2OH(256)', stick(3.340000e-01, 0.258, 0.0),
+                 id='surface1-73')
+#  Reaction index: Chemkin #74; RMG #37
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: X(1), NH2_X(35); NH2(34), NH2_X(35);
+
+# surface1 Reaction 74
+surface_reaction('X(1) + NH2(34) <=> NH2_X(35)', stick(1.000000e+00, 0.0, 0.0),
+                 id='surface1-74')
+#  Reaction index: Chemkin #75; RMG #204
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: NH2NO(121), NO_X(24); NH2NO(121), NH2_X(35);
 #  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
 #  Euclidian distance = 1.0
 #  family: Surface_Adsorption_Dissociative
 
-# surface1 Reaction 36
-surface_reaction('X(1) + X(1) + N2O2(48) <=> NO_X(24) + NO_X(24)', stick(1.600000e-02, 0.0, 0.0),
-                 id='surface1-36')
+# surface1 Reaction 75
+surface_reaction('X(1) + X(1) + NH2NO(121) <=> NO_X(24) + NH2_X(35)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-75')
+#  Reaction index: Chemkin #76; RMG #28
+#  Library reaction: Surface/Mhadeshwar_Pt111
+#  Flux pairs: X(1), HX(9); H(29), HX(9);
+
+# surface1 Reaction 76
+surface_reaction('X(1) + H(29) <=> HX(9)', stick(1.000000e+00, 0.0, 0.0),
+                 id='surface1-76')
+#  Reaction index: Chemkin #77; RMG #495
+#  Template reaction: Surface_Adsorption_Single
+#  Flux pairs: HO2(57), HO2X(95); X(1), HO2X(95);
+#  Estimated using an average for rate rule [O;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Adsorption_Single
+
+# surface1 Reaction 77
+surface_reaction('X(1) + HO2(57) <=> HO2X(95)', stick(4.803000e-03, 0.685, 0.0),
+                 id='surface1-77')
+#  Reaction index: Chemkin #78; RMG #262
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: S(147), NH2_X(35); S(147), NO2_X(25);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-N;VacantSite1;VacantSite2]
+#  Euclidian distance = 2.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 78
+surface_reaction('X(1) + X(1) + S(147) <=> NO2_X(25) + NH2_X(35)', stick(1.523000e-02, 0.077, 4.5),
+                 id='surface1-78')
+#  Reaction index: Chemkin #79; RMG #148
+#  Template reaction: Surface_Adsorption_Dissociative_Double
+#  Flux pairs: HNO(65), NH_X(37); HNO(65), OX(10);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [ONR;VacantSite1;VacantSite2]
+#  Euclidian distance = 2.0
+#  family: Surface_Adsorption_Dissociative_Double
+
+# surface1 Reaction 79
+surface_reaction('X(1) + X(1) + HNO(65) <=> OX(10) + NH_X(37)', stick(5.000000e-03, 0.0, 10.0),
+                 id='surface1-79')
+#  Reaction index: Chemkin #80; RMG #162
+#  Template reaction: Surface_Adsorption_vdW
+#  Flux pairs: HNO(65), NHO_X(51); X(1), NHO_X(51);
+#  Estimated using an average for rate rule [O=N;VacantSite]
+#  Euclidian distance = 0
+#  family: Surface_Adsorption_vdW
+
+# surface1 Reaction 80
+surface_reaction('X(1) + HNO(65) <=> NHO_X(51)', stick(1.000000e+00, 0.0, 7.841),
+                 id='surface1-80')
+#  Reaction index: Chemkin #81; RMG #207
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: HNO(65), HX(9); HNO(65), NO_X(24);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 81
+surface_reaction('X(1) + X(1) + HNO(65) <=> NO_X(24) + HX(9)', stick(1.523000e-02, 0.077, 4.5),
+                 id='surface1-81')
+#  Reaction index: Chemkin #82; RMG #604
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: NO2NO(222), NO2JX(235); NO2NO(222), NO_X(24);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 82
+surface_reaction('X(1) + X(1) + NO2NO(222) <=> NO_X(24) + NO2JX(235)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-82')
+#  Reaction index: Chemkin #83; RMG #679
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: NO2OH(227), HOX(13); NO2OH(227), NO2JX(235);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 83
+surface_reaction('X(1) + X(1) + NO2OH(227) <=> NO2JX(235) + HOX(13)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-83')
+#  Reaction index: Chemkin #84; RMG #729
+#  Template reaction: Surface_Dissociation_vdW
+#  Flux pairs: NO2OH(256), HOX(13); NO2OH(256), NO2JX(235);
+#  From training reaction 29 used for Combined;VacantSite
+#  Exact match found for rate rule [Combined;VacantSite]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_Dissociation_vdW
+
+# surface1 Reaction 84
+surface_reaction('X(1) + NO2OH(256) <=> NO2JX(235) + HOX(13)', [6.610000e+17, 1.589, 15.913],
+                 id='surface1-84')
+#  Reaction index: Chemkin #85; RMG #733
+#  Template reaction: Surface_Abstraction_vdW
+#  Estimated using template [N-R;*=O] for rate rule [N-O;*=O]
+#  Euclidian distance = 1.0
+#  family: Surface_Abstraction_vdW
+
+# surface1 Reaction 85
+surface_reaction('OX(10) + NO2OH(256) <=> NO2JX(235) + HO2X(95)', [3.366667e+20, 0.0, 16.143],
+                 id='surface1-85')
+#  Reaction index: Chemkin #86; RMG #748
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using template [N-R;Abstracting] for rate rule [N-O;Abstracting]
+#  Euclidian distance = 1.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 86
+surface_reaction('HX(9) + NO2OH(256) <=> NO2JX(235) + H2OX(14)', [9.486980e+20, 0.069, 8.789],
+                 id='surface1-86')
+#  Reaction index: Chemkin #87; RMG #773
+#  Template reaction: Surface_Abstraction_Single_vdW
+#  Estimated using template [N-R;*N] for rate rule [N-O;*N]
+#  Euclidian distance = 1.0
+#  family: Surface_Abstraction_Single_vdW
+
+# surface1 Reaction 87
+surface_reaction('NO2JX(235) + HONO(113) <=> NO_X(24) + NO2OH(256)', [8.450000e+19, 0.156, 9.686],
+                 id='surface1-87')
+#  Reaction index: Chemkin #88; RMG #1664
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: HNO2(191), NO2JX(235); HNO2(191), HX(9);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 88
+surface_reaction('X(1) + X(1) + HNO2(191) <=> NO2JX(235) + HX(9)', stick(3.046000e-02, 0.077, 4.5),
+                 id='surface1-88')
+#  Reaction index: Chemkin #89; RMG #1764
+#  Template reaction: Surface_DoubleBond_to_Bidentate
+#  Flux pairs: X(1), NO2X2(416); NO2JX(235), NO2X2(416);
+#  Exact match found for rate rule [Combined;VacantSite]
+#  Euclidian distance = 0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_DoubleBond_to_Bidentate
+
+# surface1 Reaction 89
+surface_reaction('X(1) + NO2JX(235) <=> NO2X2(416)', [8.540000e+19, 0.549, 13.51],
+                 id='surface1-89')
+#  Reaction index: Chemkin #90; RMG #1796
+#  Template reaction: Surface_Bidentate_Dissociation
+#  Flux pairs: NO2X2(416), OX(10); NO2X2(416), NO_X(24);
+#  From training reaction 1 used for Combined
+#  Exact match found for rate rule [Combined]
+#  Euclidian distance = 0
+#  family: Surface_Bidentate_Dissociation
+
+# surface1 Reaction 90
+surface_reaction('NO2X2(416) <=> OX(10) + NO_X(24)', [4.390000e+11, 0.299, 18.219],
+                 id='surface1-90')
+#  Reaction index: Chemkin #91; RMG #1800
+#  Template reaction: Surface_Abstraction
+#  Flux pairs: NO_X(24), NO2X2(416); O2_ads(71), OX(10);
+#  Estimated using template [Abstracting;Donating] for rate rule [N#*;*R-O]
+#  Euclidian distance = 2.23606797749979
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_Abstraction
+
+# surface1 Reaction 91
+surface_reaction('O2_ads(71) + NO_X(24) <=> OX(10) + NO2X2(416)', [7.069825e+21, -0.017, 14.114],
+                 id='surface1-91')
+#  Reaction index: Chemkin #92; RMG #1837
+#  Template reaction: Surface_Abstraction
+#  Flux pairs: NO2X2(416), NO_X(24); N_X(23), NOX2(119);
+#  Estimated using template [Abstracting;Donating] for rate rule [:N#*;*R-O]
+#  Euclidian distance = 3.1622776601683795
+#  family: Surface_Abstraction
+
+# surface1 Reaction 92
+surface_reaction('N_X(23) + NO2X2(416) <=> NO_X(24) + NOX2(119)', [3.534912e+21, -0.017, 14.114],
+                 id='surface1-92')

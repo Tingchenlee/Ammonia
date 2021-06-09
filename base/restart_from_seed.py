@@ -6,8 +6,8 @@ restartFromSeed(path='seed')
 # Chemical Engineering Journal 90 (2002) 61–76
 
 database(
-    thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','DFT_QCI_thermo', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON'],
-    reactionLibraries = ['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],
+    thermoLibraries=['surfaceThermoPt111', 'surfaceThermoNi111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','DFT_QCI_thermo', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON'],
+    reactionLibraries = ['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Mhadeshwar_Pt111','Surface/Novell_Pt111','Surface/Offermans_Pt111','Surface/Rebrov_Pt111','Surface/Scheuer_Pt','Surface/Schneider_Pt111'],
     seedMechanisms = [],
     kineticsDepositories = ['training'],
     kineticsFamilies = ['surface','default'],
