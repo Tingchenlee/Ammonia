@@ -371,44 +371,6 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
-  - adjlist: '1 O u0 p2 c0 {2,S} {3,S}
-
-      2 O u0 p2 c0 {1,S} {4,S}
-
-      3 X u0 p0 c0 {1,S}
-
-      4 X u0 p0 c0 {2,S}
-
-      '
-    name: O2_ads
-    radicalelectrons: 0
-    smiles: '[Pt]OO[Pt]'
-    thermo:
-      polys:
-      - Tmax: 1000.0
-        Tmin: 298.0
-        coefs:
-        - 0.744370346
-        - 0.0211027468
-        - -3.61266754e-05
-        - 2.91032111e-08
-        - -9.01689834e-12
-        - -14532.3684
-        - -4.83356832
-        type: NASApolynomial
-      - Tmax: 2000.0
-        Tmin: 1000.0
-        coefs:
-        - 5.79639127
-        - -0.000749042336
-        - 1.40680168e-06
-        - -7.97092567e-10
-        - 1.49696529e-13
-        - -15527.8968
-        - -28.9715227
-        type: NASApolynomial
-      type: NASA
-    type: Species
   - adjlist: '1 N u0 p1 c0 {2,S} {3,S} {4,S}
 
       2 H u0 p0 c0 {1,S}
@@ -447,6 +409,42 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
+  - adjlist: '1 O u0 p2 c0 {2,S} {3,S}
+
+      2 H u0 p0 c0 {1,S}
+
+      3 X u0 p0 c0 {1,S}
+
+      '
+    name: HOX
+    radicalelectrons: 0
+    smiles: O[Pt]
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 298.0
+        coefs:
+        - 1.07348583
+        - 0.0172652206
+        - -3.17712232e-05
+        - 2.71536568e-08
+        - -8.69449304e-12
+        - -19600.2909
+        - -5.65622336
+        type: NASApolynomial
+      - Tmax: 2000.0
+        Tmin: 1000.0
+        coefs:
+        - 5.01870328
+        - -0.00135424298
+        - 2.2768631e-06
+        - -1.09407298e-09
+        - 1.79396487e-13
+        - -20297.9842
+        - -24.1159621
+        type: NASApolynomial
+      type: NASA
+    type: Species
   name: surface
 Reactions:
 - kinetics:
@@ -476,27 +474,16 @@ Reactions:
   - NH3
   type: ElementaryReaction
 - kinetics:
-    A: 439000000000.0
-    Ea: 76227.0
-    n: 0.299
+    A: 6.85e+19
+    Ea: 157000.0
+    n: 0.0
     type: Arrhenius
   products:
-  - OX
-  - OX
+  - HOX
+  - NH2_X
   radicalchange: 0
   reactants:
-  - O2_ads
-  type: ElementaryReaction
-- kinetics:
-    A: 439000000000.0
-    Ea: 76227.0
-    n: 0.299
-    type: Arrhenius
-  products:
   - OX
-  - OX
-  radicalchange: 0
-  reactants:
-  - O2_ads
+  - NH3_X
   type: ElementaryReaction
 Units: {}
