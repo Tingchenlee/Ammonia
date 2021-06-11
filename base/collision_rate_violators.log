@@ -2,12 +2,25 @@
 "Violation factor" is the ratio of the rate coefficient to the collision limit rate at the relevant conditions
 
 ! Template reaction: R_Recombination
-! Flux pairs: NO(5), N2O2(50); NO(5), N2O2(50); 
+! Flux pairs: NO(5), N2O2(249); NO(5), N2O2(249); 
 ! Estimated from node Root_N-1R->H_1CNOS->N_Ext-2R-R_3R!H-u0
-NO(5)+NO(5)=N2O2(50)                                5.156200e+36 -7.489    1.348    
+NO(5)+NO(5)=N2O2(249)                               5.156200e+36 -7.489    1.348    
 
 Direction: forward
-Violation factor: 5.92
-Violation condition: 673.0 K, 0.0 bar
+Violation factor: 43.66
+Violation condition: 498.0 K, 0.0 bar
+
+
+! Template reaction: Birad_R_Recombination
+! Flux pairs: NO2(96), ONOOJ(265); O(31), ONOOJ(265); 
+! Estimated using an average for rate rule [O_sec_rad;O_birad]
+! Euclidian distance = 0
+! Multiplied by reaction path degeneracy 2.0
+! family: Birad_R_Recombination
+O(31)+NO2(96)=ONOOJ(265)                            2.168206e+09 1.443     -2.871   
+
+Direction: forward
+Violation factor: 1.82
+Violation condition: 498.0 K, 0.0 bar
 
 
