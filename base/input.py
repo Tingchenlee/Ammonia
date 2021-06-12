@@ -5,8 +5,7 @@
 
 database(
     thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON','DFT_QCI_thermo','GRI-Mech3.0'],
-    #reactionLibraries = ['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],
-    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen',('NOx2018', True),('Nitrogen_Dean_and_Bozzelli', True),('Nitrogen_Glarborg_Gimenez_et_al', True),('BurkeH2O2inN2', True)],
+    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],#('NOx2018', True),('Nitrogen_Dean_and_Bozzelli', True),('Nitrogen_Glarborg_Gimenez_et_al', True),('BurkeH2O2inN2', True)],
     seedMechanisms = ['Surface/Rebrov_Pt111','Surface/Schneider_Pt111'],
     kineticsDepositories = ['training'],
     kineticsFamilies = ['surface','default'],
@@ -19,18 +18,8 @@ catalystProperties(
 
 generatedSpeciesConstraints(
     allowed=['input species','seed mechanisms','reaction libraries'],
-    maximumCarbonAtoms=0,
-    maximumOxygenAtoms=3,
-    maximumNitrogenAtoms=4,
-    # maximumSiliconAtoms=2,
-    # maximumSulfurAtoms=2,
-    # maximumHeavyAtoms=10,
-    maximumSurfaceSites=2,
-    maximumRadicalElectrons=2,
-    # maximumSingletCarbenes=1,
-    # maximumCarbeneRadicals=0,
-    # maximumIsotopicAtoms=2,
-    # allowSingletO2 = False,
+    maximumNitrogenAtoms=2,
+    maximumOxygenAtoms=2,
 )
 
 # List of species
@@ -110,13 +99,13 @@ species(
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=[(498,'K'),(1000,'K')],
+    temperature=(1000,'K'),
     initialPressure=(1.0, 'bar'),
     nSims=12,
     initialGasMoleFractions={
-        "NH3": 0.12,
+        "NH3": 0.066,
         "O2": 0.88,
-        "He": 0.0,
+        "He": 0.054,
         "NO":0.0,
         "H2O":0.0,
         "N2O":0.0,
@@ -126,7 +115,7 @@ surfaceReactor(
         "X": 1.0,
     },
     surfaceVolumeRatio=(2.8571428e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
-    terminationConversion = {"NH3":0.95,},
+    terminationConversion = {"NH3":0.99,},
     terminationTime=(10, 's'),
 )
 
@@ -136,12 +125,14 @@ simulator( #default for surface reaction atol=1e-18,rtol=1e-12
 )
 
 model( 
-    toleranceKeepInEdge=0.01,
+    toleranceKeepInEdge=0.01, #recommend setting toleranceKeepInEdge to not be larger than 10% of toleranceMoveToCore
     toleranceMoveToCore=0.1, 
-    toleranceInterruptSimulation=1e8, 
-    maximumEdgeSpecies=5000, 
-    minCoreSizeForPrune=50,
-    minSpeciesExistIterationsForPrune=2,
+    toleranceInterruptSimulation=1e8, #This value should be set to be equal to toleranceMoveToCore unless the advanced pruning feature is desired
+    #to always enable pruning should be set as a high value, e.g. 1e8
+    maximumEdgeSpecies=5000, #set up less than 200000
+    minCoreSizeForPrune=50, #default value
+    #toleranceThermoKeepSpeciesInEdge=0.5, 
+    minSpeciesExistIterationsForPrune=2, #default value = 2 iteration
 )
 
 options(

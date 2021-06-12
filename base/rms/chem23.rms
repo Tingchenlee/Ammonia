@@ -31,6 +31,35 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
+  - name: Ar
+    radicalelectrons: 0
+    smiles: '[Ar]'
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 200.0
+        coefs:
+        - 2.5
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - -745.375
+        - 4.37967
+        type: NASApolynomial
+      - Tmax: 6000.0
+        Tmin: 1000.0
+        coefs:
+        - 2.5
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - -745.375
+        - 4.37967
+        type: NASApolynomial
+      type: NASA
+    type: Species
   - name: Ne
     radicalelectrons: 0
     smiles: '[Ne]'
@@ -231,64 +260,6 @@ Phases:
         - -1.8871425985125562e-14
         - 8266.77202878809
         - -1.0750259901631425
-        type: NASApolynomial
-      type: NASA
-    type: Species
-  - name: NH2
-    radicalelectrons: 1
-    smiles: '[NH2]'
-    thermo:
-      polys:
-      - Tmax: 1522.0442036748645
-        Tmin: 100.0
-        coefs:
-        - 4.089735245416066
-        - -0.0011551088406730344
-        - 4.137949338665951e-06
-        - -2.4832226081921234e-09
-        - 4.842720264924734e-13
-        - 21177.352270593856
-        - 0.2895688234174934
-        type: NASApolynomial
-      - Tmax: 5000.0
-        Tmin: 1522.0442036748645
-        coefs:
-        - 2.6801562213724974
-        - 0.003368412192500145
-        - -1.1272777398960698e-06
-        - 1.7655497451948368e-10
-        - -1.0678545347778822e-14
-        - 21511.56526522663
-        - 7.370401816292874
-        type: NASApolynomial
-      type: NASA
-    type: Species
-  - name: HO2
-    radicalelectrons: 1
-    smiles: '[O]O'
-    thermo:
-      polys:
-      - Tmax: 1000.2466780084238
-        Tmin: 100.0
-        coefs:
-        - 4.024255472006828
-        - -0.0016454575154667439
-        - 1.0510944059704672e-05
-        - -1.069916041045703e-08
-        - 3.4938009708234706e-12
-        - 234.74007415385483
-        - 4.700584052434649
-        type: NASApolynomial
-      - Tmax: 5000.0
-        Tmin: 1000.2466780084238
-        coefs:
-        - 3.6286825782592493
-        - 0.003053874009145323
-        - -1.2113068605483412e-06
-        - 2.2963899998597778e-10
-        - -1.6506150184251673e-14
-        - 157.9257506038629
-        - 5.829542376393761
         type: NASApolynomial
       type: NASA
     type: Species
@@ -764,6 +735,44 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
+  - adjlist: '1 O u0 p2 c0 {2,S} {4,S}
+
+      2 N u0 p1 c0 {1,S} {3,D}
+
+      3 X u0 p0 c0 {2,D}
+
+      4 X u0 p0 c0 {1,S}
+
+      '
+    name: NO-h_ads
+    radicalelectrons: 0
+    smiles: '[Pt]ON=[Pt]'
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 298.0
+        coefs:
+        - 3.23151905
+        - 0.00607214925
+        - -7.46345407e-06
+        - 5.43212687e-09
+        - -1.71496758e-12
+        - -11635.752
+        - -13.027803
+        type: NASApolynomial
+      - Tmax: 2000.0
+        Tmin: 1000.0
+        coefs:
+        - 5.54859951
+        - -0.00148179602
+        - 2.71394293e-06
+        - -1.49952005e-09
+        - 2.76147146e-13
+        - -12233.6367
+        - -24.7556107
+        type: NASApolynomial
+      type: NASA
+    type: Species
   name: surface
 Reactions:
 - kinetics:
@@ -1224,41 +1233,39 @@ Reactions:
   - NH3
   type: ElementaryReaction
 - kinetics:
-    A: 26000000000000.004
-    Ea: 3640.08
-    n: -2.369
+    A: 439000000000.0
+    Ea: 76227.0
+    n: 0.299
     type: Arrhenius
   products:
-  - N2
-  - H2O
-  radicalchange: -2
+  - O_X
+  - N_X
+  radicalchange: 0
   reactants:
-  - 'NO'
-  - NH2
+  - NO-h_ads
   type: ElementaryReaction
 - kinetics:
-    A: 1.0
-    Ea: 0.0
-    n: 0.0
-    type: StickingCoefficient
+    A: 4270000000000000.0
+    Ea: 20639.117871600465
+    n: 0.549
+    type: Arrhenius
   products:
-  - NH2_X
-  radicalchange: -1
+  - NO-h_ads
+  radicalchange: 0
   reactants:
   - X
-  - NH2
+  - NO_X
   type: ElementaryReaction
 - kinetics:
-    A: 0.017
-    Ea: 8480.968
-    n: 1.55
+    A: 439000000000.0
+    Ea: 76227.0
+    n: 0.299
     type: Arrhenius
   products:
-  - O2
-  - NH3
-  radicalchange: -2
+  - O_X
+  - N_X
+  radicalchange: 0
   reactants:
-  - HO2
-  - NH2
+  - NO-h_ads
   type: ElementaryReaction
 Units: {}

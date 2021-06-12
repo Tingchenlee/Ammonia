@@ -31,6 +31,35 @@ Phases:
         type: NASApolynomial
       type: NASA
     type: Species
+  - name: Ar
+    radicalelectrons: 0
+    smiles: '[Ar]'
+    thermo:
+      polys:
+      - Tmax: 1000.0
+        Tmin: 200.0
+        coefs:
+        - 2.5
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - -745.375
+        - 4.37967
+        type: NASApolynomial
+      - Tmax: 6000.0
+        Tmin: 1000.0
+        coefs:
+        - 2.5
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - -745.375
+        - 4.37967
+        type: NASApolynomial
+      type: NASA
+    type: Species
   - name: Ne
     radicalelectrons: 0
     smiles: '[Ne]'
@@ -231,35 +260,6 @@ Phases:
         - -1.8871425985125562e-14
         - 8266.77202878809
         - -1.0750259901631425
-        type: NASApolynomial
-      type: NASA
-    type: Species
-  - name: NH2
-    radicalelectrons: 1
-    smiles: '[NH2]'
-    thermo:
-      polys:
-      - Tmax: 1522.0442036748645
-        Tmin: 100.0
-        coefs:
-        - 4.089735245416066
-        - -0.0011551088406730344
-        - 4.137949338665951e-06
-        - -2.4832226081921234e-09
-        - 4.842720264924734e-13
-        - 21177.352270593856
-        - 0.2895688234174934
-        type: NASApolynomial
-      - Tmax: 5000.0
-        Tmin: 1522.0442036748645
-        coefs:
-        - 2.6801562213724974
-        - 0.003368412192500145
-        - -1.1272777398960698e-06
-        - 1.7655497451948368e-10
-        - -1.0678545347778822e-14
-        - 21511.56526522663
-        - 7.370401816292874
         type: NASApolynomial
       type: NASA
     type: Species
@@ -1193,30 +1193,5 @@ Reactions:
   - X
   - X
   - NH3
-  type: ElementaryReaction
-- kinetics:
-    A: 26000000000000.004
-    Ea: 3640.08
-    n: -2.369
-    type: Arrhenius
-  products:
-  - N2
-  - H2O
-  radicalchange: -2
-  reactants:
-  - 'NO'
-  - NH2
-  type: ElementaryReaction
-- kinetics:
-    A: 1.0
-    Ea: 0.0
-    n: 0.0
-    type: StickingCoefficient
-  products:
-  - NH2_X
-  radicalchange: -1
-  reactants:
-  - X
-  - NH2
   type: ElementaryReaction
 Units: {}
