@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --time=24:00:00
 #SBATCH --mem=120Gb
-#SBATCH --job-name=Rebrov
+#SBATCH --job-name=800K_O88N12_no_gas_lib
 #SBATCH --output=lee.ting.log
 #SBATCH --partition=short
 #SBATCH --cpus-per-task=4

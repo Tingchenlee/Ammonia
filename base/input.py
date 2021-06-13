@@ -5,8 +5,8 @@
 
 database(
     thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON','DFT_QCI_thermo','GRI-Mech3.0'],
-    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],#('NOx2018', True),('Nitrogen_Dean_and_Bozzelli', True),('Nitrogen_Glarborg_Gimenez_et_al', True),('BurkeH2O2inN2', True)],
-    seedMechanisms = ['Surface/Rebrov_Pt111','Surface/Schneider_Pt111'],
+    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],#,('NOx2018', True),'primaryNitrogenLibrary'],#('Nitrogen_Dean_and_Bozzelli', True),('Nitrogen_Glarborg_Gimenez_et_al', True)],
+    seedMechanisms = ['Surface/Rebrov_Pt111','Surface/Schneider_Pt111','Surface/Kraehnert_Pt111','Surface/Mhadeshwar_Pt111'],
     kineticsDepositories = ['training'],
     kineticsFamilies = ['surface','default'],
     kineticsEstimator = 'rate rules',
@@ -19,7 +19,7 @@ catalystProperties(
 generatedSpeciesConstraints(
     allowed=['input species','seed mechanisms','reaction libraries'],
     maximumNitrogenAtoms=2,
-    maximumOxygenAtoms=2,
+    maximumOxygenAtoms=3,
 )
 
 # List of species
@@ -99,13 +99,13 @@ species(
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=(1000,'K'),
+    temperature=(800,'K'),
     initialPressure=(1.0, 'bar'),
-    nSims=12,
+    nSims=6,
     initialGasMoleFractions={
-        "NH3": 0.066,
+        "NH3": 0.12,
         "O2": 0.88,
-        "He": 0.054,
+        "He": 0.0,
         "NO":0.0,
         "H2O":0.0,
         "N2O":0.0,
@@ -115,12 +115,12 @@ surfaceReactor(
         "X": 1.0,
     },
     surfaceVolumeRatio=(2.8571428e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
-    terminationConversion = {"NH3":0.99,},
+    terminationConversion = {"NH3":0.9,},
     terminationTime=(10, 's'),
 )
 
 simulator( #default for surface reaction atol=1e-18,rtol=1e-12
-    atol=1e-22, #absolute tolerance are 1e-15 to 1e-25
+    atol=1e-18, #absolute tolerance are 1e-15 to 1e-25
     rtol=1e-12, #relative tolerance is usually 1e-4 to 1e-8
 )
 
