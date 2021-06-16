@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --time=24:00:00
 #SBATCH --mem=120Gb
-#SBATCH --job-name=800K_O88N12_no_gas_lib
+#SBATCH --job-name=500_673K_O88N066_no_gas_families_with_NOx2018_new
 #SBATCH --output=lee.ting.log
 #SBATCH --partition=short
 #SBATCH --cpus-per-task=4

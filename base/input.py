@@ -4,11 +4,33 @@
 # Chemical Engineering Journal 90 (2002) 61–76
 
 database(
-    thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran', 'primaryNS', 'CHON','DFT_QCI_thermo','GRI-Mech3.0'],
-    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen'],#,('NOx2018', True),'primaryNitrogenLibrary'],#('Nitrogen_Dean_and_Bozzelli', True),('Nitrogen_Glarborg_Gimenez_et_al', True)],
-    seedMechanisms = ['Surface/Rebrov_Pt111','Surface/Schneider_Pt111','Surface/Kraehnert_Pt111','Surface/Mhadeshwar_Pt111'],
+    thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran','DFT_QCI_thermo'],
+    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Mhadeshwar_Pt111','Surface/Schneider_Pt111','NOx2018'],
+    seedMechanisms = ['Surface/Rebrov_Pt111'],
     kineticsDepositories = ['training'],
-    kineticsFamilies = ['surface','default'],
+    kineticsFamilies = [
+    'Surface_Adsorption_Single',
+    'Surface_Adsorption_vdW',
+    'Surface_Adsorption_Dissociative',
+    'Surface_Dissociation',
+    'Surface_Abstraction',
+    #'Surface_EleyRideal_Addition_Multiple_Bond',
+    #'Surface_Migration',
+    'Surface_Dissociation_Double_vdW',
+    'Surface_Addition_Single_vdW',
+    'Surface_Dissociation_vdW',
+    'Surface_Abstraction_vdW',
+    #'Surface_Dual_Adsorption_vdW',
+    #'Surface_Dissociation_Beta',
+    'Surface_Adsorption_Abstraction_vdW',
+    #'Surface_Adsorption_Bidentate',
+    #'Surface_Bidentate_Dissociation',
+    #'Surface_DoubleBond_to_Bidentate', 
+    #'Surface_vdW_to_Bidentate',
+    'Surface_Abstraction_Single_vdW',
+    #'Surface_Adsorption_Dissociative_Double',
+    #'default'
+    ],
     kineticsEstimator = 'rate rules',
 )
 
@@ -18,8 +40,11 @@ catalystProperties(
 
 generatedSpeciesConstraints(
     allowed=['input species','seed mechanisms','reaction libraries'],
-    maximumNitrogenAtoms=2,
+    maximumCarbonAtoms=0,
     maximumOxygenAtoms=3,
+    maximumNitrogenAtoms=2,
+    maximumSurfaceSites=2,
+    maximumRadicalElectrons=2,
 )
 
 # List of species
@@ -99,13 +124,13 @@ species(
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=(800,'K'),
+    temperature=[(500,'K'),(673,'K')],
     initialPressure=(1.0, 'bar'),
-    nSims=6,
+    nSims=12,
     initialGasMoleFractions={
-        "NH3": 0.12,
+        "NH3": 0.066,
         "O2": 0.88,
-        "He": 0.0,
+        "He": 0.054,
         "NO":0.0,
         "H2O":0.0,
         "N2O":0.0,
@@ -114,25 +139,24 @@ surfaceReactor(
     initialSurfaceCoverages={
         "X": 1.0,
     },
-    surfaceVolumeRatio=(2.8571428e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
+    surfaceVolumeRatio=(1.4285714e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
     terminationConversion = {"NH3":0.9,},
-    terminationTime=(10, 's'),
+    #terminationTime=(10, 's'),
 )
 
 simulator( #default for surface reaction atol=1e-18,rtol=1e-12
-    atol=1e-18, #absolute tolerance are 1e-15 to 1e-25
+    atol=1e-22, #absolute tolerance are 1e-15 to 1e-25
     rtol=1e-12, #relative tolerance is usually 1e-4 to 1e-8
 )
 
 model( 
-    toleranceKeepInEdge=0.01, #recommend setting toleranceKeepInEdge to not be larger than 10% of toleranceMoveToCore
-    toleranceMoveToCore=0.1, 
-    toleranceInterruptSimulation=1e8, #This value should be set to be equal to toleranceMoveToCore unless the advanced pruning feature is desired
-    #to always enable pruning should be set as a high value, e.g. 1e8
-    maximumEdgeSpecies=5000, #set up less than 200000
-    minCoreSizeForPrune=50, #default value
-    #toleranceThermoKeepSpeciesInEdge=0.5, 
-    minSpeciesExistIterationsForPrune=2, #default value = 2 iteration
+    toleranceKeepInEdge=0.05,
+    toleranceMoveToCore=0.5, 
+    toleranceInterruptSimulation=1e8, 
+    maximumEdgeSpecies=5000, 
+    minCoreSizeForPrune=50,
+    toleranceThermoKeepSpeciesInEdge=0.5, # prune before simulation based on thermo
+    minSpeciesExistIterationsForPrune=2, # prune rxns from edge that dont move into core
 )
 
 options(
