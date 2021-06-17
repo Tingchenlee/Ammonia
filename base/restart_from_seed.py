@@ -7,32 +7,34 @@ restartFromSeed(path='seed')
 
 database(
     thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran','DFT_QCI_thermo'],
-    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Mhadeshwar_Pt111','Surface/Schneider_Pt111','NOx2018'],
-    seedMechanisms = ['Surface/Rebrov_Pt111'],
+    reactionLibraries =['Surface/Rebrov_Pt111'],
+    #reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Schneider_Pt111','Surface/Novell_Pt111','Surface/Offermans_Pt111','Surface/Scheuer_Pt'],
+    seedMechanisms = [],
     kineticsDepositories = ['training'],
-    kineticsFamilies = [
-    'Surface_Adsorption_Single',
-    'Surface_Adsorption_vdW',
-    'Surface_Adsorption_Dissociative',
-    'Surface_Dissociation',
-    'Surface_Abstraction',
-    #'Surface_EleyRideal_Addition_Multiple_Bond',
-    #'Surface_Migration',
-    'Surface_Dissociation_Double_vdW',
-    'Surface_Addition_Single_vdW',
-    'Surface_Dissociation_vdW',
-    'Surface_Abstraction_vdW',
-    #'Surface_Dual_Adsorption_vdW',
-    #'Surface_Dissociation_Beta',
-    'Surface_Adsorption_Abstraction_vdW',
-    #'Surface_Adsorption_Bidentate',
-    #'Surface_Bidentate_Dissociation',
-    #'Surface_DoubleBond_to_Bidentate', 
-    #'Surface_vdW_to_Bidentate',
-    'Surface_Abstraction_Single_vdW',
-    #'Surface_Adsorption_Dissociative_Double',
-    #'default'
-    ],
+    kineticsFamilies = ['Surface_Dissociation'],
+    # kineticsFamilies = [
+    # 'Surface_Adsorption_Single',
+    # 'Surface_Adsorption_vdW',
+    # 'Surface_Adsorption_Dissociative',
+    # 'Surface_Dissociation',
+    # 'Surface_Abstraction',
+    # #'Surface_EleyRideal_Addition_Multiple_Bond',
+    # #'Surface_Migration',
+    # 'Surface_Dissociation_Double_vdW',
+    # 'Surface_Addition_Single_vdW',
+    # 'Surface_Dissociation_vdW',
+    # 'Surface_Abstraction_vdW',
+    # #'Surface_Dual_Adsorption_vdW',
+    # #'Surface_Dissociation_Beta',
+    # 'Surface_Adsorption_Abstraction_vdW',
+    # #'Surface_Adsorption_Bidentate',
+    # #'Surface_Bidentate_Dissociation',
+    # #'Surface_DoubleBond_to_Bidentate', 
+    # #'Surface_vdW_to_Bidentate',
+    # 'Surface_Abstraction_Single_vdW',
+    # #'Surface_Adsorption_Dissociative_Double',
+    # #'default'
+    # ],
     kineticsEstimator = 'rate rules',
 )
 
@@ -122,11 +124,66 @@ species(
 """),
 )
 
+species(
+    label='NOX',
+    reactive=False,
+    structure=adjacencyList(
+"""
+1 O u0 p2 c0 {2,D}
+2 N u0 p1 c0 {1,D} {3,S}
+3 X u0 p0 c0 {2,S}
+"""),
+)
+
+species(
+    label='OX',
+    reactive=False,
+    structure=adjacencyList(
+"""
+1 O u0 p2 c0 {2,D}
+2 X u0 p0 c0 {1,D}
+"""),
+)
+
+species(
+    label='NX',
+    reactive=False,
+    structure=adjacencyList(
+"""
+1 N u0 p1 c0 {2,T}
+2 X u0 p0 c0 {1,T}
+"""),
+)
+
+species(
+    label='OHX',
+    reactive=False,
+    structure=adjacencyList(
+"""
+1 O u0 p2 c0 {2,S} {3,S}
+2 H u0 p0 c0 {1,S}
+3 X u0 p0 c0 {1,S}
+"""),
+)
+
+species(
+    label='NH3X',
+    reactive=False,
+    structure=adjacencyList(
+"""
+1 N u0 p1 c0 {2,S} {3,S} {4,S}
+2 H u0 p0 c0 {1,S}
+3 H u0 p0 c0 {1,S}
+4 H u0 p0 c0 {1,S}
+5 X u0 p0 c0
+"""),
+)
+
 #-------------
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=[(500,'K'),(673,'K')],
+    temperature=[(523,'K'),(673,'K')],
     initialPressure=(1.0, 'bar'),
     nSims=12,
     initialGasMoleFractions={
@@ -137,12 +194,18 @@ surfaceReactor(
         "H2O":0.0,
         "N2O":0.0,
         "N2":0.0,
+        "NX":0.0,
+        "NOX":0.0,
+        "NH3X":0.0,
+        "OX":0.0,
+        "OHX":0.0,
     },
     initialSurfaceCoverages={
         "X": 1.0,
     },
-    surfaceVolumeRatio=(1.4285714e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
-    terminationConversion = {"NH3":0.9,},
+    surfaceVolumeRatio=(2.3832928e4, 'm^-1'), #Spherical area=0.0660382956m2,V of Pt=0.00002531468cm3 
+    #surfaceVolumeRatio=(1.4285714e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
+    terminationConversion = {"NH3":0.95,},
     #terminationTime=(10, 's'),
 )
 

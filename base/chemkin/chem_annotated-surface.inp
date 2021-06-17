@@ -1,21 +1,13 @@
 SITE   SDEN/2.4830E-09/ ! mol/cm^2
+    NOX                 ! NOX
+    OX                  ! OX
+    NX                  ! NX
+    OHX                 ! OHX
+    NH3X                ! NH3X
     X(1)                ! X(1)
-    NH3_X(8)            ! NH3_X(8)
-    O_X(9)              ! O_X(9)
-    NH2_X(10)           ! NH2_X(10)
-    OH_X(11)            ! OH_X(11)
-    NH_X(12)            ! NH_X(12)
-    N_X(13)             ! N_X(13)
-    NO_X(14)            ! NO_X(14)
-    NHO_X(15)           ! NHO_X(15)
-    H2O_X(16)           ! H2O_X(16)
-    HX(18)              ! HX(18)
-    NO2_X(28)           ! NO2_X(28)
-    N2O_X(48)           ! N2O_X(48)
-    N2O_X(51)           ! N2O_X(51)
-    HNOX(189)           ! NOH_ads(189)
-    HONO(190)           ! HONO(190)
-    N2X(199)            ! NN_ads(199)
+    NH2_X(8)            ! NH2_X(8)
+    NH_X(9)             ! NH_X(9)
+    H2O_X(11)           ! H2O_X(11)
 END
 
 
@@ -24,110 +16,58 @@ THERM ALL
     300.000  1000.000  5000.000
 
 ! Thermo library: surfaceThermoPt111
+NOX                     N   1O   1X   1     G   298.000  2000.000 1000.00      1
+ 5.58200160E+00-1.44698193E-03 2.66840782E-06-1.48667738E-09 2.75613483E-13    2
+-1.47707534E+04-2.76785587E+01 1.91253452E+00 1.19742948E-02-1.74150740E-05    3
+ 1.31050130E-08-3.98440482E-12-1.39133497E+04-9.50920619E+00                   4
+
+! Thermo library: surfaceThermoPt111
+OX                      O   1X   1          G   298.000  2000.000 1000.00      1
+ 2.92050897E+00-2.70455589E-04 5.15610634E-07-2.93911213E-10 5.54030466E-14    2
+-1.78369003E+04-1.50940536E+01 1.79722382E-01 1.25453156E-02-2.29924588E-05    3
+ 1.94187177E-08-6.22414099E-12-1.73402246E+04-2.22409728E+00                   4
+
+! Thermo library: surfaceThermoPt111
+NX                      N   1X   1          G   298.000  2000.000 1000.00      1
+ 2.87812725E+00-4.32547150E-04 8.18868468E-07-4.65641564E-10 8.76522110E-14    2
+ 3.86307901E+03-1.54118153E+01-8.62158075E-01 1.65321723E-02-2.95187453E-05    3
+ 2.44741387E-08-7.73894837E-12 4.56391760E+03 2.27263793E+00                   4
+
+! Thermo library: surfaceThermoPt111
+OHX                     H   1O   1X   1     G   298.000  2000.000 1000.00      1
+ 5.01870328E+00-1.35424298E-03 2.27686310E-06-1.09407298E-09 1.79396487E-13    2
+-2.02979842E+04-2.41159621E+01 1.07348583E+00 1.72652206E-02-3.17712232E-05    3
+ 2.71536568E-08-8.69449304E-12-1.96002909E+04-5.65622336E+00                   4
+
+! Thermo library: surfaceThermoPt111
+NH3X                    H   3N   1X   1     G   298.000  2000.000 1000.00      1
+ 8.39460262E+00-7.22640455E-03 1.26169819E-05-6.50952664E-09 1.13563586E-12    2
+-1.63659104E+04-4.02856883E+01 1.31496774E+00 1.46998289E-02-1.30679071E-05    3
+ 6.99360870E-09-1.52920905E-12-1.45305774E+04-4.29992592E+00                   4
+
+! Thermo library: surfaceThermoPt111
 X(1)                    X   1               G   298.000  3000.000 1000.00      1
  0.00000000E+00 0.00000000E+00 0.00000000E+00 0.00000000E+00 0.00000000E+00    2
  0.00000000E+00 0.00000000E+00 0.00000000E+00 0.00000000E+00 0.00000000E+00    3
  0.00000000E+00 0.00000000E+00 0.00000000E+00 0.00000000E+00                   4
 
 ! Thermo library: surfaceThermoPt111
-NH3_X(8)                H   3N   1X   1     G   298.000  2000.000 1000.00      1
- 8.39460262E+00-7.22640455E-03 1.26169819E-05-6.50952664E-09 1.13563586E-12    2
--1.63659104E+04-4.02856883E+01 1.31496774E+00 1.46998289E-02-1.30679071E-05    3
- 6.99360870E-09-1.52920905E-12-1.45305774E+04-4.29992592E+00                   4
-
-! Thermo library: surfaceThermoPt111
-O_X(9)                  O   1X   1          G   298.000  2000.000 1000.00      1
- 2.92050897E+00-2.70455589E-04 5.15610634E-07-2.93911213E-10 5.54030466E-14    2
--1.78369003E+04-1.50940536E+01 1.79722382E-01 1.25453156E-02-2.29924588E-05    3
- 1.94187177E-08-6.22414099E-12-1.73402246E+04-2.22409728E+00                   4
-
-! Thermo library: surfaceThermoPt111
-NH2_X(10)               H   2N   1X   1     G   298.000  2000.000 1000.00      1
+NH2_X(8)                H   2N   1X   1     G   298.000  2000.000 1000.00      1
  6.67968147E+00-4.64266766E-03 8.12871035E-06-4.20436074E-09 7.35132153E-13    2
 -6.75225639E+03-3.55181494E+01-1.89010759E+00 2.86217997E-02-4.34545237E-05    3
  3.34143285E-08-9.99500135E-12-4.87893528E+03 6.34997611E+00                   4
 
 ! Thermo library: surfaceThermoPt111
-OH_X(11)                H   1O   1X   1     G   298.000  2000.000 1000.00      1
- 5.01870328E+00-1.35424298E-03 2.27686310E-06-1.09407298E-09 1.79396487E-13    2
--2.02979842E+04-2.41159621E+01 1.07348583E+00 1.72652206E-02-3.17712232E-05    3
- 2.71536568E-08-8.69449304E-12-1.96002909E+04-5.65622336E+00                   4
-
-! Thermo library: surfaceThermoPt111
-NH_X(12)                H   1N   1X   1     G   298.000  2000.000 1000.00      1
+NH_X(9)                 H   1N   1X   1     G   298.000  2000.000 1000.00      1
  4.82700699E+00-2.46380210E-03 4.35378855E-06-2.27895186E-09 4.02508146E-13    2
 -2.92453268E+03-2.63392973E+01-2.68663098E+00 2.89197486E-02-4.76398566E-05    3
  3.77368064E-08-1.14895177E-11-1.39698939E+03 9.81076735E+00                   4
 
 ! Thermo library: surfaceThermoPt111
-N_X(13)                 N   1X   1          G   298.000  2000.000 1000.00      1
- 2.87812725E+00-4.32547150E-04 8.18868468E-07-4.65641564E-10 8.76522110E-14    2
- 3.86307901E+03-1.54118153E+01-8.62158075E-01 1.65321723E-02-2.95187453E-05    3
- 2.44741387E-08-7.73894837E-12 4.56391760E+03 2.27263793E+00                   4
-
-! Thermo library: surfaceThermoPt111
-NO_X(14)                N   1O   1X   1     G   298.000  2000.000 1000.00      1
- 5.58200160E+00-1.44698193E-03 2.66840782E-06-1.48667738E-09 2.75613483E-13    2
--1.47707534E+04-2.76785587E+01 1.91253452E+00 1.19742948E-02-1.74150740E-05    3
- 1.31050130E-08-3.98440482E-12-1.39133497E+04-9.50920619E+00                   4
-
-! Thermo library: surfaceThermoPt111
-NHO_X(15)               H   1N   1O   1X   1G   298.000  2000.000 1000.00      1
- 7.47524494E+00-3.96252296E-03 7.10187157E-06-3.81135483E-09 6.86348467E-13    2
--9.61232525E+03-3.50542775E+01 2.01921333E+00 1.32114264E-02-1.38865889E-05    3
- 8.22652454E-09-2.08098816E-12-8.20311734E+03-7.36585771E+00                   4
-
-! Thermo library: surfaceThermoPt111
-H2O_X(16)               H   2O   1X   1     G   298.000  2000.000 1000.00      1
+H2O_X(11)               H   2O   1X   1     G   298.000  2000.000 1000.00      1
  5.84789466E+00-3.31526816E-03 5.62018785E-06-2.75864893E-09 4.61279066E-13    2
 -3.34885608E+04-2.15622699E+01 2.53777266E+00 9.45372010E-03-1.41325664E-05    3
  1.16730945E-08-3.67657640E-12-3.27590463E+04-5.36548561E+00                   4
-
-! Thermo library: surfaceThermoPt111
-HX(18)                  H   1X   1          G   298.000  2000.000 1000.00      1
- 2.71968546E+00-1.07696656E-03 2.00193294E-06-1.12865983E-09 2.11269165E-13    2
--4.24701712E+03-1.52793490E+01-1.96702988E+00 1.67920714E-02-2.50314139E-05    3
- 1.80485455E-08-5.11491197E-12-3.21277026E+03 7.68211257E+00                   4
-
-! Gas phase thermo for NO2J from Thermo library: primaryThermoLibrary. Adsorption correction: + Thermo group additivity estimation:
-! adsorptionPt111(O-*R)
-NO2_X(28)               N   1O   2X   1     G   100.000  5000.000  944.78      1
- 6.56032390E+00 1.06476421E-03-6.32224278E-08 2.86672424E-11-4.96825971E-15    2
--2.14178242E+04-2.67865327E+01 3.77761273E+00-2.42435523E-04 2.27925148E-05    3
--3.07622678E-08 1.20227209E-11-2.03078610E+04-1.04281554E+01                   4
-
-! Gas phase thermo for NNOJJ from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation:
-! adsorptionPt111(N=*R)
-N2O_X(48)               N   2O   1X   1     G   100.000  5000.000  922.11      1
- 9.61526693E+00-5.47386513E-03 3.97655308E-06-7.31585378E-10 4.35197965E-14    2
- 3.23050544E+03-4.57015200E+01 4.14561464E+00-1.68703748E-02 7.96504716E-05    3
--9.67499402E-08 3.72750092E-11 5.73246537E+03-1.16602964E+01                   4
-
-! Gas phase thermo for N2O from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation:
-! adsorptionPt111(R*vdW)
-N2O_X(51)               N   2O   1X   1     G   100.000  5000.000  971.58      1
- 5.91358258E+00 2.71896998E-03-1.01290919E-06 2.00473284E-10-1.55152302E-14    2
- 3.87045848E+03-1.89410992E+01 3.03441124E+00 7.20156191E-03 3.44631073E-06    3
--1.06676845E-08 4.79018440E-12 4.77782804E+03-3.34339433E+00                   4
-
-! Thermo library: surfaceThermoPt111
-HNOX(189)               H   1N   1O   1X   1G   298.000  2000.000 1000.00      1
- 7.64521455E+00-2.91720741E-03 5.16378086E-06-2.71526676E-09 4.81634389E-13    2
--1.23572356E+04-3.85225151E+01 7.02968349E-01 2.37024940E-02-3.55330194E-05    3
- 2.65623392E-08-7.77662656E-12-1.08269894E+04-4.53311528E+00                   4
-
-! Gas phase thermo for HONO from Thermo library: thermo_DFT_CCSDTF12_BAC. Adsorption correction: + Thermo group additivity estimation:
-! adsorptionPt111((NRO)*)
-HONO(190)               H   1N   1O   2X   1G   100.000  5000.000  943.73      1
- 8.50096224E+00 2.07450944E-03-3.50280696E-07 7.08138696E-11-7.63487809E-15    2
--2.71520787E+04-3.90944247E+01 3.30627438E+00 9.43859144E-03 1.12357628E-05    3
--2.45666269E-08 1.08774081E-11-2.55190522E+04-1.08766335E+01                   4
-
-! Thermo library: surfaceThermoPt111
-N2X(199)                N   2X   1          G   298.000  2000.000 1000.00      1
- 4.38660517E+00-1.50692391E-03 2.67640594E-06-1.41531803E-09 2.51363379E-13    2
--4.48345747E+03-9.36216462E+00 4.13993917E+00-9.92755910E-04 1.76704033E-06    3
--1.57884342E-10-3.64206712E-13-4.38199802E+03-7.98299353E+00                   4
 
 END
 
@@ -135,515 +75,73 @@ END
 
 REACTIONS    KCAL/MOLE   MOLES
 
-! Reaction index: Chemkin #1; RMG #1
+! Reaction index: Chemkin #1; RMG #6
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: X(1), NH3_X(8); NH3(6), NH3_X(8); 
-X(1)+NH3(6)=NH3_X(8)                                7.973e-01 0.000     0.000    
-    STICK
+! Flux pairs: OX, NOX; NX, X(1); 
+OX+NX=X(1)+NOX                                      8.460000e+21 0.000     31.310   
 
 ! Reaction index: Chemkin #2; RMG #2
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: O2(2), O_X(9); X(1), O_X(9); X(1), O_X(9); 
-X(1)+X(1)+O2(2)=O_X(9)+O_X(9)                       2.352e-02 0.000     0.000    
+! Flux pairs: O2(2), OX; X(1), OX; X(1), OX; 
+X(1)+X(1)+O2(2)=OX+OX                               2.352e-02 0.000     0.000    
     STICK
 
-! Reaction index: Chemkin #3; RMG #3
+! Reaction index: Chemkin #3; RMG #9
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: O_X(9), OH_X(11); NH3_X(8), NH2_X(10); 
-O_X(9)+NH3_X(8)=OH_X(11)+NH2_X(10)                  6.850000e+23 0.000     37.524   
+! Flux pairs: NX, N2(4); NX, X(1); NX, X(1); 
+NX+NX=X(1)+X(1)+N2(4)                               3.220000e+21 0.000     29.637   
 
-! Reaction index: Chemkin #4; RMG #4
+! Reaction index: Chemkin #4; RMG #12
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: O_X(9), OH_X(11); NH2_X(10), NH_X(12); 
-O_X(9)+NH2_X(10)=OH_X(11)+NH_X(12)                  4.030000e+21 0.000     0.000    
+! Flux pairs: NOX, X(1); NOX, NO(5); 
+NOX=X(1)+NO(5)                                      1.500000e+13 0.000     34.178   
 
-! Reaction index: Chemkin #5; RMG #5
+! Reaction index: Chemkin #5; RMG #1
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: O_X(9), OH_X(11); NH_X(12), N_X(13); 
-O_X(9)+NH_X(12)=N_X(13)+OH_X(11)                    4.030000e+21 0.000     13.982   
+! Flux pairs: X(1), NH3X; NH3(6), NH3X; 
+X(1)+NH3(6)=NH3X                                    7.973e-01 0.000     0.000    
+    STICK
 
-! Reaction index: Chemkin #6; RMG #6
+! Reaction index: Chemkin #6; RMG #10
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: O_X(9), NO_X(14); N_X(13), X(1); 
-O_X(9)+N_X(13)=X(1)+NO_X(14)                        8.460000e+21 0.000     31.310   
+! Flux pairs: NOX, N2O(7); NX, X(1); NX, X(1); 
+NX+NOX=X(1)+X(1)+N2O(7)                             1.010000e+19 0.000     23.638   
 
-! Reaction index: Chemkin #7; RMG #7
+! Reaction index: Chemkin #7; RMG #11
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: O_X(9), NHO_X(15); NH_X(12), X(1); 
-O_X(9)+NH_X(12)=X(1)+NHO_X(15)                      4.030000e+21 0.000     17.447   
+! Flux pairs: N2O(7), OX; X(1), N2(4); 
+X(1)+N2O(7)=OX+N2(4)                                1.603e-02 0.000     17.256   
+    STICK
 
-! Reaction index: Chemkin #8; RMG #8
+! Reaction index: Chemkin #8; RMG #3
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: NHO_X(15), NO_X(14); O_X(9), OH_X(11); 
-O_X(9)+NHO_X(15)=NO_X(14)+OH_X(11)                  8.050000e+23 0.000     28.203   
+! Flux pairs: OX, OHX; NH3X, NH2_X(8); 
+OX+NH3X=OHX+NH2_X(8)                                6.850000e+23 0.000     37.524   
 
-! Reaction index: Chemkin #9; RMG #9
+! Reaction index: Chemkin #9; RMG #4
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: N_X(13), N2(4); N_X(13), X(1); N_X(13), X(1); 
-N_X(13)+N_X(13)=X(1)+X(1)+N2(4)                     3.220000e+21 0.000     29.637   
+! Flux pairs: OX, OHX; NH2_X(8), NH_X(9); 
+OX+NH2_X(8)=OHX+NH_X(9)                             4.030000e+21 0.000     0.000    
 
-! Reaction index: Chemkin #10; RMG #10
+! Reaction index: Chemkin #10; RMG #5
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: NO_X(14), N2O(7); N_X(13), X(1); N_X(13), X(1); 
-N_X(13)+NO_X(14)=X(1)+X(1)+N2O(7)                   1.010000e+19 0.000     23.638   
+! Flux pairs: OX, OHX; NH_X(9), NX; 
+OX+NH_X(9)=NX+OHX                                   4.030000e+21 0.000     13.982   
 
-! Reaction index: Chemkin #11; RMG #11
+! Reaction index: Chemkin #11; RMG #13
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: N2O(7), O_X(9); X(1), N2(4); 
-X(1)+N2O(7)=O_X(9)+N2(4)                            1.603e-02 0.000     17.256   
-    STICK
+! Flux pairs: OHX, H2O_X(11); NH_X(9), NX; 
+OHX+NH_X(9)=NX+H2O_X(11)                            4.030000e+21 0.000     10.994   
 
-! Reaction index: Chemkin #12; RMG #12
+! Reaction index: Chemkin #12; RMG #14
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: NO_X(14), X(1); NO_X(14), NO(5); 
-NO_X(14)=X(1)+NO(5)                                 1.500000e+13 0.000     34.178   
+! Flux pairs: H2O_X(11), OHX; OX, OHX; 
+OX+H2O_X(11)=OHX+OHX                                4.030000e+19 0.000     12.596   
 
-! Reaction index: Chemkin #13; RMG #13
+! Reaction index: Chemkin #13; RMG #15
 ! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: OH_X(11), H2O_X(16); NH_X(12), N_X(13); 
-OH_X(11)+NH_X(12)=N_X(13)+H2O_X(16)                 4.030000e+21 0.000     10.994   
-
-! Reaction index: Chemkin #14; RMG #14
-! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: H2O_X(16), OH_X(11); O_X(9), OH_X(11); 
-O_X(9)+H2O_X(16)=OH_X(11)+OH_X(11)                  4.030000e+19 0.000     12.596   
-
-! Reaction index: Chemkin #15; RMG #15
-! Library reaction: Surface/Rebrov_Pt111
-! Flux pairs: H2O_X(16), X(1); H2O_X(16), H2O(3); 
-H2O_X(16)=X(1)+H2O(3)                               1.000000e+13 0.000     9.632    
-
-! Reaction index: Chemkin #16; RMG #49
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: OH_X(11), H2O_X(16); NH3_X(8), NH2_X(10); 
-OH_X(11)+NH3_X(8)=H2O_X(16)+NH2_X(10)               4.000000e+19 0.000     12.000   
-
-! Reaction index: Chemkin #17; RMG #50
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: OH_X(11), H2O_X(16); NH2_X(10), NH_X(12); 
-OH_X(11)+NH2_X(10)=NH_X(12)+H2O_X(16)               4.000000e+19 0.000     12.900   
-
-! Reaction index: Chemkin #18; RMG #1402
-! Template reaction: Surface_Abstraction_vdW
-! Matched reaction 42 H2NX + H2NX-2 <=> H3NX + HNX in Surface_Abstraction_vdW/training
-! This reaction matched rate rule [N-R;*=NH]
-! family: Surface_Abstraction_vdW
-! metal: None
-! facet: None
-! site: None
-NH2_X(10)+NH2_X(10)=NH_X(12)+NH3_X(8)               1.160000e+20 0.667     10.378   
-
-! Reaction index: Chemkin #19; RMG #1404
-! Template reaction: Surface_Abstraction_vdW
-! Matched reaction 50 HNX-2 + H2NX <=> H3NX + NX in Surface_Abstraction_vdW/training
-! This reaction matched rate rule [N-R;*#N]
-! family: Surface_Abstraction_vdW
-! metal: None
-! facet: None
-! site: None
-NH_X(12)+NH2_X(10)=N_X(13)+NH3_X(8)                 3.870000e+21 0.000     22.600   
-
-! Reaction index: Chemkin #20; RMG #1406
-! Template reaction: Surface_Abstraction_Single_vdW
-! From training reaction 8 used for N-H;*NH2
-! Exact match found for rate rule [N-H;*NH2]
-! Euclidian distance = 0
-! family: Surface_Abstraction_Single_vdW
-NHO_X(15)+NH2_X(10)=NO_X(14)+NH3_X(8)               8.450000e+19 0.156     9.686    
-
-! Reaction index: Chemkin #21; RMG #1418
-! Template reaction: Surface_Abstraction
-! Flux pairs: NH2_X(10), NH_X(12); N_X(13), NH_X(12); 
-! Estimated using template [Abstracting;*-N-H] for rate rule [:N#*;*-N-H]
-! Euclidian distance = 3.0
-! Multiplied by reaction path degeneracy 2.0
-! family: Surface_Abstraction
-N_X(13)+NH2_X(10)=NH_X(12)+NH_X(12)                 2.220000e+21 0.000     18.680   
-
-! Reaction index: Chemkin #22; RMG #1420
-! Template reaction: Surface_Abstraction_vdW
-! From training reaction 42 used for N-R;*=NH
-! Exact match found for rate rule [N-R;*=NH]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-NH_X(12)+NHO_X(15)=NO_X(14)+NH2_X(10)               4.158951e+17 0.820     21.912   
-
-! Reaction index: Chemkin #23; RMG #1435
-! Template reaction: Surface_Abstraction_Single_vdW
-! Estimated using an average for rate rule [N-H;*O-H]
-! Euclidian distance = 0
-! family: Surface_Abstraction_Single_vdW
-OH_X(11)+NHO_X(15)=NO_X(14)+H2O_X(16)               6.566667e+21 0.000     8.072    
-
-! Reaction index: Chemkin #24; RMG #1443
-! Template reaction: Surface_Abstraction_vdW
-! From training reaction 50 used for N-R;*#N
-! Exact match found for rate rule [N-R;*#N]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-N_X(13)+NHO_X(15)=NO_X(14)+NH_X(12)                 3.176748e+18 0.209     28.348   
-
-! Reaction index: Chemkin #25; RMG #31
-! Library reaction: Surface/Arevalo_Pt111
-! Flux pairs: NO_X(14), NO2_X(28); O_X(9), X(1); 
-O_X(9)+NO_X(14)=X(1)+NO2_X(28)                      1.776000e+22 0.000     27.674   
-
-! Reaction index: Chemkin #26; RMG #28
-! Library reaction: Surface/CPOX_Pt/Deutschmann2006
-! Flux pairs: O_X(9), OH_X(11); HX(18), X(1); 
-O_X(9)+HX(18)=X(1)+OH_X(11)                         1.280000e+21 0.000     2.677    
-
-! Reaction index: Chemkin #27; RMG #30
-! Library reaction: Surface/CPOX_Pt/Deutschmann2006
-! Flux pairs: OH_X(11), H2O_X(16); HX(18), X(1); 
-HX(18)+OH_X(11)=X(1)+H2O_X(16)                      2.040000e+21 0.000     15.827   
-
-! Reaction index: Chemkin #28; RMG #46
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: NH2_X(10), NH3_X(8); HX(18), X(1); 
-HX(18)+NH2_X(10)=X(1)+NH3_X(8)                      4.000000e+19 0.000     7.300    
-
-! Reaction index: Chemkin #29; RMG #47
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: NH_X(12), NH2_X(10); HX(18), X(1); 
-HX(18)+NH_X(12)=X(1)+NH2_X(10)                      4.000000e+19 0.000     16.500   
-
-! Reaction index: Chemkin #30; RMG #48
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: N_X(13), NH_X(12); HX(18), X(1); 
-N_X(13)+HX(18)=X(1)+NH_X(12)                        4.000000e+19 0.000     24.500   
-
-! Reaction index: Chemkin #31; RMG #51
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: OH_X(11), NO_X(14); N_X(13), HX(18); 
-N_X(13)+OH_X(11)=NO_X(14)+HX(18)                    4.000000e+19 0.000     35.100   
-
-! Reaction index: Chemkin #32; RMG #52
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: O_X(9), NO_X(14); NH_X(12), HX(18); 
-O_X(9)+NH_X(12)=NO_X(14)+HX(18)                     4.000000e+19 0.000     14.900   
-
-! Reaction index: Chemkin #33; RMG #53
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: NO_X(14), NO2_X(28); OH_X(11), HX(18); 
-NO_X(14)+OH_X(11)=NO2_X(28)+HX(18)                  4.000000e+19 0.000     38.200   
-
-! Reaction index: Chemkin #34; RMG #1411
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using an average for rate rule [AdsorbateVdW;*=O]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-O_X(9)+NHO_X(15)=NO2_X(28)+HX(18)                   2.572451e+18 0.428     15.134   
-
-! Reaction index: Chemkin #35; RMG #1457
-! Template reaction: Surface_Dissociation_vdW
-! Flux pairs: NHO_X(15), NO_X(14); NHO_X(15), HX(18); 
-! From training reaction 11 used for N-H;VacantSite
-! Exact match found for rate rule [N-H;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Dissociation_vdW
-X(1)+NHO_X(15)=NO_X(14)+HX(18)                      7.516667e+19 0.000     22.228   
-
-! Reaction index: Chemkin #36; RMG #1458
-! Template reaction: Surface_Adsorption_Dissociative
-! Flux pairs: H2O(3), OH_X(11); H2O(3), HX(18); 
-! Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [H2O;VacantSite1;VacantSite2]
-! Euclidian distance = 3.0
-! Multiplied by reaction path degeneracy 2.0
-! family: Surface_Adsorption_Dissociative
-! Ea raised from 59.0 to 61.9 kJ/mol to match endothermicity of reaction.
-X(1)+X(1)+H2O(3)=HX(18)+OH_X(11)                    6.093e-02 0.077     14.803   
-    STICK
-
-! Reaction index: Chemkin #37; RMG #1460
-! Template reaction: Surface_Adsorption_Dissociative
-! Flux pairs: NH3(6), NH2_X(10); NH3(6), HX(18); 
-! Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
-! Euclidian distance = 1.0
-! Multiplied by reaction path degeneracy 3.0
-! family: Surface_Adsorption_Dissociative
-X(1)+X(1)+NH3(6)=HX(18)+NH2_X(10)                   9.139e-02 0.077     4.500    
-    STICK
-
-! Reaction index: Chemkin #38; RMG #75
-! Library reaction: Surface/Schneider_Pt111
-! Flux pairs: NO_X(14), N2O_X(51); N_X(13), X(1); 
-N_X(13)+NO_X(14)=X(1)+N2O_X(51)                     1.730000e+21 0.000     39.435   
-
-! Reaction index: Chemkin #39; RMG #76
-! Library reaction: Surface/Schneider_Pt111
-! Flux pairs: N2O_X(51), X(1); N2O_X(51), N2O(7); 
-N2O_X(51)=X(1)+N2O(7)                               1.400000e+16 0.000     0.000    
-
-! Reaction index: Chemkin #40; RMG #71
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: X(1), N2O_X(48); N2O(7), N2O_X(48); 
-X(1)+N2O(7)=N2O_X(48)                               1.000e+00 0.000     0.000    
-    STICK
-
-! Reaction index: Chemkin #41; RMG #72
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: NO_X(14), N2O_X(48); N_X(13), X(1); 
-N_X(13)+NO_X(14)=X(1)+N2O_X(48)                     4.000000e+19 0.000     19.800   
-
-! Reaction index: Chemkin #42; RMG #1449
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using an average for rate rule [AdsorbateVdW;*#N]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-N_X(13)+NHO_X(15)=N2O_X(48)+HX(18)                  5.905306e+16 0.619     25.344   
-
-! Reaction index: Chemkin #43; RMG #1475
-! Template reaction: Surface_Abstraction
-! Flux pairs: O_X(9), NO2_X(28); N2O_X(48), N_X(13); 
-! Estimated using template [O;Donating] for rate rule [O;*N-N]
-! Euclidian distance = 2.0
-! family: Surface_Abstraction
-O_X(9)+N2O_X(48)=N_X(13)+NO2_X(28)                  2.481353e+21 0.000     13.895   
-
-! Reaction index: Chemkin #44; RMG #1434
-! Template reaction: Surface_Dissociation_vdW
-! Flux pairs: HONO(190), NO_X(14); HONO(190), OH_X(11); 
-! From training reaction 29 used for Combined;VacantSite
-! Exact match found for rate rule [Combined;VacantSite]
-! Euclidian distance = 0
-! Multiplied by reaction path degeneracy 2.0
-! family: Surface_Dissociation_vdW
-X(1)+HONO(190)=NO_X(14)+OH_X(11)                    6.610000e+17 1.589     15.913   
-DUPLICATE
-
-! Reaction index: Chemkin #45; RMG #1436
-! Template reaction: Surface_Abstraction_Single_vdW
-! Estimated using an average for rate rule [Donating;*O-H]
-! Euclidian distance = 0
-! family: Surface_Abstraction_Single_vdW
-OH_X(11)+NHO_X(15)=HX(18)+HONO(190)                 6.566667e+21 0.000     8.072    
-
-! Reaction index: Chemkin #46; RMG #1456
-! Template reaction: Surface_Abstraction_Single_vdW
-! Estimated using template [N-R;Abstracting] for rate rule [N-O;Abstracting]
-! Euclidian distance = 1.0
-! family: Surface_Abstraction_Single_vdW
-HX(18)+HONO(190)=NO_X(14)+H2O_X(16)                 9.486980e+20 0.069     8.789    
-
-! Reaction index: Chemkin #47; RMG #1461
-! Template reaction: Surface_Abstraction_Single_vdW
-! Estimated using template [Donating;*NH2] for rate rule [O-H;*NH2]
-! Euclidian distance = 2.0
-! family: Surface_Abstraction_Single_vdW
-HONO(190)+NH2_X(10)=NO2_X(28)+NH3_X(8)              8.450000e+19 0.156     9.686    
-
-! Reaction index: Chemkin #48; RMG #1465
-! Template reaction: Surface_Abstraction_vdW
-! From training reaction 9 used for O-R;*=NH
-! Exact match found for rate rule [O-R;*=NH]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-NH_X(12)+HONO(190)=NO2_X(28)+NH2_X(10)              1.248121e+16 0.969     18.903   
-
-! Reaction index: Chemkin #49; RMG #1468
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using template [O-R;*=O] for rate rule [O-N=R;*=O]
-! Euclidian distance = 2.0
-! family: Surface_Abstraction_vdW
-O_X(9)+HONO(190)=NO2_X(28)+OH_X(11)                 2.015000e+19 0.000     12.596   
-DUPLICATE
-
-! Reaction index: Chemkin #50; RMG #1469
-! Template reaction: Surface_Abstraction_vdW
-! From training reaction 33 used for O-R;*=O
-! Exact match found for rate rule [O-R;*=O]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-O_X(9)+HONO(190)=NO2_X(28)+OH_X(11)                 2.015000e+19 0.000     12.596   
-DUPLICATE
-
-! Reaction index: Chemkin #51; RMG #1473
-! Template reaction: Surface_Abstraction_vdW
-! From training reaction 10 used for O-R;*#N
-! Exact match found for rate rule [O-R;*#N]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-N_X(13)+HONO(190)=NO2_X(28)+NH_X(12)                1.097746e+15 1.029     22.340   
-
-! Reaction index: Chemkin #52; RMG #1480
-! Template reaction: Surface_Abstraction_Single_vdW
-! Estimated using template [N-H;*O] for rate rule [N-H;*O-N]
-! Euclidian distance = 1.0
-! family: Surface_Abstraction_Single_vdW
-NO2_X(28)+NHO_X(15)=NO_X(14)+HONO(190)              6.566667e+21 0.000     8.072    
-
-! Reaction index: Chemkin #53; RMG #1486
-! Template reaction: Surface_Abstraction_Single_vdW
-! Estimated using average of templates [Donating;*O-H] + [O-H;Abstracting] for rate rule [O-H;*O-H]
-! Euclidian distance = 2.0
-! family: Surface_Abstraction_Single_vdW
-OH_X(11)+HONO(190)=NO2_X(28)+H2O_X(16)              3.623994e+20 0.000     9.461    
-
-! Reaction index: Chemkin #54; RMG #1499
-! Template reaction: Surface_Dissociation_vdW
-! Flux pairs: HONO(190), HX(18); HONO(190), NO2_X(28); 
-! From training reaction 22 used for O-H;VacantSite
-! Exact match found for rate rule [O-H;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Dissociation_vdW
-X(1)+HONO(190)=NO2_X(28)+HX(18)                     1.885000e+21 -0.118    17.800   
-
-! Reaction index: Chemkin #55; RMG #1526
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using template [O-R;*#N] for rate rule [O-N=R;*#N]
-! Euclidian distance = 2.0
-! family: Surface_Abstraction_vdW
-N_X(13)+HONO(190)=N2O_X(48)+OH_X(11)                1.097746e+15 1.029     22.340   
-
-! Reaction index: Chemkin #56; RMG #1539
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using template [O-R;*=O] for rate rule [O-N=R;*=O]
-! Euclidian distance = 2.0
-! family: Surface_Abstraction_vdW
-O_X(9)+HONO(190)=NO2_X(28)+OH_X(11)                 2.015000e+19 0.000     12.596   
-DUPLICATE
-
-! Reaction index: Chemkin #57; RMG #1540
-! Template reaction: Surface_Abstraction_vdW
-! From training reaction 33 used for O-R;*=O
-! Exact match found for rate rule [O-R;*=O]
-! Euclidian distance = 0
-! family: Surface_Abstraction_vdW
-O_X(9)+HONO(190)=NO2_X(28)+OH_X(11)                 2.015000e+19 0.000     12.596   
-DUPLICATE
-
-! Reaction index: Chemkin #58; RMG #1568
-! Template reaction: Surface_Dissociation_vdW
-! Flux pairs: HONO(190), OH_X(11); HONO(190), NO_X(14); 
-! From training reaction 29 used for Combined;VacantSite
-! Exact match found for rate rule [Combined;VacantSite]
-! Euclidian distance = 0
-! Multiplied by reaction path degeneracy 2.0
-! family: Surface_Dissociation_vdW
-X(1)+HONO(190)=NO_X(14)+OH_X(11)                    6.610000e+17 1.589     15.913   
-DUPLICATE
-
-! Reaction index: Chemkin #59; RMG #1432
-! Template reaction: Surface_Dissociation
-! Flux pairs: HNOX(189), OH_X(11); HNOX(189), N_X(13); 
-! From training reaction 49 used for N;VacantSite
-! Exact match found for rate rule [N;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Dissociation
-X(1)+HNOX(189)=N_X(13)+OH_X(11)                     1.340000e+17 1.942     29.058   
-DUPLICATE
-
-! Reaction index: Chemkin #60; RMG #1450
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using an average for rate rule [AdsorbateVdW;*#N]
-! Euclidian distance = 0
-! Multiplied by reaction path degeneracy 2.0
-! family: Surface_Abstraction_vdW
-! Ea raised from 114.7 to 115.2 kJ/mol to match endothermicity of reaction.
-N_X(13)+H2O_X(16)=HX(18)+HNOX(189)                  1.181061e+17 0.619     27.533   
-
-! Reaction index: Chemkin #61; RMG #1561
-! Template reaction: Surface_Abstraction_vdW
-! Estimated using template [N-R;*#N] for rate rule [N-O;*#N]
-! Euclidian distance = 1.0
-! family: Surface_Abstraction_vdW
-N_X(13)+HONO(190)=NO_X(14)+HNOX(189)                3.176748e+18 0.209     28.348   
-
-! Reaction index: Chemkin #62; RMG #1567
-! Template reaction: Surface_Dissociation_Double_vdW
-! Flux pairs: HONO(190), O_X(9); HONO(190), HNOX(189); 
-! From training reaction 6 used for ONR;VacantSite
-! Exact match found for rate rule [ONR;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Dissociation_Double_vdW
-X(1)+HONO(190)=O_X(9)+HNOX(189)                     2.982313e+18 0.398     -4.730   
-
-! Reaction index: Chemkin #63; RMG #1599
-! Template reaction: Surface_Dissociation
-! Flux pairs: HNOX(189), N_X(13); HNOX(189), OH_X(11); 
-! From training reaction 49 used for N;VacantSite
-! Exact match found for rate rule [N;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Dissociation
-X(1)+HNOX(189)=N_X(13)+OH_X(11)                     1.340000e+17 1.942     29.058   
-DUPLICATE
-
-! Reaction index: Chemkin #64; RMG #1433
-! Template reaction: Surface_Adsorption_Dissociative
-! Flux pairs: HONO(107), NO_X(14); HONO(107), OH_X(11); 
-! Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-N;VacantSite1;VacantSite2]
-! Euclidian distance = 2.0
-! family: Surface_Adsorption_Dissociative
-X(1)+X(1)+HONO(107)=NO_X(14)+OH_X(11)               1.523e-02 0.077     4.500    
-    STICK
-
-! Reaction index: Chemkin #65; RMG #1498
-! Template reaction: Surface_Adsorption_Dissociative
-! Flux pairs: HONO(107), HX(18); HONO(107), NO2_X(28); 
-! Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [O-H;VacantSite1;VacantSite2]
-! Euclidian distance = 2.0
-! family: Surface_Adsorption_Dissociative
-X(1)+X(1)+HONO(107)=NO2_X(28)+HX(18)                1.523e-02 0.077     4.500    
-    STICK
-
-! Reaction index: Chemkin #66; RMG #1538
-! Template reaction: Surface_Adsorption_vdW
-! Flux pairs: HONO(107), HONO(190); X(1), HONO(190); 
-! From training reaction 15 used for O-H;VacantSite
-! Exact match found for rate rule [O-H;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Adsorption_vdW
-X(1)+HONO(107)=HONO(190)                            3.340e-01 0.258     0.000    
-    STICK
-
-! Reaction index: Chemkin #67; RMG #1459
-! Template reaction: Surface_Adsorption_vdW
-! Flux pairs: X(1), N2X(199); N2(4), N2X(199); 
-! Matched reaction 22 X + N2 <=> N2X in Surface_Adsorption_vdW/training
-! This reaction matched rate rule [N#N;VacantSite]
-! family: Surface_Adsorption_vdW
-! metal: None
-! facet: None
-! site: None
-X(1)+N2(4)=N2X(199)                                 5.500e-05 0.000     0.000    
-    STICK
-
-! Reaction index: Chemkin #68; RMG #32
-! Library reaction: Surface/Arevalo_Pt111
-! Flux pairs: X(1), NO2_X(28); NO2(29), NO2_X(28); 
-X(1)+NO2(29)=NO2_X(28)                              1.488e-06 0.000     0.000    
-    STICK
-
-! Reaction index: Chemkin #69; RMG #44
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: X(1), NH2_X(10); NH2(37), NH2_X(10); 
-X(1)+NH2(37)=NH2_X(10)                              1.000e+00 0.000     0.000    
-    STICK
-
-! Reaction index: Chemkin #70; RMG #1398
-! Template reaction: Surface_Adsorption_vdW
-! Flux pairs: HNO(103), NHO_X(15); X(1), NHO_X(15); 
-! Estimated using an average for rate rule [O=N;VacantSite]
-! Euclidian distance = 0
-! family: Surface_Adsorption_vdW
-X(1)+HNO(103)=NHO_X(15)                             1.000e+00 0.000     7.841    
-    STICK
-
-! Reaction index: Chemkin #71; RMG #1493
-! Template reaction: Surface_Adsorption_Dissociative
-! Flux pairs: HNO(103), HX(18); HNO(103), NO_X(14); 
-! Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
-! Euclidian distance = 1.0
-! family: Surface_Adsorption_Dissociative
-X(1)+X(1)+HNO(103)=NO_X(14)+HX(18)                  1.523e-02 0.077     4.500    
-    STICK
-
-! Reaction index: Chemkin #72; RMG #36
-! Library reaction: Surface/Mhadeshwar_Pt111
-! Flux pairs: X(1), OH_X(11); OH(33), OH_X(11); 
-X(1)+OH(33)=OH_X(11)                                1.000e+00 0.000     0.000    
-    STICK
+! Flux pairs: H2O_X(11), X(1); H2O_X(11), H2O(3); 
+H2O_X(11)=X(1)+H2O(3)                               1.000000e+13 0.000     9.632    
 
 END
 
