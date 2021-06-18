@@ -1,17 +1,17 @@
 units(length='cm', time='s', quantity='mol', act_energy='kcal/mol')
 
 ideal_gas(name='gas',
-          elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X_H X_N",
+          elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
           species="""He      Ar      Ne      O2(2)   H2O(3)  N2(4)   NO(5)
                      NH3(6)  N2O(7)""",
           transport='Mix',
           initial_state=state(temperature=300.0, pressure=OneAtm))
 
 ideal_interface(name='surface1',
-                elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X_H X_N",
+                elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
                 species="""NOX        OX         NX         OHX
-                          NH3X       X(N)       NH2_X(8)   NH_X(9)
-                          H2O_X(11)  X(H)""",
+                          NH3X       X(H)       NH2_X(8)   NH_X(9)
+                          H2O_X(11)  X(N)""",
                 site_density=2.483e-09,
                 phases="gas",
           reactions='all',
@@ -25,8 +25,7 @@ element(symbol='Ci', atomic_mass=13.003)
 element(symbol='D', atomic_mass=2.014)
 element(symbol='Oi', atomic_mass=17.999)
 element(symbol='T', atomic_mass=3.016)
-element(symbol='X_H', atomic_mass=195.083)
-element(symbol='X_N', atomic_mass=195.083)
+element(symbol='X', atomic_mass=195.083)
 #-------------------------------------------------------------------------------
 # Species data
 #-------------------------------------------------------------------------------
@@ -169,7 +168,7 @@ species(name='N2O(7)',
                                 rot_relax=1.0))
 
 species(name='NOX',
-        atoms='N:1 O:1 X_N:1',
+        atoms='N:1 O:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 1.91253452E+00,  1.19742948E-02, -1.74150740E-05,
                        1.31050130E-08, -3.98440482E-12, -1.39133497E+04,
@@ -180,7 +179,7 @@ species(name='NOX',
                       -2.76785587E+01])))
 
 species(name='OX',
-        atoms='O:1 X_H:1',
+        atoms='O:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 1.79722382E-01,  1.25453156E-02, -2.29924588E-05,
                        1.94187177E-08, -6.22414099E-12, -1.73402246E+04,
@@ -191,7 +190,7 @@ species(name='OX',
                       -1.50940536E+01])))
 
 species(name='NX',
-        atoms='N:1 X_N:1',
+        atoms='N:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [-8.62158075E-01,  1.65321723E-02, -2.95187453E-05,
                        2.44741387E-08, -7.73894837E-12,  4.56391760E+03,
@@ -202,7 +201,7 @@ species(name='NX',
                       -1.54118153E+01])))
 
 species(name='OHX',
-        atoms='H:1 O:1 X_H:1',
+        atoms='H:1 O:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 1.07348583E+00,  1.72652206E-02, -3.17712232E-05,
                        2.71536568E-08, -8.69449304E-12, -1.96002909E+04,
@@ -213,7 +212,7 @@ species(name='OHX',
                       -2.41159621E+01])))
 
 species(name='NH3X',
-        atoms='H:3 N:1 X_N:1',
+        atoms='H:3 N:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 1.31496774E+00,  1.46998289E-02, -1.30679071E-05,
                        6.99360870E-09, -1.52920905E-12, -1.45305774E+04,
@@ -223,19 +222,8 @@ species(name='NH3X',
                       -6.50952664E-09,  1.13563586E-12, -1.63659104E+04,
                       -4.02856883E+01])))
 
-species(name='X(N)',
-        atoms='X_N:1',
-        thermo=(NASA([298.00, 1000.00],
-                     [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00]),
-                NASA([1000.00, 3000.00],
-                     [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00])))
-
 species(name='X(H)',
-        atoms='X_H:1',
+        atoms='X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
                        0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
@@ -244,9 +232,19 @@ species(name='X(H)',
                      [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
                        0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
                        0.00000000E+00])))
-
+species(name='X(N)',
+        atoms='X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00]),
+                NASA([1000.00, 3000.00],
+                     [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
+                       0.00000000E+00])))
+                       
 species(name='NH2_X(8)',
-        atoms='H:2 N:1 X_N:1',
+        atoms='H:2 N:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [-1.89010759E+00,  2.86217997E-02, -4.34545237E-05,
                        3.34143285E-08, -9.99500135E-12, -4.87893528E+03,
@@ -257,7 +255,7 @@ species(name='NH2_X(8)',
                       -3.55181494E+01])))
 
 species(name='NH_X(9)',
-        atoms='H:1 N:1 X_N:1',
+        atoms='H:1 N:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [-2.68663098E+00,  2.89197486E-02, -4.76398566E-05,
                        3.77368064E-08, -1.14895177E-11, -1.39698939E+03,
@@ -268,7 +266,7 @@ species(name='NH_X(9)',
                       -2.63392973E+01])))
 
 species(name='H2O_X(11)',
-        atoms='H:2 O:1 X_H:1',
+        atoms='H:2 O:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 2.53777266E+00,  9.45372010E-03, -1.41325664E-05,
                        1.16730945E-08, -3.67657640E-12, -3.27590463E+04,
