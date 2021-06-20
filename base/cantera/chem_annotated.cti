@@ -2,17 +2,16 @@ units(length='cm', time='s', quantity='mol', act_energy='kcal/mol')
 
 ideal_gas(name='gas',
           elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
-          species="""He          Ar          Ne          O2(2)
-                     H2O(3)      N2(4)       NO(5)       NH3(6)
-                     N2O(7)""",
+          species="""He      Ar      Ne      O2(2)   H2O(3)  N2(4)   NO(5)
+                     NH3(6)  N2O(7)""",
           transport='Mix',
           initial_state=state(temperature=300.0, pressure=OneAtm))
 
 ideal_interface(name='surface1',
                 elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
-                species="""NOX         OX          NX          OHX
-                          NH3X        X(1)        NH2_X(8)    NH_X(9)
-                          H2O_X(10)   N2O_X(11)   H_X(12)     NN_ads(45)""",
+                species="""NOX        OX         NX         OHX
+                          NH3X       X(1)       NH2_X(8)   NH_X(9)
+                          H2O_X(10)  N2O_X(11)  H_X(12)""",
                 site_density=2.483e-09,
                 phases="gas",
           reactions='all',
@@ -289,137 +288,179 @@ species(name='H_X(12)',
                       -1.12865983E-09,  2.11269165E-13, -4.24701712E+03,
                       -1.52793490E+01])))
 
-species(name='NN_ads(45)',
-        atoms='N:2 X:1',
-        thermo=(NASA([298.00, 1000.00],
-                     [ 4.13993917E+00, -9.92755910E-04,  1.76704033E-06,
-                      -1.57884342E-10, -3.64206712E-13, -4.38199802E+03,
-                      -7.98299353E+00]),
-                NASA([1000.00, 2000.00],
-                     [ 4.38660517E+00, -1.50692391E-03,  2.67640594E-06,
-                      -1.41531803E-09,  2.51363379E-13, -4.48345747E+03,
-                      -9.36216462E+00])))
-
 #-------------------------------------------------------------------------------
 # Reaction data
 #-------------------------------------------------------------------------------
 #  Reaction index: Chemkin #1; RMG #1
 #  Library reaction: Surface/Schneider_Pt111
-#  Flux pairs: O2(2), OX; X(1), OX; X(1), OX;
-
-# surface1 Reaction 1
-surface_reaction('X(1) + X(1) + O2(2) <=> OX + OX', stick(1.000000e-03, 0.0, 0.0))
-#  Reaction index: Chemkin #2; RMG #2
-#  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: X(1), NH3X; NH3(6), NH3X;
 
-# surface1 Reaction 2
+# surface1 Reaction 1
 surface_reaction('X(1) + NH3(6) <=> NH3X', stick(1.000000e+00, 0.0, 0.0))
-#  Reaction index: Chemkin #3; RMG #3
+#  Reaction index: Chemkin #2; RMG #2
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OX, OHX; NH3X, NH2_X(8);
 
-# surface1 Reaction 3
+# surface1 Reaction 2
 surface_reaction('OX + NH3X <=> OHX + NH2_X(8)', [1.010000e+21, 0.0, 16.143])
-#  Reaction index: Chemkin #4; RMG #4
+#  Reaction index: Chemkin #3; RMG #3
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OX, OHX; NH2_X(8), NH_X(9);
 
-# surface1 Reaction 4
+# surface1 Reaction 3
 surface_reaction('OX + NH2_X(8) <=> OHX + NH_X(9)', [2.220000e+21, 0.0, 18.68])
-#  Reaction index: Chemkin #5; RMG #5
+#  Reaction index: Chemkin #4; RMG #4
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OX, OHX; NH_X(9), NX;
 
-# surface1 Reaction 5
+# surface1 Reaction 4
 surface_reaction('OX + NH_X(9) <=> NX + OHX', [3.140000e+21, 0.0, 36.899])
-#  Reaction index: Chemkin #6; RMG #6
+#  Reaction index: Chemkin #5; RMG #5
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OHX, H2O_X(10); NH3X, NH2_X(8);
 
-# surface1 Reaction 6
+# surface1 Reaction 5
 surface_reaction('OHX + NH3X <=> H2O_X(10) + NH2_X(8)', [1.970000e+22, 0.0, 8.072])
-#  Reaction index: Chemkin #7; RMG #7
+#  Reaction index: Chemkin #6; RMG #6
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OHX, H2O_X(10); NH2_X(8), NH_X(9);
 
-# surface1 Reaction 7
+# surface1 Reaction 6
 surface_reaction('OHX + NH2_X(8) <=> NH_X(9) + H2O_X(10)', [6.040000e+21, 0.0, 0.231])
-#  Reaction index: Chemkin #8; RMG #8
+#  Reaction index: Chemkin #7; RMG #7
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OHX, H2O_X(10); NH_X(9), NX;
 
-# surface1 Reaction 8
+# surface1 Reaction 7
 surface_reaction('OHX + NH_X(9) <=> NX + H2O_X(10)', [2.380000e+21, 0.0, 9.455])
-#  Reaction index: Chemkin #9; RMG #9
-#  Library reaction: Surface/Schneider_Pt111
-#  Flux pairs: OHX, H2O_X(10); OHX, OX;
-
-# surface1 Reaction 9
-surface_reaction('OHX + OHX <=> OX + H2O_X(10)', [1.250000e+21, 0.0, 0.0])
-#  Reaction index: Chemkin #10; RMG #10
-#  Library reaction: Surface/Schneider_Pt111
-#  Flux pairs: H2O_X(10), X(1); H2O_X(10), H2O(3);
-
-# surface1 Reaction 10
-surface_reaction('H2O_X(10) <=> X(1) + H2O(3)', [5.900000e+15, 0.0, 4.382])
-#  Reaction index: Chemkin #11; RMG #11
+#  Reaction index: Chemkin #8; RMG #8
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: NX, N2(4); NX, X(1); NX, X(1);
 
-# surface1 Reaction 11
+# surface1 Reaction 8
 surface_reaction('NX + NX <=> X(1) + X(1) + N2(4)', [3.710000e+21, 0.0, 58.346])
-#  Reaction index: Chemkin #12; RMG #12
+#  Reaction index: Chemkin #9; RMG #9
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: OX, NOX; NX, X(1);
 
-# surface1 Reaction 12
+# surface1 Reaction 9
 surface_reaction('OX + NX <=> X(1) + NOX', [3.340000e+21, 0.0, 50.966])
-#  Reaction index: Chemkin #13; RMG #13
+#  Reaction index: Chemkin #10; RMG #10
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: NOX, X(1); NOX, NO(5);
 
-# surface1 Reaction 13
+# surface1 Reaction 10
 surface_reaction('NOX <=> X(1) + NO(5)', [2.600000e+17, 0.0, 44.048])
-#  Reaction index: Chemkin #14; RMG #14
+#  Reaction index: Chemkin #11; RMG #11
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: NOX, N2O_X(11); NX, X(1);
 
-# surface1 Reaction 14
+# surface1 Reaction 11
 surface_reaction('NX + NOX <=> X(1) + N2O_X(11)', [1.730000e+21, 0.0, 39.435])
-#  Reaction index: Chemkin #15; RMG #15
+#  Reaction index: Chemkin #12; RMG #12
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: N2O_X(11), X(1); N2O_X(11), N2O(7);
 
-# surface1 Reaction 15
+# surface1 Reaction 12
 surface_reaction('N2O_X(11) <=> X(1) + N2O(7)', [1.400000e+16, 0.0, 0.0])
-#  Reaction index: Chemkin #16; RMG #16
+#  Reaction index: Chemkin #13; RMG #13
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: NH3X, NH2_X(8); X(1), H_X(12);
 
-# surface1 Reaction 16
+# surface1 Reaction 13
 surface_reaction('X(1) + NH3X <=> H_X(12) + NH2_X(8)', [5.500000e+20, 0.0, 23.292])
-#  Reaction index: Chemkin #17; RMG #17
+#  Reaction index: Chemkin #14; RMG #14
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: NH2_X(8), NH_X(9); X(1), H_X(12);
 
-# surface1 Reaction 17
+# surface1 Reaction 14
 surface_reaction('X(1) + NH2_X(8) <=> H_X(12) + NH_X(9)', [2.160000e+21, 0.0, 36.437])
-#  Reaction index: Chemkin #18; RMG #18
+#  Reaction index: Chemkin #15; RMG #15
 #  Library reaction: Surface/Schneider_Pt111
 #  Flux pairs: NH_X(9), NX; X(1), H_X(12);
 
-# surface1 Reaction 18
+# surface1 Reaction 15
 surface_reaction('X(1) + NH_X(9) <=> NX + H_X(12)', [2.460000e+21, 0.0, 28.366])
-#  Reaction index: Chemkin #19; RMG #19
-#  Library reaction: Surface/Schneider_Pt111
+#  Reaction index: Chemkin #16; RMG #31
+#  Library reaction: Surface/CPOX_Pt/Deutschmann2006
+#  Flux pairs: H2O_X(10), OHX; OX, OHX;
+
+# surface1 Reaction 16
+surface_reaction('OX + H2O_X(10) <=> OHX + OHX', [1.000000e+20, 0.0, 10.301])
+#  Reaction index: Chemkin #17; RMG #30
+#  Library reaction: Surface/CPOX_Pt/Deutschmann2006
 #  Flux pairs: OX, OHX; H_X(12), X(1);
 
-# surface1 Reaction 19
-surface_reaction('OX + H_X(12) <=> X(1) + OHX', [2.640000e+21, 0.0, 29.519])
-#  Reaction index: Chemkin #20; RMG #20
-#  Library reaction: Surface/Schneider_Pt111
+# surface1 Reaction 17
+surface_reaction('OX + H_X(12) <=> X(1) + OHX', [1.280000e+21, 0.0, 2.677])
+#  Reaction index: Chemkin #18; RMG #33
+#  Library reaction: Surface/CPOX_Pt/Deutschmann2006
 #  Flux pairs: OHX, H2O_X(10); H_X(12), X(1);
 
+# surface1 Reaction 18
+surface_reaction('H_X(12) + OHX <=> X(1) + H2O_X(10)', [2.040000e+21, 0.0, 15.827])
+#  Reaction index: Chemkin #19; RMG #17
+#  Library reaction: Surface/CPOX_Pt/Deutschmann2006
+#  Flux pairs: O2(2), OX; X(1), OX; X(1), OX;
+
+# surface1 Reaction 19
+surface_reaction('X(1) + X(1) + O2(2) <=> OX + OX', [1.890000e+21, -0.5, 0.0])
+#  Reaction index: Chemkin #20; RMG #21
+#  Library reaction: Surface/CPOX_Pt/Deutschmann2006
+#  Flux pairs: X(1), H2O_X(10); H2O(3), H2O_X(10);
+
 # surface1 Reaction 20
-surface_reaction('H_X(12) + OHX <=> X(1) + H2O_X(10)', [2.640000e+21, 0.0, 21.909])
+surface_reaction('X(1) + H2O(3) <=> H2O_X(10)', stick(7.500000e-01, 0.0, 0.0))
+#  Reaction index: Chemkin #21; RMG #36
+#  Template reaction: Surface_Abstraction_vdW
+#  Matched reaction 42 H2NX + H2NX-2 <=> H3NX + HNX in Surface_Abstraction_vdW/training
+#  This reaction matched rate rule [N-R;*=NH]
+#  family: Surface_Abstraction_vdW
+#  metal: None
+#  facet: None
+#  site: None
+
+# surface1 Reaction 21
+surface_reaction('NH2_X(8) + NH2_X(8) <=> NH_X(9) + NH3X', [1.160000e+20, 0.667, 10.378])
+#  Reaction index: Chemkin #22; RMG #39
+#  Template reaction: Surface_Abstraction_vdW
+#  Matched reaction 50 HNX-2 + H2NX <=> H3NX + NX in Surface_Abstraction_vdW/training
+#  This reaction matched rate rule [N-R;*#N]
+#  family: Surface_Abstraction_vdW
+#  metal: None
+#  facet: None
+#  site: None
+
+# surface1 Reaction 22
+surface_reaction('NH_X(9) + NH2_X(8) <=> NX + NH3X', [3.870000e+21, 0.0, 22.6])
+#  Reaction index: Chemkin #23; RMG #45
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: NH3(6), H_X(12); NH3(6), NH2_X(8);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [N;VacantSite1;VacantSite2]
+#  Euclidian distance = 1.0
+#  Multiplied by reaction path degeneracy 1.5
+#  family: Surface_Adsorption_Dissociative
+
+# surface1 Reaction 23
+surface_reaction('X(1) + X(1) + NH3(6) <=> H_X(12) + NH2_X(8)', stick(4.569000e-02, 0.077, 4.5))
+#  Reaction index: Chemkin #24; RMG #46
+#  Template reaction: Surface_Abstraction
+#  Flux pairs: NX, NH_X(9); NH2_X(8), NH_X(9);
+#  Estimated using template [Abstracting;*-N-H] for rate rule [:N#*;*-N-H]
+#  Euclidian distance = 3.0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_Abstraction
+
+# surface1 Reaction 24
+surface_reaction('NX + NH2_X(8) <=> NH_X(9) + NH_X(9)', [2.220000e+21, 0.0, 18.68])
+#  Reaction index: Chemkin #25; RMG #57
+#  Template reaction: Surface_Adsorption_Dissociative
+#  Flux pairs: H2O(3), OHX; H2O(3), H_X(12);
+#  Estimated using template [Adsorbate;VacantSite1;VacantSite2] for rate rule [H2O;VacantSite1;VacantSite2]
+#  Euclidian distance = 3.0
+#  Multiplied by reaction path degeneracy 2.0
+#  family: Surface_Adsorption_Dissociative
+#  Ea raised from 59.0 to 61.9 kJ/mol to match endothermicity of reaction.
+
+# surface1 Reaction 25
+surface_reaction('X(1) + X(1) + H2O(3) <=> H_X(12) + OHX', stick(6.093000e-02, 0.077, 14.803))

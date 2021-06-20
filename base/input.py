@@ -5,34 +5,34 @@
 
 database(
     thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran','DFT_QCI_thermo'],
-    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Schneider_Pt111'],
+    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006'],
     #reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Rebrov_Pt111','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Schneider_Pt111','Surface/Novell_Pt111','Surface/Offermans_Pt111','Surface/Scheuer_Pt'],
-    seedMechanisms = [],
+    seedMechanisms = ['Surface/Schneider_Pt111','Surface/Nitrogen'],
     kineticsDepositories = ['training'],
-    kineticsFamilies = ['surface'],
-    # kineticsFamilies = [
-    # 'Surface_Adsorption_Single',
-    # 'Surface_Adsorption_vdW',
-    # 'Surface_Adsorption_Dissociative',
-    # 'Surface_Dissociation',
-    # 'Surface_Abstraction',
-    # #'Surface_EleyRideal_Addition_Multiple_Bond',
-    # #'Surface_Migration',
-    # 'Surface_Dissociation_Double_vdW',
-    # 'Surface_Addition_Single_vdW',
-    # 'Surface_Dissociation_vdW',
-    # 'Surface_Abstraction_vdW',
-    # #'Surface_Dual_Adsorption_vdW',
-    # #'Surface_Dissociation_Beta',
-    # 'Surface_Adsorption_Abstraction_vdW',
-    # #'Surface_Adsorption_Bidentate',
-    # #'Surface_Bidentate_Dissociation',
-    # #'Surface_DoubleBond_to_Bidentate', 
-    # #'Surface_vdW_to_Bidentate',
-    # 'Surface_Abstraction_Single_vdW',
-    # #'Surface_Adsorption_Dissociative_Double',
-    # #'default'
-    # ],
+    # kineticsFamilies = ['surface'],
+    kineticsFamilies = [
+    'Surface_Adsorption_Single',
+    'Surface_Adsorption_vdW',
+    'Surface_Adsorption_Dissociative',
+    'Surface_Dissociation',
+    'Surface_Abstraction',
+    #'Surface_EleyRideal_Addition_Multiple_Bond',
+    #'Surface_Migration',
+    'Surface_Dissociation_Double_vdW',
+    'Surface_Addition_Single_vdW',
+    'Surface_Dissociation_vdW',
+    'Surface_Abstraction_vdW',
+    #'Surface_Dual_Adsorption_vdW',
+    #'Surface_Dissociation_Beta',
+    'Surface_Adsorption_Abstraction_vdW',
+    #'Surface_Adsorption_Bidentate',
+    #'Surface_Bidentate_Dissociation',
+    #'Surface_DoubleBond_to_Bidentate', 
+    #'Surface_vdW_to_Bidentate',
+    'Surface_Abstraction_Single_vdW',
+    #'Surface_Adsorption_Dissociative_Double',
+    #'default'
+    ],
     kineticsEstimator = 'rate rules',
 )
 
@@ -181,7 +181,7 @@ species(
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=(800,'K'),#[(500,'K'),(1200,'K')],
+    temperature=[(500,'K'),(1500,'K')],
     initialPressure=(1.0, 'bar'),
     nSims=6,
     initialGasMoleFractions={
@@ -203,8 +203,8 @@ surfaceReactor(
     },
     surfaceVolumeRatio=(2.3832928e4, 'm^-1'), #Spherical area=0.0660382956m2,V of Pt=0.00002531468cm3 
     #surfaceVolumeRatio=(1.4285714e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
-    terminationConversion = {"NH3":0.9,},
-    terminationTime=(10, 's'),
+    terminationConversion = {"NH3":0.95,},
+    #terminationTime=(10, 's'),
 )
 
 simulator( #default for surface reaction atol=1e-18,rtol=1e-12
