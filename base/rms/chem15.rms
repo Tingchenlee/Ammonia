@@ -480,23 +480,23 @@ Phases:
   name: surface
 Reactions:
 - kinetics:
-    A: 8.46e+17
-    Ea: 131000.0
+    A: 5.0e+16
+    Ea: 107800.0
     n: 0.0
     type: Arrhenius
   products:
-  - X
-  - NOX
-  radicalchange: 0
-  reactants:
   - OX
   - NX
+  radicalchange: 0
+  reactants:
+  - X
+  - NOX
   type: ElementaryReaction
 - kinetics:
-    A: 0.0235189884
+    A: 189000000000.00003
     Ea: 0.0
-    n: 0.0
-    type: StickingCoefficient
+    n: -0.5
+    type: Arrhenius
   products:
   - OX
   - OX
@@ -507,22 +507,22 @@ Reactions:
   - O2
   type: ElementaryReaction
 - kinetics:
-    A: 3.22e+17
-    Ea: 124000.0
+    A: 1.0e-06
+    Ea: 0.0
     n: 0.0
-    type: Arrhenius
+    type: StickingCoefficient
   products:
+  - NX
+  - NX
+  radicalchange: 0
+  reactants:
   - X
   - X
   - N2
-  radicalchange: 0
-  reactants:
-  - NX
-  - NX
   type: ElementaryReaction
 - kinetics:
-    A: 15000000000000.0
-    Ea: 143000.0
+    A: 2.6e+17
+    Ea: 184295.9
     n: 0.0
     type: Arrhenius
   products:
@@ -533,7 +533,7 @@ Reactions:
   - NOX
   type: ElementaryReaction
 - kinetics:
-    A: 0.79731
+    A: 0.011
     Ea: 0.0
     n: 0.0
     type: StickingCoefficient
@@ -543,32 +543,5 @@ Reactions:
   reactants:
   - X
   - NH3
-  type: ElementaryReaction
-- kinetics:
-    A: 1010000000000000.0
-    Ea: 98900.0
-    n: 0.0
-    type: Arrhenius
-  products:
-  - X
-  - X
-  - N2O
-  radicalchange: 0
-  reactants:
-  - NX
-  - NOX
-  type: ElementaryReaction
-- kinetics:
-    A: 0.0160339874
-    Ea: 72200.0
-    n: 0.0
-    type: StickingCoefficient
-  products:
-  - OX
-  - N2
-  radicalchange: 0
-  reactants:
-  - X
-  - N2O
   type: ElementaryReaction
 Units: {}

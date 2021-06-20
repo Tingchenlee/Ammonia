@@ -9,9 +9,9 @@ ideal_gas(name='gas',
 
 ideal_interface(name='surface1',
                 elements="H D T C Ci O Oi N Ne Ar He Si S F Cl Br I X",
-                species="""NOX        OX         NX         OHX
-                          NH3X       X(H)       NH2_X(8)   NH_X(9)
-                          H2O_X(11)  X(N)""",
+                species="""NOX         OX          NX          OHX
+                          NH3X        X(1)        HX(9)       H2OX(12)
+                          NH2_X(20)   NH_X(21)    N2X2(23)    NN_ads(24)""",
                 site_density=2.483e-09,
                 phases="gas",
           reactions='all',
@@ -222,7 +222,7 @@ species(name='NH3X',
                       -6.50952664E-09,  1.13563586E-12, -1.63659104E+04,
                       -4.02856883E+01])))
 
-species(name='X(H)',
+species(name='X(1)',
         atoms='X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
@@ -232,40 +232,19 @@ species(name='X(H)',
                      [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
                        0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
                        0.00000000E+00])))
-species(name='X(N)',
-        atoms='X:1',
-        thermo=(NASA([298.00, 1000.00],
-                     [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00]),
-                NASA([1000.00, 3000.00],
-                     [ 0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00,  0.00000000E+00,  0.00000000E+00,
-                       0.00000000E+00])))
-                       
-species(name='NH2_X(8)',
-        atoms='H:2 N:1 X:1',
-        thermo=(NASA([298.00, 1000.00],
-                     [-1.89010759E+00,  2.86217997E-02, -4.34545237E-05,
-                       3.34143285E-08, -9.99500135E-12, -4.87893528E+03,
-                       6.34997611E+00]),
-                NASA([1000.00, 2000.00],
-                     [ 6.67968147E+00, -4.64266766E-03,  8.12871035E-06,
-                      -4.20436074E-09,  7.35132153E-13, -6.75225639E+03,
-                      -3.55181494E+01])))
 
-species(name='NH_X(9)',
-        atoms='H:1 N:1 X:1',
+species(name='HX(9)',
+        atoms='H:1 X:1',
         thermo=(NASA([298.00, 1000.00],
-                     [-2.68663098E+00,  2.89197486E-02, -4.76398566E-05,
-                       3.77368064E-08, -1.14895177E-11, -1.39698939E+03,
-                       9.81076735E+00]),
+                     [-1.96702988E+00,  1.67920714E-02, -2.50314139E-05,
+                       1.80485455E-08, -5.11491197E-12, -3.21277026E+03,
+                       7.68211257E+00]),
                 NASA([1000.00, 2000.00],
-                     [ 4.82700699E+00, -2.46380210E-03,  4.35378855E-06,
-                      -2.27895186E-09,  4.02508146E-13, -2.92453268E+03,
-                      -2.63392973E+01])))
+                     [ 2.71968546E+00, -1.07696656E-03,  2.00193294E-06,
+                      -1.12865983E-09,  2.11269165E-13, -4.24701712E+03,
+                      -1.52793490E+01])))
 
-species(name='H2O_X(11)',
+species(name='H2OX(12)',
         atoms='H:2 O:1 X:1',
         thermo=(NASA([298.00, 1000.00],
                      [ 2.53777266E+00,  9.45372010E-03, -1.41325664E-05,
@@ -276,45 +255,129 @@ species(name='H2O_X(11)',
                       -2.75864893E-09,  4.61279066E-13, -3.34885608E+04,
                       -2.15622699E+01])))
 
+species(name='NH2_X(20)',
+        atoms='H:2 N:1 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [-1.89010759E+00,  2.86217997E-02, -4.34545237E-05,
+                       3.34143285E-08, -9.99500135E-12, -4.87893528E+03,
+                       6.34997611E+00]),
+                NASA([1000.00, 2000.00],
+                     [ 6.67968147E+00, -4.64266766E-03,  8.12871035E-06,
+                      -4.20436074E-09,  7.35132153E-13, -6.75225639E+03,
+                      -3.55181494E+01])))
+
+species(name='NH_X(21)',
+        atoms='H:1 N:1 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [-2.68663098E+00,  2.89197486E-02, -4.76398566E-05,
+                       3.77368064E-08, -1.14895177E-11, -1.39698939E+03,
+                       9.81076735E+00]),
+                NASA([1000.00, 2000.00],
+                     [ 4.82700699E+00, -2.46380210E-03,  4.35378855E-06,
+                      -2.27895186E-09,  4.02508146E-13, -2.92453268E+03,
+                      -2.63392973E+01])))
+
+species(name='N2X2(23)',
+        atoms='N:2 X:2',
+        thermo=(NASA([100.00, 899.07],
+                     [ 3.17988900E+00,  2.16745972E-03,  1.49948526E-05,
+                      -2.58978952E-08,  1.15481723E-11, -1.28962753E+04,
+                      -1.75805654E+01]),
+                NASA([899.07, 5000.00],
+                     [ 7.25771166E+00, -3.06811296E-03,  2.19621155E-06,
+                      -4.40293987E-10,  2.93499924E-14, -1.41511722E+04,
+                      -3.97208822E+01])),
+        size=2.0)
+
+species(name='NN_ads(24)',
+        atoms='N:2 X:1',
+        thermo=(NASA([298.00, 1000.00],
+                     [ 4.13993917E+00, -9.92755910E-04,  1.76704033E-06,
+                      -1.57884342E-10, -3.64206712E-13, -4.38199802E+03,
+                      -7.98299353E+00]),
+                NASA([1000.00, 2000.00],
+                     [ 4.38660517E+00, -1.50692391E-03,  2.67640594E-06,
+                      -1.41531803E-09,  2.51363379E-13, -4.48345747E+03,
+                      -9.36216462E+00])))
+
 #-------------------------------------------------------------------------------
 # Reaction data
 #-------------------------------------------------------------------------------
 
 # surface1 Reaction 1
-surface_reaction('OX + NX <=> X(H) + NOX', [8.460000e+21, 0.0, 31.31])
+surface_reaction('X(1) + NOX <=> OX + NX', [5.000000e+20, 0.0, 25.765])
 
 # surface1 Reaction 2
-surface_reaction('X(H) + X(H) + O2(2) <=> OX + OX', stick(2.352000e-02, 0.0, 0.0))
+surface_reaction('X(1) + X(1) + O2(2) <=> OX + OX', [1.890000e+21, -0.5, 0.0])
 
 # surface1 Reaction 3
-surface_reaction('NX + NX <=> X(N) + X(N) + N2(4)', [3.220000e+21, 0.0, 29.637])
+surface_reaction('X(1) + X(1) + N2(4) <=> NX + NX', stick(1.000000e-06, 0.0, 0.0))
 
 # surface1 Reaction 4
-surface_reaction('NOX <=> X(N) + NO(5)', [1.500000e+13, 0.0, 34.178])
+surface_reaction('NOX <=> X(1) + NO(5)', [2.600000e+17, 0.0, 44.048])
 
 # surface1 Reaction 5
-surface_reaction('X(N) + NH3(6) <=> NH3X', stick(7.973000e-01, 0.0, 0.0))
+surface_reaction('X(1) + NH3(6) <=> NH3X', stick(1.100000e-02, 0.0, 0.0))
 
 # surface1 Reaction 6
-surface_reaction('NX + NOX <=> X(N) + X(N) + N2O(7)', [1.010000e+19, 0.0, 23.638])
+surface_reaction('X(1) + H2O(3) <=> H2OX(12)', stick(7.500000e-01, 0.0, 0.0))
 
 # surface1 Reaction 7
-surface_reaction('X(H) + N2O(7) <=> OX + N2(4)', stick(1.603000e-02, 0.0, 17.256))
+surface_reaction('OX + H2OX(12) <=> OHX + OHX', [1.000000e+20, 0.0, 10.301])
 
 # surface1 Reaction 8
-surface_reaction('OX + NH3X <=> OHX + NH2_X(8)', [6.850000e+23, 0.0, 37.524])
+surface_reaction('OX + HX(9) <=> X(1) + OHX', [1.280000e+21, 0.0, 2.677])
 
 # surface1 Reaction 9
-surface_reaction('OX + NH2_X(8) <=> OHX + NH_X(9)', [4.030000e+21, 0.0, 0.0])
+surface_reaction('HX(9) + OHX <=> X(1) + H2OX(12)', [2.040000e+21, 0.0, 15.827])
 
 # surface1 Reaction 10
-surface_reaction('OX + NH_X(9) <=> NX + OHX', [4.030000e+21, 0.0, 13.982])
+surface_reaction('X(1) + X(1) + H2O(3) <=> HX(9) + OHX', stick(3.200000e-02, 0.0, 14.803))
 
 # surface1 Reaction 11
-surface_reaction('OHX + NH_X(9) <=> NX + H2O_X(11)', [4.030000e+21, 0.0, 10.994])
+surface_reaction('OX + NH3X <=> OHX + NH2_X(20)', [1.010000e+21, 0.0, 16.143])
 
 # surface1 Reaction 12
-surface_reaction('OX + H2O_X(11) <=> OHX + OHX', [4.030000e+19, 0.0, 12.596])
+surface_reaction('OHX + NH3X <=> H2OX(12) + NH2_X(20)', [1.970000e+22, 0.0, 8.072])
 
 # surface1 Reaction 13
-surface_reaction('H2O_X(11) <=> X(H) + H2O(3)', [1.000000e+13, 0.0, 9.632])
+surface_reaction('X(1) + NH3X <=> HX(9) + NH2_X(20)', [5.500000e+20, 0.0, 23.292])
+
+# surface1 Reaction 14
+surface_reaction('X(1) + X(1) + NH3(6) <=> HX(9) + NH2_X(20)', stick(4.800000e-02, 0.0, 0.0))
+
+# surface1 Reaction 15
+surface_reaction('OX + NH2_X(20) <=> OHX + NH_X(21)', [2.220000e+21, 0.0, 18.68])
+
+# surface1 Reaction 16
+surface_reaction('OX + NH_X(21) <=> NX + OHX', [3.140000e+21, 0.0, 36.899])
+
+# surface1 Reaction 17
+surface_reaction('OHX + NH2_X(20) <=> NH_X(21) + H2OX(12)', [6.040000e+21, 0.0, 0.231])
+
+# surface1 Reaction 18
+surface_reaction('OHX + NH_X(21) <=> NX + H2OX(12)', [2.380000e+21, 0.0, 9.455])
+
+# surface1 Reaction 19
+surface_reaction('X(1) + NH2_X(20) <=> HX(9) + NH_X(21)', [2.160000e+21, 0.0, 36.437])
+
+# surface1 Reaction 20
+surface_reaction('X(1) + NH_X(21) <=> NX + HX(9)', [2.460000e+21, 0.0, 28.366])
+
+# surface1 Reaction 21
+surface_reaction('NH_X(21) + NH3X <=> NH2_X(20) + NH2_X(20)', [4.949007e+19, 0.653, 28.713])
+
+# surface1 Reaction 22
+surface_reaction('NX + NH3X <=> NH_X(21) + NH2_X(20)', [4.949007e+19, 0.653, 28.713])
+
+# surface1 Reaction 23
+surface_reaction('NX + NH2_X(20) <=> NH_X(21) + NH_X(21)', [8.359256e+21, -0.018, 7.182])
+
+# surface1 Reaction 24
+surface_reaction('X(1) + X(1) + N2(4) <=> N2X2(23)', stick(2.000000e-01, 0.0, 0.0))
+
+# surface1 Reaction 25
+surface_reaction('X(1) + N2(4) <=> NN_ads(24)', stick(1.000000e-01, 0.0, 0.0))
+
+# surface1 Reaction 26
+surface_reaction('X(1) + NN_ads(24) <=> N2X2(23)', [2.000000e+19, 0.0, 0.0])

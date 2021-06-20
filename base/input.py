@@ -5,11 +5,11 @@
 
 database(
     thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran','DFT_QCI_thermo'],
-    reactionLibraries =['Surface/Rebrov_Pt111'],
-    #reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Schneider_Pt111','Surface/Novell_Pt111','Surface/Offermans_Pt111','Surface/Scheuer_Pt'],
+    reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Nitrogen','Surface/Schneider_Pt111'],
+    #reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Rebrov_Pt111','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Schneider_Pt111','Surface/Novell_Pt111','Surface/Offermans_Pt111','Surface/Scheuer_Pt'],
     seedMechanisms = [],
     kineticsDepositories = ['training'],
-    kineticsFamilies = ['Surface_Dissociation'],
+    kineticsFamilies = ['surface'],
     # kineticsFamilies = [
     # 'Surface_Adsorption_Single',
     # 'Surface_Adsorption_vdW',
@@ -43,7 +43,7 @@ catalystProperties(
 generatedSpeciesConstraints(
     allowed=['input species','seed mechanisms','reaction libraries'],
     maximumCarbonAtoms=0,
-    maximumOxygenAtoms=3,
+    maximumOxygenAtoms=2,
     maximumNitrogenAtoms=2,
     maximumSurfaceSites=2,
     maximumRadicalElectrons=2,
@@ -181,15 +181,15 @@ species(
 
 #temperature from 523-673K 
 surfaceReactor(  
-    temperature=[(523,'K'),(673,'K')],
+    temperature=(800,'K'),#[(500,'K'),(1200,'K')],
     initialPressure=(1.0, 'bar'),
-    nSims=12,
+    nSims=6,
     initialGasMoleFractions={
-        "NH3": 0.066,
-        "O2": 0.88,
-        "He": 0.054,
+        "NH3": 0.002,
+        "O2": 0.01,
+        "He": 0.938,
         "NO":0.0,
-        "H2O":0.0,
+        "H2O":0.05,
         "N2O":0.0,
         "N2":0.0,
         "NX":0.0,
@@ -203,8 +203,8 @@ surfaceReactor(
     },
     surfaceVolumeRatio=(2.3832928e4, 'm^-1'), #Spherical area=0.0660382956m2,V of Pt=0.00002531468cm3 
     #surfaceVolumeRatio=(1.4285714e4, 'm^-1'), #A/V = 280µm*π*9mm/140µm*140µm*π*9mm = 2.8571428e4^m-1
-    terminationConversion = {"NH3":0.95,},
-    #terminationTime=(10, 's'),
+    terminationConversion = {"NH3":0.9,},
+    terminationTime=(10, 's'),
 )
 
 simulator( #default for surface reaction atol=1e-18,rtol=1e-12
@@ -215,7 +215,7 @@ simulator( #default for surface reaction atol=1e-18,rtol=1e-12
 model( 
     toleranceKeepInEdge=0.05,
     toleranceMoveToCore=0.5, 
-    toleranceInterruptSimulation=1e8, 
+    toleranceInterruptSimulation=1e6, 
     maximumEdgeSpecies=5000, 
     minCoreSizeForPrune=50,
     toleranceThermoKeepSpeciesInEdge=0.5, # prune before simulation based on thermo
