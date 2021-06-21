@@ -9,7 +9,7 @@ database(
     thermoLibraries=['surfaceThermoPt111', 'primaryThermoLibrary', 'thermo_DFT_CCSDTF12_BAC','CHON_G4','NOx2018', 'GRI-Mech3.0-N', 'NitrogenCurran','DFT_QCI_thermo'],
     reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006'],
     #reactionLibraries =['Surface/CPOX_Pt/Deutschmann2006','Surface/Rebrov_Pt111','Surface/Nitrogen','Surface/Arevalo_Pt111','Surface/Kraehnert_Pt111','Surface/Schneider_Pt111','Surface/Novell_Pt111','Surface/Offermans_Pt111','Surface/Scheuer_Pt'],
-    seedMechanisms = ['Surface/Schneider_Pt111','Surface/Nitrogen'],
+    seedMechanisms = ['Surface/Schneider_Pt211','Surface/Nitrogen'],
     kineticsDepositories = ['training'],
     # kineticsFamilies = ['surface'],
     kineticsFamilies = [
